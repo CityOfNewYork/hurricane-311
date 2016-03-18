@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta prefix="og: http://ogp.me/ns#" property="og:title" content="NYC Hurricane Evacuation Zone Finder">
+	<meta prefix="og: http://ogp.me/ns#" property="og:type" content="website">
+	<meta prefix="og: http://ogp.me/ns#" property="og:url" content="https://maps.nyc.gov/hurricane">
+	<meta prefix="og: http://ogp.me/ns#" property="og:image" content="https://maps.nyc.gov/hurricane/img/li.png">
+	<meta prefix="og: http://ogp.me/ns#" property="og:image:type" content="image/png">
+	<meta prefix="og: http://ogp.me/ns#" property="og:image:width" content="280">
+	<meta prefix="og: http://ogp.me/ns#" property="og:image:height" content="136">
+	<meta prefix="og: http://ogp.me/ns#" property="og:image" content="https://maps.nyc.gov/hurricane/img/og.png">
+	<meta prefix="og: http://ogp.me/ns#" property="og:image:width" content="1200">
+	<meta prefix="og: http://ogp.me/ns#" property="og:image:height" content="626">
+	<meta prefix="og: http://ogp.me/ns#" property="og:description" content="NYC Hurricane Evacuation Zone Finder">
+	<meta prefix="og: http://ogp.me/ns#" property="og:site_name" content="NYC.gov">	
+	<meta name="google-translate-customization" content="4707bd7f535893a0-45bca7b6a97e5a2d-g609df9381571b349-c"> 	
+ 	
+ 	<title>NYC Hurricane Evacuation Zone Finder</title>
+
+	<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.12.1/ol.css">
+	<link rel="stylesheet" href="https://maps.nyc.gov/nyc-lib/v0.1.1/css/nyc-ol-lib.css">
+	<link rel="stylesheet" href="css/hurricane.css"> 
+
+	<link rel="apple-touch-icon" sizes="60x60" href="img/apple-touch-icon-60.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="img/apple-touch-icon-76.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="img/apple-touch-icon-120.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="img/apple-touch-icon-152.png">
+
+	<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.12/proj4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.12.1/ol.js"></script>    
+</head>
+<body>
+	<table id="first-load">
+		<tbody><tr><td>
+			<img src="img/first-load.gif" alt="maps.nyc.gov"><p>maps.nyc.gov</p>
+		</td></tr></tbody>
+	</table>
+	<div id="map-page" data-role="page" data-title="NYC Hurricane Evacuation Zone Finder">
+		<div id="splash">
+			<div id="splash-cont">
+				<div class="orders"></div>
+				<button id="btn-view-map" class="capitalize">
+					<span>view map</span><br><span>to find your evacuation zone</span>
+				</button>
+			</div>
+		</div>
+		<div id="panel">
+			<div id="panel-content">
+				<div id="tabs" data-role="tabs">
+					<div data-role="navbar">
+						<ul>
+							<li id="map-tab-btn">
+								<a class="capitalize" href="#map-tab">map</a>
+							</li>
+							<li id="centers-tab-btn">
+								<a class="capitalize" href="#centers-tab" onclick="nyc.app.initList();">evacuation<br>centers</a>
+							</li>
+							<li>
+								<a class="capitalize" href="#legend-tab">legend</a>
+							</li>
+						</ul>
+					</div>
+					<div id="map-tab"></div>
+					<div id="centers-tab">
+						<div class="centers-top">
+							<div class="panel-note">If you are required to evacuate, it is recommended that you shelter at the home of friends or family outside of the 
+								evacuation area. If you wish to go to a public facility, select any evacuation center from the following list and click 
+								for travel directions.
+							</div>
+							<div id="filter" data-role="controlgroup" data-type="horizontal">
+								<input id="filter-all" type="radio" checked name="filter" data-prop='ACCESSIBLE' data-vals="N,Y">
+								<label for="filter-all" class="capitalize">all centers</label>
+								<input id="filter-access" type="radio" name="filter" data-prop='ACCESSIBLE' data-vals="Y">
+								<label for="filter-access" class="capitalize">only accessible centers</label>
+							</div>
+						</div>
+						<div class="centers-bottom">
+							<div id="centers-list" role="directory"></div>
+						</div>
+					</div>
+					<div id="legend-tab">
+						<div class="panel-note">
+							<p>
+								Use the NYC Hurricane Evacuation Zone Finder to find out if your address is in a hurricane evacuation zone.
+								The best way to be prepared for the possibility of a hurricane evacuation is to know your evacuation zone,
+								and plan your destination and travel routes ahead of time. Zones are color-coded and labeled 1, 2, 3, 4, 5, and 6
+								when represented on a map.
+							</p>
+							<p>
+								Information on evacuation centers is subject to change. Please revisit this site for updated 
+								reports on building status and wheelchair accessibility features.							
+							</p>
+						</div>
+						<div class="leg">
+							<div class="leg-it ec">
+								<div class="leg-sw ec-access"></div>
+								<span class="capitalize">accessible evacuation center</span>
+							</div>
+							<div class="leg-it ec">
+								<div class="leg-sw"></div>
+								<span class="capitalize">evacuation center</span>
+								</div>
+							<div class="leg-it">
+								<div class="leg-sw zone z1"></div>
+								<span class="capitalize">zone 1</span>
+							</div>
+							<div class="leg-it">
+								<div class="leg-sw zone z2"></div>
+								<span class="capitalize">Zone 2</span>
+							</div>
+							<div class="leg-it">
+								<div class="leg-sw zone z3"></div>
+								<span class="capitalize">zone 3</span>
+							</div>
+							<div class="leg-it">
+								<div class="leg-sw zone z4"></div>
+								<span class="capitalize">zone 4</span>
+							</div>
+							<div class="leg-it">
+								<div class="leg-sw zone z5"></div>
+								<span class="capitalize">zone 5</span>
+							</div>
+							<div class="leg-it">
+								<div class="leg-sw zone z6"></div>
+								<span class="capitalize">zone 6</span>
+							</div>							
+							<label for="transparency" class="capitalize">zone transparency:</label>
+							<input id="transparency" type="range" value="45" min="0" max="100">
+						</div>
+						<div class="panel-note">Find out more about the zones and preparing for a coastal storm: 
+							<a href="http://www.nyc.gov/html/oem/html/hazards/storms.shtml" target="_blank">
+							NYC Hazards - Coastal Storms & Hurricanes</a>						
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="banner">
+			<img class="banner-logo" src="img/nyc.png" onclick="document.location='./';" alt="NYC Hurricane Evacuation Zone Finder" title="NYC Hurricane Evacuation Zone Finder">
+			<h1 class="notranslate" translate="no" onclick="document.location='./';" title="NYC Hurricane Evacuation Zone Finder">
+				Hurricane Evacuation Zone Finder
+			</h1>
+			<div class="orders"></div>
+		</div>
+		<div id="main" data-role="main" class="ui-content">
+			<div id="map"></div>
+		</div>
+	</div>
+	<div id="dir-page" data-role="page">
+		<div class="banner">
+			<img class="banner-logo" src="img/nyc.png" onclick="document.location='./';" alt="NYC Hurricane Evacuation Zone Finder" title="NYC Hurricane Evacuation Zone Finder">
+			<h1 class="notranslate" translate="no" onclick="document.location='./';" title="NYC Hurricane Evacuation Zone Finder">
+				Hurricane Evacuation Zone Finder
+			</h1>
+			<a data-role="button" data-icon="arrow-l" class="hdr-btn back-btn ui-btn-right" href="#map-page" data-transition="slidedown">
+				Back to <span class="noshow">Hurricane Zone </span>Finder
+			</a>
+		</div>
+		<div data-role="content">
+			<div id="dir-panel">
+				<div id="dir-content">
+					<div class="fld-lbl">From my location:</div>
+					<div id="fld-from"><input placeholder="Enter an address..."></div>
+					<div class="fld-lbl">To <span id="fld-facility"></span>:</div>
+					<div id="fld-to"></div>
+					<table id="dir-mode">
+						<tbody><tr>
+							<td><a id="mode-transit" class="dir-mode-btn active-mode" data-role="button" data-mode="TRANSIT" title="Get transit directions">
+								<span class="noshow">Get transit directions</span>
+							</a></td>
+							<td><a id="mode-bike" class="dir-mode-btn" data-role="button" data-mode="BICYCLING" title="Get bicycling directions">
+								<span class="noshow">Get bicycling directions</span>
+							</a></td>
+							<td><a id="mode-walk" class="dir-mode-btn" data-role="button" data-mode="WALKING" title="Get walking directions">
+								<span class="noshow">Get walking directions</span>
+							</a></td>
+							<td><a id="mode-car" class="dir-mode-btn" data-role="button" data-mode="DRIVING" title="Get driving directions">
+								<span class="noshow">Get driving directions</span>
+							</a></td>
+						</tr></tbody>
+					</table>
+				</div>
+				<div id="directions"></div>
+			</div>
+			<div id="dir-main">
+				<div id="dir-map"></div>
+			</div>
+			<div id="dir-toggle" data-role="controlgroup" data-type="horizontal">
+				<a class="toggle-map capitalize" data-role="button">map</a>
+				<a class="ui-btn-active capitalize" data-role="button">directions</a>
+			</div>
+		</div>
+	</div>
+	<script src="https://maps.nyc.gov/nyc-lib/v0.1.1/js/nyc-ol-lib.js"></script>
+	<script src="js/style.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/init.js"></script>
+	<script>
+		/* google analytics */
+	</script>	
+</body>
+</html>
