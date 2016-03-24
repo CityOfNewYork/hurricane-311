@@ -71,7 +71,10 @@ nyc.App = function(map, featureDecorations, content, style, locationMgr, directi
 	locationMgr.on(nyc.Locate.EventType.GEOLOCATION, $.proxy(me.located, me));
 		
 	directions.on(nyc.Directions.EventType.CHANGED, function(){
-		$('#directions div.adp div.adp-agencies').prepend(content.message('trip_planner'))			
+		var msg = content.message('trip_planner'), node = $('#directions div.adp div.adp-agencies');
+		if (node.length && node.html().indexOf(msg) == -1){
+			node.prepend(msg);			
+		}
 	});
 
 	directions.on(nyc.Directions.EventType.NO_DIRECTIONS, function(event){
