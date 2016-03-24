@@ -23,7 +23,8 @@ $(document).ready(function(){
 			bad_input: 'The location you entered was not understood',
 			data_load_error: 'There was a problem loading map data. Please refresh the page to try again.',
 			trip_planner: 'For directions with information regarding wheelchair accessible subway stations use the <a href="http://tripplanner.mta.info/MyTrip/ui_phone/cp/idefault.aspx" target="_blank">MTA Trip Planner</a>.',
-			copyright: '&copy; ${yr} City of New York'
+			copyright: '&copy; ${yr} City of New York',
+			no_directions: '<span class="capitalize">${travelMode}</span> directions from <b><span class="notranslate" translate="no">${origin}</span></b> to <b><span class="notranslate" translate="no">${destination}</span></b> are not available.  Please try a different mode of transportation.'
 		},
 		LANGUAGES = {
 		    en: {val: 'English', desc: 'English', hint: 'Translate'},

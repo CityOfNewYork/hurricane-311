@@ -73,7 +73,14 @@ nyc.App = function(map, featureDecorations, content, style, locationMgr, directi
 	directions.on(nyc.Directions.EventType.CHANGED, function(){
 		$('#directions div.adp div.adp-agencies').prepend(content.message('trip_planner'))			
 	});
-	
+
+	directions.on(nyc.Directions.EventType.NO_DIRECTIONS, function(event){
+		var req = event.response.request;
+		req.travelMode = req.travelMode.toLowerCase(); 
+		me.alert(content.message('no_directions', req));
+		$('#directions div.adp div.adp-agencies').prepend(content.message('trip_planner'))			
+	});
+
 	map.on('click', $.proxy(me.mapClick, me));
 	
 	$('#transparency').attr('type', ''); //removes up/down arrows from input in ff
