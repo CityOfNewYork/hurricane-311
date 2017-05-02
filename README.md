@@ -7,13 +7,13 @@ This app is a stand-alone HTML5 app that can be dropped into the doc root of any
 * The ```order.json``` file included is sample evacuation order data for development use only.
 * In production ```center.json```, ```zone.json``` and ```order.json``` may change without notice and are regularly cached at a CDN.
 
-###Geocoding:###
+## Geocoding:
 * To use ```nyc.Geoclient``` as the implementation of ```nyc.Geocoder``` you must first get your Geoclient App ID and App Key from the NYC Developer Portal [https://developer.cityofnewyork.us/api/geoclient-api](https://developer.cityofnewyork.us/api/geoclient-api)
   * Register if you don't have an NYC Developer Portal account
   * Developer Management > View or Create a New Project...
   * Set ```hurricane.local.geoclient.url='//maps.nyc.gov/geoclient/v1/search.json?app_key=YOUR_APP_KEY&app_id=YOUR_APP_ID'``` in ```$GRADLE_USER_HOME/gradle.properties```
 
-###Running Locally:###
+## Running Locally:
 * Use ```gradle jettyRun``` to run from project root on local Jetty web server
 	* Substitutes ```gradle.properties``` configured Geoclient URL into ``init.js``
 	* Allows for viewing live edits [http://localhost:8088/src/main/webapp/](http://localhost:8088/src/main/webapp/)
@@ -21,7 +21,7 @@ This app is a stand-alone HTML5 app that can be dropped into the doc root of any
 	* Allows for running QUnit tests [http://localhost:8088/src/test/webapp/](http://localhost:8088/src/test/webapp/)
 * Use ```gradle jettyStop``` to stop the server and reset the Geoclient URL
 	
-###Building and Deploying to NYC DoITT GIS environments:###
+## Building and Deploying to NYC DoITT GIS environments:
 * The following properties should be set in ```$GRADLE_USER_HOME/gradle.properties```
 	* __File location properties:__
 		* ```archive.dir``` - the location on the remote server to store the zipped application
