@@ -102,6 +102,8 @@ task deploy(dependsOn: [archive]) << {
 	remotes.deployTarget.host = project.ext["${env}.host"]
     remotes.deployTarget.user = project.ext["${env}.user"]	
     remotes.deployTarget.identity = file("${System.properties['user.home']}/.ssh/id_rsa")
+
+	println "deploying ${archive.archiveName} to ${remotes.deployTarget.host}:${deployDir}"
 	
 	ssh.run {
         session(remotes.deployTarget) {

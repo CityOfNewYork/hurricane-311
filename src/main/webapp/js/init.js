@@ -24,7 +24,8 @@ $(document).ready(function(){
 			data_load_error: 'There was a problem loading map data. Please refresh the page to try again.',
 			trip_planner: 'For directions with information regarding wheelchair accessible subway stations use the <a href="http://tripplanner.mta.info/MyTrip/ui_phone/cp/idefault.aspx" target="_blank">MTA Trip Planner</a>.',
 			copyright: '&copy; ${yr} City of New York',
-			no_directions: '<span class="capitalize">${travelMode}</span> directions from <b><span class="notranslate" translate="no">${origin}</span></b> to <b><span class="notranslate" translate="no">${destination}</span></b> are not available.  Please try a different mode of transportation.'
+			no_directions: '<span class="capitalize">${travelMode}</span> directions from <b><span class="notranslate" translate="no">${origin}</span></b> to <b><span class="notranslate" translate="no">${destination}</span></b> are not available.  Please try a different mode of transportation.',
+			acc_feat: '<ul><li>${ACC_FEAT}</li><li>Access to the main shelter areas will be unobstructed and without steps. </li><li>Accessible restrooms are available.</li><li>Accessible dormitory and eating/cafeteria areas are available.</li><li>Additional amenities will be available such as accessible cots and mobility aids (canes, crutches, manual wheelchairs, storage space for refrigerated medication, etc.).</li></ul>'
 		},
 		LANGUAGES = {
 		    en: {val: 'English', desc: 'English', hint: 'Translate'},
@@ -67,7 +68,7 @@ $(document).ready(function(){
 						return this.get('ACCESSIBLE') != 'N';
 					},
 					getAccessibleFeatures: function(){
-						return this.get('ACC_FEAT');
+						return this.message('acc_feat', this.getProperties());
 					},
 					getDistance: function(){
 						return this.get('distance');
