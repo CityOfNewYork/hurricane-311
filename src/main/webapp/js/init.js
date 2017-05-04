@@ -46,9 +46,6 @@ $(document).ready(function(){
 						var g = this.getGeometry();
 						return g ? g.getCoordinates() : null;
 					},
-					getId: function(){
-						return this.get('BLDG_ID');
-					},
 					getName: function(){
 						return this.get('NAME');
 					},
