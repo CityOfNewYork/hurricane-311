@@ -46,6 +46,9 @@ $(document).ready(function(){
 						var g = this.getGeometry();
 						return g ? g.getCoordinates() : null;
 					},
+					getId: function(){
+						return this.get('BLDG_ID');
+					},
 					getName: function(){
 						return this.get('NAME');
 					},
@@ -68,7 +71,7 @@ $(document).ready(function(){
 						return this.get('ACCESSIBLE') != 'N';
 					},
 					getAccessibleFeatures: function(){
-						return this.message('acc_feat', this.getProperties());
+						return this.isAccessible() ? this.message('acc_feat', this.getProperties()) : '';
 					},
 					getDistance: function(){
 						return this.get('distance');
