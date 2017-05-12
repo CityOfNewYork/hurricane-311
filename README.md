@@ -12,14 +12,6 @@ This app is a stand-alone HTML5 app that can be dropped into the doc root of any
   * Register if you don't have an NYC Developer Portal account
   * Developer Management > View or Create a New Project...
   * Set ```hurricane.local.geoclient.url='//maps.nyc.gov/geoclient/v1/search.json?app_key=YOUR_APP_KEY&app_id=YOUR_APP_ID'``` in ```$GRADLE_USER_HOME/gradle.properties```
-
-## Running Locally:
-* Use ```gradle jettyRun``` to run from project root on local Jetty web server
-	* Substitutes ```gradle.properties``` configured Geoclient URL into ``init.js``
-	* Allows for viewing live edits [http://localhost:8088/src/main/webapp/](http://localhost:8088/src/main/webapp/)
-	* Allows for viewing a build [http://localhost:8088/build/webapp/](http://localhost:8088/build/webapp/)
-	* Allows for running QUnit tests [http://localhost:8088/src/test/webapp/](http://localhost:8088/src/test/webapp/)
-* Use ```gradle jettyStop``` to stop the server and reset the Geoclient URL
 	
 ## Building and Deploying to NYC DoITT GIS environments:
 * The following properties should be set in ```$GRADLE_USER_HOME/gradle.properties```
