@@ -1,6 +1,0 @@
-build to include google client and channel params in URL 
-GOOGLE_URL = 'https://maps.googleapis.com/maps/api/js?sensor=false&libraries=visualization';
-
-build to swap out URLs by env
-nyc.ol.layer.BaseLayer.BASIC_URLS = ['//maps.nyc.gov/gis/data/tiles/basic/', '//maps1.nyc.gov/gis/data/tiles/basic/', '//maps2.nyc.gov/gis/data/tiles/basic/', '//maps3.nyc.gov/gis/data/tiles/basic/'];
-

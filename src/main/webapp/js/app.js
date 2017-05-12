@@ -46,7 +46,7 @@ nyc.App = function(map, featureDecorations, content, style, locationMgr, directi
 	});
 	map.addLayer(me.zoneLayer);
 	me.tips.push(
-		new nyc.ol.FeatureTip(map, [{source: me.zoneSource, labelFunction: me.zoneTip}])
+		new nyc.ol.FeatureTip(map, [{layer: me.zoneLayer, labelFunction: me.zoneTip}])
 	);
 
 	me.centerSource = new nyc.ol.source.FilteringAndSorting(
@@ -60,7 +60,7 @@ nyc.App = function(map, featureDecorations, content, style, locationMgr, directi
 	});
 	map.addLayer(me.centerLayer);
 	me.tips.push(
-		new nyc.ol.FeatureTip(map, [{source: me.centerSource, labelFunction: me.centerTip}])
+		new nyc.ol.FeatureTip(map, [{layer: me.centerLayer, labelFunction: me.centerTip}])
 	);
 	
 	$('#panel, .banner, .ctl').hover($.proxy(me.hideTips, me));
@@ -429,12 +429,7 @@ nyc.App.prototype = {
 	 * @param {ol.Coordinate} coordinates
 	 */
 	zoomCoords: function(coords){
-		this.map.beforeRender(
-			ol.animation.zoom({resolution: this.view.getResolution()}), 
-			ol.animation.pan({source: this.view.getCenter()})
-		);
-		this.view.setZoom(7);
-		this.view.setCenter(coords);
+		this.view.animate({zoom: 17, center: coords});
 	},
 	/** 
 	 * @private 

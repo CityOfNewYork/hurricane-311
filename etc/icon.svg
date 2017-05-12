@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="512"
+   height="512"
+   viewBox="0 0 512.00001 512.00001"
+   id="svg4143"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   inkscape:export-filename="A:\git\hurricane\src\main\webapp\img\icon-384.png"
+   inkscape:export-xdpi="67.5"
+   inkscape:export-ydpi="67.5"
+   sodipodi:docname="icon.svg">
+  <defs
+     id="defs4145" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.3066406"
+     inkscape:cx="236.10164"
+     inkscape:cy="256"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1600"
+     inkscape:window-height="838"
+     inkscape:window-x="-8"
+     inkscape:window-y="152"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata4148">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-540.36216)">
+    <rect
+       style="fill:#085095;fill-opacity:1"
+       id="rect4151"
+       width="512"
+       height="512"
+       x="0"
+       y="540.36218"
+       ry="82.654709" />
+    <g
+       id="g4816"
+       transform="translate(0,5.9999998)">
+      <g
+         style="fill:#fbed30;fill-opacity:1;stroke:none;stroke-opacity:1"
+         id="g3"
+         transform="matrix(3.0201411,0,0,3.0201411,30.867652,604.19384)">
+        <g
+           style="fill:#fbed30;fill-opacity:1;stroke:none;stroke-opacity:1"
+           id="g5">
+          <g
+             style="fill:#fbed30;fill-opacity:1;stroke:none;stroke-opacity:1"
+             id="g7">
+            <polygon
+               style="fill:#fbed30;fill-opacity:1;stroke:none;stroke-opacity:1"
+               id="polygon9"
+               points="15.5,1.2 3.1,1.2 0,4.3 0,47.7 3.1,50.8 15.5,50.8 18.6,47.7 18.6,35.3 34.1,50.8 46.6,50.8 49.7,47.7 49.7,4.3 46.6,1.2 34.1,1.2 31,4.3 31,16.7 " />
+          </g>
+        </g>
+        <g
+           style="fill:#fbed30;fill-opacity:1;stroke:none;stroke-opacity:1"
+           id="g11">
+          <g
+             style="fill:#fbed30;fill-opacity:1;stroke:none;stroke-opacity:1"
+             id="g13">
+            <polyline
+               style="fill:#fbed30;fill-opacity:1;stroke:none;stroke-opacity:1"
+               id="polyline15"
+               points="49.7,22.9 65.2,38.4 65.2,47.7 68.3,50.8 80.7,50.8 83.8,47.7 83.8,38.4 99.3,22.9 99.3,10.5      99.3,4.3 96.2,1.2 83.8,1.2 80.7,4.3 80.7,10.5 74.5,16.7 68.3,10.5 68.3,4.3 65.2,1.2 52.8,1.2 49.7,4.3    " />
+          </g>
+        </g>
+        <g
+           style="fill:#fbed30;fill-opacity:1;stroke:none;stroke-opacity:1"
+           id="g17">
+          <g
+             style="fill:#fbed30;fill-opacity:1;stroke:none;stroke-opacity:1"
+             id="g19">
+            <g
+               style="fill:#fbed30;fill-opacity:1;stroke:none;stroke-opacity:1"
+               id="g21">
+              <polyline
+                 style="fill:#fbed30;fill-opacity:1;stroke:none;stroke-opacity:1"
+                 id="polyline23"
+                 points="99.3,41.5 108.6,50.8 139.7,50.8 149,41.5 149,32.2 145.9,29.1 130.4,29.1 130.4,32.2       118,32.2 118,19.8 130.4,19.8 130.4,22.9 145.9,22.9 149,19.8 149,10.5 139.7,1.2 108.6,1.2 99.3,10.5     " />
+            </g>
+          </g>
+        </g>
+      </g>
+      <text
+         sodipodi:linespacing="100%"
+         id="text4738"
+         y="831.71002"
+         x="255.07715"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:70px;line-height:100%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#fbed30;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           y="831.71002"
+           x="255.07715"
+           id="tspan4740"
+           sodipodi:role="line">Hurricane</tspan><tspan
+           id="tspan4742"
+           y="901.71002"
+           x="255.07715"
+           sodipodi:role="line">Evacuation</tspan><tspan
+           id="tspan4746"
+           y="971.71002"
+           x="255.07715"
+           sodipodi:role="line">Zone Finder</tspan></text>
+    </g>
+  </g>
+</svg>

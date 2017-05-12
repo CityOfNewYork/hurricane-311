@@ -139,15 +139,7 @@ $(document).ready(function(){
 	var base = new nyc.ol.layer.BaseLayer();
 	base.on('postcompose', nyc.ol.layer.grayscale);
 	
-	var map = new ol.Map({
-		target: $('#map').get(0),
-		layers: [base],
-		view: new ol.View({
-			projection: 'EPSG:2263',
-			resolutions: nyc.ol.layer.BaseLayer.RESOLUTIONS
-		})
-	});
-	map.getView().fit(nyc.ol.EXTENT, map.getSize());
+	var map = new nyc.ol.Basemap({target: $('#map').get(0)});
 	
 	var style = new nyc.Style();
 	
@@ -157,21 +149,9 @@ $(document).ready(function(){
 		new nyc.Content(MESSAGES),
 		style,
 		new nyc.LocationMgr({
-			autoLocate: true,
 			controls: new nyc.ol.control.ZoomSearch(map),
-			locate: new nyc.ol.Locate(
-				new nyc.Geoclient(GEOCLIENT_URL),
-				'EPSG:2263',
-				nyc.ol.EXTENT
-			),
-			locator: new nyc.ol.Locator({
-				map: map,
-				layer: new ol.layer.Vector({
-					map: map, 
-					source: new nyc.ol.source.Decorating({}, [{getName: function(){return this.get('name')}}]),
-					style: $.proxy(style.locationStyle, style)
-				})
-			})
+			locate: new nyc.ol.Locate(new nyc.Geoclient(GEOCLIENT_URL)),
+			locator: new nyc.ol.Locator({map: map})
 		}),
 		new nyc.Directions('#dir-map', '#directions', GOOGLE_URL),
 		new nyc.ol.Popup(map)
