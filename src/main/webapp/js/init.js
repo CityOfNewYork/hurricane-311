@@ -131,7 +131,7 @@ $(document).ready(function(){
 			setTimeout(loadingComplete, 100);
 		}
 	};
-	var lang = new nyc.Lang('#splash-cont', LANGUAGES);
+	var lang = new nyc.Lang({target: '#splash-cont', languages: LANGUAGES});
 	lang.on(nyc.Lang.EventType.READY, loadingComplete);
 	
 	new nyc.Share('#map');
