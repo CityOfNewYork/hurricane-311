@@ -44,10 +44,4 @@ This app is a stand-alone HTML5 app that can be dropped into the doc root of any
 	* Use ```gradle -Penv=dev deploy``` to build and deploy to gis dev environment
 	* Use ```gradle -Penv=stg deploy``` to build and deploy to gis stg environment
 	* Use ```gradle -Penv=prd deploy``` to build and deploy to gis prd environment
-* __Deploying changes to Evacuation Orders:__
-	* Use ```gradle -Penv=dev createEvacuationOrder``` to deploy evacuation orders to gis dev environment
-	* Use ```gradle -Penv=stg createEvacuationOrder``` to deploy evacuation orders to gis stg environment
-	* Use ```gradle -Penv=prd createEvacuationOrder``` to deploy evacuation orders to gis prd environment
-	* Alternatively, the ```order.json``` file may be edited in the target environment so as to contain an array of numbers from 1 through 7, indicating the Zones requiring evacuation (i.e. ```[1,2,3]```).
-
 
