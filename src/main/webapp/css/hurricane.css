@@ -82,7 +82,7 @@ input.ui-slider-input {
 	background-color: rgba(251, 237, 48, 0);
 
 }
-a[href='#centers-tab'] {
+#centers-tab-btn a.pre-storm {
     padding: 3px 0 19px !important;
 }
 #tabs .ui-navbar li {
@@ -380,13 +380,15 @@ div.leg-sw.z6 {
 }
 #filter label {
 	padding: 7px 11px;
+}
+#filter label, span.filter-center {
 	line-height: 22px;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	max-width: 74px;
 	font-size: 13px !important;
 }
-#dir-toggle a.ui-btn-active, #filter label.ui-btn.ui-btn-active {
+#dir-toggle a.ui-btn-active, #filter label.ui-btn.ui-btn-active, #filter label.ui-btn.ui-btn-active span.filter-center  {
 	color: #fff;
 }
 #filter label[for="filter-access"] {

@@ -31,13 +31,12 @@ nyc.App = function(map, featureDecorations, content, style, locationMgr, directi
 	});
 	$('#copyright').html(content.message('copyright', {yr: new Date().getFullYear()}));
 	
-	me.getOrders(me.ordersUrl());
+	me.getState();
 	
 	me.zoneSource = new nyc.ol.source.Decorating(
-		{url: 'zone.json', format: new ol.format.TopoJSON},
+		{url: 'data/zone.json', format: new ol.format.TopoJSON},
 		[content, {orders: me.zoneOrders}, featureDecorations.zone.fieldAccessors, featureDecorations.zone.htmlRenderer]
 	);
-	me.zoneSource.on(nyc.ol.source.Decorating.LoaderEventType.FEATURESLOADED, $.proxy(me.ready, me));
 	me.zoneSource.on(nyc.ol.source.Decorating.LoaderEventType.FEATURELOADERROR, $.proxy(me.error, me));
 	me.zoneLayer = new ol.layer.Vector({
 		source: me.zoneSource,
@@ -50,9 +49,16 @@ nyc.App = function(map, featureDecorations, content, style, locationMgr, directi
 	);
 
 	me.centerSource = new nyc.ol.source.FilteringAndSorting(
-		{url: 'center.json', format: new ol.format.TopoJSON()},
-		[content, featureDecorations.center.fieldAccessors, featureDecorations.center.htmlRenderer]
+		{loader: new nyc.ol.source.CsvPointFeatureLoader({
+			url: 'data/center.csv',
+			projection: 'EPSG:2263',
+			xCol: 'X',
+			yCol: 'Y'
+		})}, 
+		[content, featureDecorations.center.fieldAccessors, featureDecorations.center.htmlRenderer],
+		{nativeProjection: 'EPSG:2263', projection: 'EPSG:3857'}
 	);
+	
 	me.centerSource.on(nyc.ol.source.Decorating.LoaderEventType.FEATURELOADERROR, $.proxy(me.error, me));
 	me.centerLayer = new ol.layer.Vector({
 		source: me.centerSource,
@@ -212,10 +218,6 @@ nyc.App.prototype = {
 				);
 			}
 		});
-		if (!this.zoneSource.isXhrFeaturesLoaded()){
-			$('#first-load').data('reloaded', true);
-			$('#first-load').show();
-		}
 		$('#tabs li a').removeClass('ui-btn-active');
 		if (mobile){
 			$('#map-tab-btn').show();
@@ -281,14 +283,6 @@ nyc.App.prototype = {
 				me.popup.pan();
 			}				
 		});
-	},
-	/** 
-	 * @private 
-	 * @method
-	 */
-	ready: function(){
-		if ($('#first-load').data('reloaded'))
-			$('#first-load').fadeOut();
 	},
 	/**
 	 * @private
@@ -365,25 +359,33 @@ nyc.App.prototype = {
 	/** 
 	 * @private 
 	 * @method
-	 * @return {string}
 	 */
-	ordersUrl: function(){
-		var date = new Date(),
-			mo = date.getMonth() + 1,
-			dt = date.getDate(),
-			yr = date.getFullYear(),
-			hr = date.getHours();
-		return 'order.json?' + yr + '-' + mo + '-' + dt + '-' + hr;
-		
+	getState: function(){
+		var content = this.content;
+		$('#splash-cont .orders').html('<div class="order">' + content.message('splash_msg') + '</div>');
+		if (content.message('post_storm') == 'false'){
+			$('#centers-tab-btn a').addClass('pre-storm');
+			this.getOrders();
+		}
+		var banner = content.message('banner_text');
+		$('.banner h1').html(banner).attr('title', 'NYC ' + content.message('banner_text'));		
+		$('.banner img').attr('alt', 'NYC ' + content.message('banner_text'));		
+		$('#btn-view-map').html(content.message('btn_text'));		
+		$('#centers-tab-btn a').html(content.message('centers_tab'));		
+		$('.filter-center').html(content.message('filter_centers'));		
+		$('.leg-center').html(content.message('legend_center'));		
+		$('#centers-tab .panel-note').html(content.message('centers_msg'));		
+		$('#legend-tab .panel-note.top').html(content.message('legend_msg'));			
+		$('#first-load').fadeOut();
 	},
 	/** 
 	 * @private 
 	 * @method
 	 */
-	getOrders: function(url){
+	getOrders: function(){
 		$.ajax({
-			url: url,
-			dataType: 'json',
+			url: 'data/order.csv',
+			dataType: 'text',
 			success: $.proxy(this.gotOrders, this),
 			error: $.proxy(this.error, this)
 		});
@@ -391,24 +393,22 @@ nyc.App.prototype = {
 	/** 
 	 * @private 
 	 * @method
-	 * @param {Array<number>} data
+	 * @param {string} csv
 	 */
-	gotOrders: function(data){
-		var content = this.content, orders = this.zoneOrders;
+	gotOrders: function(csv){
+		var content = this.content, orders = this.zoneOrders, data = $.csv.toObjects(csv);
 		if (data.length){
 			var zones = data.length > 1 ? 'Zones ' : 'Zone ';
 			$('#splash').addClass('active-order');
 			$('.orders').html(content.message('splash_yes_order'));
 			$.each(data, function(_, zone){
-				orders[zone] = true;
+				orders[zone.ZONE_EVAC_ORDER] = true;
 			});
 			$.each(data, function(i, zone){
-				zones += zone;
+				zones += zone.ZONE_EVAC_ORDER;
 				zones += (i == data.length - 2) ? ' and ' : ', ';								
 			});
 			$('.orders').append(content.message('splash_zone_order', {zones: zones.substr(0, zones.length - 2)}));
-		}else{
-			$('#splash .orders').html(content.message('no_order'));
 		}					
 	},
 	/** 

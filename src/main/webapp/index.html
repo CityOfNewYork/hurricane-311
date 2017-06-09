@@ -36,6 +36,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.4.5/jquery.mobile.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.15/proj4.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.0.1/ol.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.71/jquery.csv-0.71.min.js"></script>
 </head>
 <body>
 	<table id="first-load">
@@ -47,9 +48,7 @@
 		<div id="splash">
 			<div id="splash-cont">
 				<div class="orders"></div>
-				<button id="btn-view-map" class="capitalize">
-					<span>view map</span><br><span>to find your evacuation zone</span>
-				</button>
+				<button id="btn-view-map" class="capitalize"></button>
 			</div>
 		</div>
 		<div id="panel">
@@ -61,7 +60,7 @@
 								<a class="capitalize" href="#map-tab">map</a>
 							</li>
 							<li id="centers-tab-btn">
-								<a class="capitalize" href="#centers-tab" onclick="nyc.app.initList();">evacuation<br>centers</a>
+								<a class="capitalize" href="#centers-tab" onclick="nyc.app.initList();"></a>
 							</li>
 							<li>
 								<a class="capitalize" href="#legend-tab">legend</a>
@@ -71,15 +70,12 @@
 					<div id="map-tab"></div>
 					<div id="centers-tab">
 						<div class="centers-top">
-							<div class="panel-note">If you are required to evacuate, it is recommended that you shelter at the home of friends or family outside of the 
-								evacuation area. If you wish to go to a public facility, select any evacuation center from the following list and click 
-								for travel directions.
-							</div>
+							<div class="panel-note"></div>
 							<div id="filter" data-role="controlgroup" data-type="horizontal">
 								<input id="filter-all" type="radio" checked name="filter" data-prop='ACCESSIBLE' data-vals="N,Y">
-								<label for="filter-all" class="capitalize">all centers</label>
+								<label for="filter-all" class="capitalize">all <span class="filter-center"></span></label>
 								<input id="filter-access" type="radio" name="filter" data-prop='ACCESSIBLE' data-vals="Y">
-								<label for="filter-access" class="capitalize">only accessible centers</label>
+								<label for="filter-access" class="capitalize">only accessible <span class="filter-center"></span></label>
 							</div>
 						</div>
 						<div class="centers-bottom">
@@ -87,26 +83,15 @@
 						</div>
 					</div>
 					<div id="legend-tab">
-						<div class="panel-note">
-							<p>
-								Use the NYC Hurricane Evacuation Zone Finder to find out if your address is in a hurricane evacuation zone.
-								The best way to be prepared for the possibility of a hurricane evacuation is to know your evacuation zone,
-								and plan your destination and travel routes ahead of time. Zones are color-coded and labeled 1, 2, 3, 4, 5, and 6
-								when represented on a map.
-							</p>
-							<p>
-								Information on evacuation centers is subject to change. Please revisit this site for updated 
-								reports on building status and wheelchair accessibility features.							
-							</p>
-						</div>
+						<div class="panel-note top"></div>
 						<div class="leg">
 							<div class="leg-it ec">
 								<div class="leg-sw ec-access"></div>
-								<span class="capitalize">accessible evacuation center</span>
+								<span class="capitalize">accessible <span class="leg-center"></span></span>
 							</div>
 							<div class="leg-it ec">
 								<div class="leg-sw"></div>
-								<span class="capitalize">evacuation center</span>
+								<span class="capitalize"><span class="leg-center"></span></span>
 								</div>
 							<div class="leg-it">
 								<div class="leg-sw zone z1"></div>

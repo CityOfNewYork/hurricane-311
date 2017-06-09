@@ -1,0 +1,10 @@
+key,value
+post_storm,true
+banner_text,Something different
+splash_msg,A different splash message
+btn_text,Lookie a map
+centers_tab,shelters
+filter_centers,shelters
+centers_msg,A different centers message
+legend_msg,A different legend message
+legend_center,shelter
