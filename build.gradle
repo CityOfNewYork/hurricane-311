@@ -119,44 +119,6 @@ task deploy(dependsOn: [archive]) << {
     }
 }
 
-task createEvacuationOrder(dependsOn: [setEnv]) << {
-	def console = System.console()
-	def zones = console.readLine('\n\n> Enter a comman-delimited list of zones (1-7) requiring evacuation or ENTER to clear existing orders:')
-	def errors = new ArrayList<String>()
-
-	zones = zones.length() > 0 ? zones.split(',') : []
-	
-	for (zone in zones){ 
-		def zn = new Integer(zone)
-		if (zn < 1 || zn > 7) {
-			errors.add("${zone} is not a valid zone")
-		}
-	}
-	if (errors.size() > 0){
-		throw new GradleException ("\n\nERRORS: ${errors}\nNO EVACUATION ORDERS HAVE BEEN DEPLOYED\n\n") 
-	}else{
-		def mobileDir = project.ext['mobile.dir']
-		def deployDir = "${mobileDir}/${remoteDir}"
-	
-		mkdir('build')
-		file('build/order.json').text = zones.toString()
-	
-		remotes.deployTarget.host = project.ext["${env}.host"]
-	    remotes.deployTarget.user = project.ext["${env}.user"]	
-	    remotes.deployTarget.identity = file("${System.properties['user.home']}/.ssh/id_rsa")
-		
-		ssh.run {
-	        session(remotes.deployTarget) {
-	            execute "cp ${deployDir}/order.json ${deployDir}/order.json.bak"
-	            put "build/order.json", deployDir
-	            execute "rm ${deployDir}/order.json.bak"
-	        }
-	    }
-	    
-	    println "EVACUATION ORDERS FOR ZONES ${zones} HAVE BEEN DEPLOYED TO ${remotes.deployTarget.host}"
-	}
-}
-
 task wrapper(type: Wrapper) {
     gradleVersion '2.9'
 }
