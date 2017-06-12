@@ -34,7 +34,7 @@ nyc.App = function(map, featureDecorations, content, style, locationMgr, directi
 	me.getState();
 	
 	me.zoneSource = new nyc.ol.source.Decorating(
-		{url: 'data/zone.json', format: new ol.format.TopoJSON},
+		{url: 'data/zone.json' , format: new ol.format.TopoJSON},
 		[content, {orders: me.zoneOrders}, featureDecorations.zone.fieldAccessors, featureDecorations.zone.htmlRenderer]
 	);
 	me.zoneSource.on(nyc.ol.source.Decorating.LoaderEventType.FEATURELOADERROR, $.proxy(me.error, me));
@@ -50,7 +50,7 @@ nyc.App = function(map, featureDecorations, content, style, locationMgr, directi
 
 	me.centerSource = new nyc.ol.source.FilteringAndSorting(
 		{loader: new nyc.ol.source.CsvPointFeatureLoader({
-			url: 'data/center.csv',
+			url: 'data/center.csv?' + cacheBust,
 			projection: 'EPSG:2263',
 			xCol: 'X',
 			yCol: 'Y'
@@ -384,7 +384,7 @@ nyc.App.prototype = {
 	 */
 	getOrders: function(){
 		$.ajax({
-			url: 'data/order.csv',
+			url: 'data/order.csv?' + cacheBust,
 			dataType: 'text',
 			success: $.proxy(this.gotOrders, this),
 			error: $.proxy(this.error, this)

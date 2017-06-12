@@ -1,3 +1,6 @@
+var timeOffset = 1000 * 60 * 5;
+var cacheBust = Math.round(new Date().getTime() / timeOffset) * timeOffset;
+
 function csvContentLoaded(csvContent){
 
 	console.info(csvContent);
@@ -164,4 +167,4 @@ function csvContentLoaded(csvContent){
 	});
 };
 
-new nyc.CsvContent('data/content.csv', csvContentLoaded);
+new nyc.CsvContent('data/content.csv?' + cacheBust, csvContentLoaded);
