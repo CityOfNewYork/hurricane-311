@@ -261,7 +261,7 @@ nyc.App.prototype = {
 			feature = me.centerSource.getFeatureById(id),
 			to = feature.getAddress(),
 			name = feature.getName(),
-			from = me.location.name || '';
+			from = me.origin();
 		
 		$('body').pagecontainer('change', $('#dir-page'), {transition: 'slideup'});
 		if (me.lastDir != from + '|' + to){
@@ -283,6 +283,19 @@ nyc.App.prototype = {
 				me.popup.pan();
 			}				
 		});
+	},
+	/** 
+	 * @private 
+	 * @method
+	 * @return {string}
+	 */
+	origin: function(){
+		var location = this.location || {};
+		if (location.type == 'geolocation'){
+			var coordinates = proj4('EPSG:3857', 'EPSG:4326', location.coordinates);
+			return [coordinates[1], coordinates[0]];
+		}
+		return location.name || '';
 	},
 	/**
 	 * @private
