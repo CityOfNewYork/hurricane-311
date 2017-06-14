@@ -107,23 +107,13 @@ function setup(assert, hooks){
 		center_info_access: '<div class="capitalize inf-btn inf-detail-btn"><a data-role="button" onclick=\'nyc.util.preventDblEventHandler(event, nyc.app.access, nyc.app);\'>details...</a></div><div class="inf-detail">${detail}</div>',
 		center_tip: '<div class="${css}">${name}</div>',
 		bad_input: 'The location you entered was not uderstood',
-		data_load_error: 'There was a problem loading map data. Please refresh the page to try again.',
-		copyright: '&copy; ${yr} City of New York'
+		data_load_error: 'There was a problem loading map data. Please refresh the page to try again.'
 	};
-	
-	hooks.TEST_CONTENT = new nyc.Content(hooks.MESSAGES);
-	
+		
 	hooks.TEST_MAP = (function(){
 		var div = $('<div class="test-map"></div>')[0];
 		$('body').append(div);
-		var map = new ol.Map({
-			target: div,
-			view: new ol.View({
-				projection: 'EPSG:2263',
-				resolutions: nyc.ol.layer.BaseLayer.RESOLUTIONS
-			})
-		});
-		map.getView().fit(nyc.ol.EXTENT, map.getSize());
+		var map = new nyc.ol.Basemap({target: div});
 		return map;
 	}());
 	
@@ -133,7 +123,6 @@ function teardown(assert, hooks){
 	delete hooks.SURFACE_WATER_ZONE;
 	delete hooks.FEATURE_DECORATIONS;
 	delete hooks.MESSAGES;
-	delete hooks.TEST_CONTENT;
 	
 	var div = hooks.TEST_MAP.getTarget();
 	delete hooks.TEST_MAP;

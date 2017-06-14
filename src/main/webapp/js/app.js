@@ -17,6 +17,7 @@ window.nyc = window.nyc || {};
 nyc.App = function(map, featureDecorations, content, style, locationMgr, directions, popup){
 	var me = this;
 	me.map = map;
+	me.geocoder = locationMgr.locate.geocoder,
 	me.content = content;
 	me.view = map.getView();
 	me.directions = directions;
@@ -29,7 +30,6 @@ nyc.App = function(map, featureDecorations, content, style, locationMgr, directi
 		$('#splash').fadeOut();
 		me.layout();
 	});
-	$('#copyright').html(content.message('copyright', {yr: new Date().getFullYear()}));
 	
 	me.getState();
 	
@@ -50,8 +50,9 @@ nyc.App = function(map, featureDecorations, content, style, locationMgr, directi
 
 	me.centerSource = new nyc.ol.source.FilteringAndSorting(
 		{loader: new nyc.ol.source.CsvPointFeatureLoader({
-			url: 'data/center.csv?' + cacheBust,
+			url: 'data/center.csv?' + window.cacheBust,
 			projection: 'EPSG:2263',
+			fidCol: 'ID',
 			xCol: 'X',
 			yCol: 'Y'
 		})}, 
@@ -124,6 +125,11 @@ nyc.App.prototype = {
 	 * @member {ol.Map}
 	 */
 	map: null,
+	/** 
+	 * @private
+	 * @member {nyc.Geocoder}
+	 */
+	geocoder: null,
 	/** 
 	 * @private
 	 * @member {ol.View}
@@ -356,7 +362,7 @@ nyc.App.prototype = {
 	 */
 	listHeight: function(){
 		$('#centers-tab .centers-bottom').height(
-			$('#centers-tab').height() - $('#centers-tab .centers-top').height() - $('#copyright').height() - 5
+			$('#centers-tab').height() - $('#centers-tab .centers-top').height() - 5
 		);
 	},
 	/** 
@@ -376,7 +382,7 @@ nyc.App.prototype = {
 	getState: function(){
 		var content = this.content;
 		$('#splash-cont .orders').html('<div class="order">' + content.message('splash_msg') + '</div>');
-		if (content.message('post_storm') == 'false'){
+		if (content.message('post_storm') == 'NO'){
 			$('#centers-tab-btn a').addClass('pre-storm');
 			this.getOrders();
 		}
@@ -395,9 +401,16 @@ nyc.App.prototype = {
 	 * @private 
 	 * @method
 	 */
+	getOrderUrl: function(){
+		return 'data/order.csv?' + window.cacheBust;
+	},
+	/** 
+	 * @private 
+	 * @method
+	 */
 	getOrders: function(){
 		$.ajax({
-			url: 'data/order.csv?' + cacheBust,
+			url: this.getOrderUrl(),
 			dataType: 'text',
 			success: $.proxy(this.gotOrders, this),
 			error: $.proxy(this.error, this)
@@ -409,20 +422,26 @@ nyc.App.prototype = {
 	 * @param {string} csv
 	 */
 	gotOrders: function(csv){
-		var content = this.content, orders = this.zoneOrders, data = $.csv.toObjects(csv);
-		if (data.length){
-			var zones = data.length > 1 ? 'Zones ' : 'Zone ';
+		var content = this.content, orders = this.zoneOrders, data = $.csv.toObjects(csv), evacReq = [], zones = 'Zone ';
+		this.ordersLoaded = true;
+		$.each(data, function(_, zone){
+			if (zone.EVACUATE == 'YES'){
+				orders[zone.ZONE] = true;
+				evacReq.push(zone.ZONE);
+			}				
+		});
+		if (evacReq.length){
 			$('#splash').addClass('active-order');
 			$('.orders').html(content.message('splash_yes_order'));
-			$.each(data, function(_, zone){
-				orders[zone.ZONE_EVAC_ORDER] = true;
-			});
-			$.each(data, function(i, zone){
-				zones += zone.ZONE_EVAC_ORDER;
-				zones += (i == data.length - 2) ? ' and ' : ', ';								
+			if (evacReq.length > 1){
+				zones = 'Zones ';
+			}
+			$.each(evacReq, function(i, zone){
+				zones += zone;
+				zones += (i == evacReq.length - 2) ? ' and ' : ', ';								
 			});
 			$('.orders').append(content.message('splash_zone_order', {zones: zones.substr(0, zones.length - 2)}));
-		}					
+		}
 	},
 	/** 
 	 * @private 
@@ -455,12 +474,13 @@ nyc.App.prototype = {
 			name = location.name.replace(/,/, '<br>'), 
 			coords = location.coordinates, 
 			accuracy = location.accuracy,
+			buffer = this.geocoder.accuracyDistance(accuracy),
 			features = [],
 			html;
 		if (accuracy == nyc.Geocoder.Accuracy.HIGH){
 			features = zones.getFeaturesAtCoordinate(coords);
 		}else{
-			var extent = ol.extent.buffer(ol.extent.boundingExtent([coords]), accuracy);
+			var extent = ol.extent.buffer(ol.extent.boundingExtent([coords]), buffer);
 			zones.forEachFeatureIntersectingExtent(extent, function(feature){
 				features.push(feature);
 			});
@@ -570,6 +590,6 @@ nyc.App.prototype = {
 	 */
 	alert: function(msg){
 		this.dialog = this.dialog || new nyc.Dialog();
-		this.dialog.ok(msg);
+		this.dialog.ok({message: msg});
 	}
 };

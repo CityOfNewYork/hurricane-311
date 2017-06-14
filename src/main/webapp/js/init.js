@@ -2,13 +2,11 @@ var timeOffset = 1000 * 60 * 5;
 var cacheBust = Math.round(new Date().getTime() / timeOffset) * timeOffset;
 
 function csvContentLoaded(csvContent){
-
-	console.info(csvContent);
 	
 	$(document).ready(function(){
 	
 		var SURFACE_WATER_ZONE = 7,
-			GEOCLIENT_URL = '//maps.nyc.gov/geoclient/v1/search.json?app_key=YOUR_APP_KEY&app_id=YOUR_APP_ID',
+			GEOCLIENT_URL = '//maps.nyc.gov/geoclient/v1/search.json?app_key=A159073974562987C&app_id=hurricane-evac',
 			GOOGLE_URL = 'https://maps.googleapis.com/maps/api/js?sensor=false&libraries=visualization',
 			MESSAGES = {
 				yes_order: '<div class="order active-order">You are required to evacuate</div>',
@@ -30,7 +28,6 @@ function csvContentLoaded(csvContent){
 				bad_input: 'The location you entered was not understood',
 				data_load_error: 'There was a problem loading map data. Please refresh the page to try again.',
 				trip_planner: 'For directions with information regarding wheelchair accessible subway stations use the <a href="http://tripplanner.mta.info/MyTrip/ui_phone/cp/idefault.aspx" target="_blank">MTA Trip Planner</a>.',
-				copyright: '&copy; ${yr} City of New York',
 				no_directions: '<span class="capitalize">${travelMode}</span> directions from <b><span class="notranslate" translate="no">${origin}</span></b> to <b><span class="notranslate" translate="no">${destination}</span></b> are not available.  Please try a different mode of transportation.',
 				acc_feat: '<ul><li>${ACC_FEAT}</li><li>Access to the main shelter areas will be unobstructed and without steps. </li><li>Accessible restrooms are available.</li><li>Accessible dormitory and eating/cafeteria areas are available.</li><li>Additional amenities will be available such as accessible cots and mobility aids (canes, crutches, manual wheelchairs, storage space for refrigerated medication, etc.).</li></ul>'
 			},
