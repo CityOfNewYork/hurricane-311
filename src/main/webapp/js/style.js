@@ -20,13 +20,13 @@ nyc.Style = (function(){
 			return nyc.util.isIe() ? '.png' : '.svg';
 		},
 		/**
-		 * @desc Return the zoom level for a resolution 
+		 * @desc Return the sizeIndex for a resolution 
 		 * @public
 		 * @method
 		 * @param {number} resolution The resolution of the map view
 		 * @return {number} 
 		 */
-		zoom: function(resolution){
+		sizeIndex: function(resolution){
 			return nyc.ol.TILE_GRID.getZForResolution(resolution) - 8;
 		},
 		zoneStyle: function(feature, resolution){
@@ -41,13 +41,13 @@ nyc.Style = (function(){
 			return this.zoneCache[zone];
 		},
 		centerStyle: function(feature, resolution){
-			var zoom = this.zoom(resolution),
+			var sizeIndex = this.sizeIndex(resolution),
 				access = feature.isAccessible(),
-				radius = [8, 8, 8, 12, 12, 12, 16, 16, 16, 16, 16, 20, 20, 20][zoom],
+				radius = [8, 8, 8, 12, 12, 12, 16, 16, 16, 16, 16, 20, 20, 20][sizeIndex],
 				image = 'img/access0' + this.imgExt();
-			this.centerCache[zoom] = this.centerCache[zoom] || {};
-			if (!this.centerCache[zoom][access]){
-				this.centerCache[zoom][access] = [new ol.style.Style({
+			this.centerCache[sizeIndex] = this.centerCache[sizeIndex] || {};
+			if (!this.centerCache[sizeIndex][access]){
+				this.centerCache[sizeIndex][access] = [new ol.style.Style({
 					image: new ol.style.Circle({
 						radius: radius,
 						fill: new ol.style.Fill({color: '#085095'}),
@@ -55,7 +55,7 @@ nyc.Style = (function(){
 					})
 				})];
 				if (access){
-					this.centerCache[zoom][access].push(new ol.style.Style({
+					this.centerCache[sizeIndex][access].push(new ol.style.Style({
 						image: new ol.style.Icon({
 							scale: radius / 128,
 							src: image
@@ -63,7 +63,7 @@ nyc.Style = (function(){
 					}));
 				}
 			}
-			return this.centerCache[zoom][access];
+			return this.centerCache[sizeIndex][access];
 		}
 	};
 
