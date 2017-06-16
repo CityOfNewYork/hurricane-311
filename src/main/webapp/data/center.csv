@@ -4,7 +4,7 @@ Q505,1038959.20684,197885.084923,Hillcrest HS,160-05 Highland Avenue,4,Jamaica,P
 Q268,1043802.51638,197171.097834,PS - IS 268,92-07 175 Street,4,Jamaica,Jamaica Avenue,93 Avenue,11433,"Y",The main/accessible entrance to this location for sheltering purposes is 92-07 175th Street, Queens (Close to the intersection with Jamaica Avenue)
 Q025,1042504.70434,218052.162043,JHS 25,34-65 192 Street,4,Flushing,34 Avenue,35 Avenue,11355,"N",
 Q074,1048876.05545,210779.690367,IS 74,61-15 Oceania Street,4,Oakland Gardens,Horace Harding Expy,210 Street,11362,"N",
-Q566,1059380.12761,210618.771398,Queens HS of Teach., Lib. Arts & Sci.,74-20 Commonwealth Boulevard,4,Bellerose,Grand Central Pkwy,76 Avenue,11426,"Y",The main/accessible entrance to this location for sheltering purposes is 74-20 Commonwealth Boulevard, Queens (Close to the intersection with Cross Island Parkway and Grand Central Parkway)
+Q566,1059380.12761,210618.771398,"Queens HS of Teach., Lib. Arts & Sci.",74-20 Commonwealth Boulevard,4,Bellerose,Grand Central Pkwy,76 Avenue,11426,"Y",The main/accessible entrance to this location for sheltering purposes is 74-20 Commonwealth Boulevard, Queens (Close to the intersection with Cross Island Parkway and Grand Central Parkway)
 X235,1006480.20356,243680.011049,PS - IS 218,1220 Gerard Avenue,2,Bronx,E 167 Street,E 168 Street,10452,"Y",The main/accessible entrance to this location for sheltering purposes is 1220 Gerard Avenue, Bronx (Close to the intersection with East 167th Street)
 X102,1021341.52357,244563.684479,PS 102,1827 Archer St,2,Bronx,Taylor Avenue,Thieriot Avenue,10460,"N",
 X193,1014707.34459,246718.788108,PS 211,1919 Prospect Avenue,2,Bronx,E 176 Street,East Tremont Avenue,10457,"N",
@@ -20,7 +20,7 @@ Q020,1033000.36837,215650.719011,PS 20,142-30 Barclay Avenue,4,Flushing,Bowne St
 Q570,1005020.73765,214745.45901,Frank Sinatra HS,35-12 35 Avenue,4,Astoria,35 Street,36 Street,11101,"N",
 Q145,1015440.04719,214091.972128,IS 145,33-34 80 Street,4,Jackson Heights,Northern Blvd,34 Avenue,11372,"N",
 X074,1015995.27246,236471.961489,IS 201,730 Bryant Avenue,2,Bronx,Lafayette Avenue,Spofford Avenue,10474,"N",
-X460,1006660.98437,240759.77542,HS of Law, Gov't and Justice,244 E 163 Street,2,Bronx,Sherman Avenue,Grant Avenue,10451,"Y",The main/accessible entrance to this location for sheltering purposes is  244 East 163rd Street (Between Grant Avenue and Sherman Avenue)
+X460,1006660.98437,240759.77542,"HS of Law, Gov't and Justice",244 E 163 Street,2,Bronx,Sherman Avenue,Grant Avenue,10451,"Y",The main/accessible entrance to this location for sheltering purposes is  244 East 163rd Street (Between Grant Avenue and Sherman Avenue)
 X158,1011759.60507,240728.995626,IS 158,800 Home Street,2,Bronx,Tinton Avenue,Union Avenue,10456,"N",
 X132,1009984.82844,242431.67037,PS 132,1245 Washington Avenue,2,Bronx,E 168 Street,E 169 Street,10456,"N",
 K055,1008310.527,185023.555856,IS 55,2021 Bergen Street,3,Brooklyn,Thomas Boyland Street,Rockaway Avenue,11233,"N",

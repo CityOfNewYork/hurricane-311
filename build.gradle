@@ -21,7 +21,6 @@ ext{
 	prd_nyclib = '/nyc-lib/'
 	
 	default_env = 'local'
-	remoteDir = "hurricane-2015"	
 }
 
 task setEnv << {
@@ -41,6 +40,7 @@ task copyFiles(dependsOn: clean) << {
 		include 'manifest.webmanifest'
 		exclude 'img/Thumbs.db'
 		include 'css/**'
+		include 'data/**'
 		include 'js/**'
 		into "build/${ver}" 
 	}
