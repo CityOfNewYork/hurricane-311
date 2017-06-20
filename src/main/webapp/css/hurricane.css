@@ -176,7 +176,7 @@ input.ui-slider-input {
 	background-color: rgb(251, 237, 48);
 	border-color: #085095;
 }
-#splash .ui-btn:hover div, #splash .ui-btn:hover span, #splash a.ui-btn:hover {
+#splash .ui-btn:hover div, #splash .ui-btn:hover span, #splash button.ui-btn:hover, #splash a.ui-btn:hover {
 	color: #085095;
 }
 #splash button span:first-of-type {
