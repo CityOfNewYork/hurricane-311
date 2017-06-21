@@ -1,0 +1,182 @@
+html, body, #map, #splash{
+	font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+	font-size:14px;
+	margin:0;
+	padding:0;
+}
+body{
+	width:600px;
+	border-right:1px solid #253494;
+}
+.section, #possible{
+	margin:10px 0;
+	padding:20px 20px;
+}
+.section{
+	border-top:5px solid #253494;
+}
+#possible{
+	display: none;
+}
+.name{
+	font-weight:bold;
+}
+#banner{
+	z-index:3000;
+	width:100%;
+	overflow:hidden;
+    background-color:#253494;
+    height: 34px;  
+}
+#banner img {
+    height: 24px;
+    margin: 4px 3px 0 3px;
+}
+#banner div {
+	color: #FBEE31;
+    font-family: arial;
+    font-size: 20px;
+    font-weight: bold;
+    left: 75px;
+    position: absolute;
+    top: 3px;
+    width: 200px;
+    font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+#address{
+    border: 1px solid black;
+    height: 22px;
+    padding: 2px 0 0;
+    width: 280px;
+}
+button{
+	height:30px;
+	margin:0 0 0 5px;
+}
+#order{
+	font-size: 22px;
+	color:#EA2524;
+	padding:10px 5px 0;
+	font-weight:bold;
+}
+#userAddr, #userZone, #userEvac{
+	color:#EA2524;
+	font-weight:bold;
+	width:400px;
+}
+.btn{
+	z-index:1;
+	position:absolute;
+	border:1px solid black;	
+	cursor:pointer;
+	background-color:white;
+	width:44px;
+	height:44px;
+	border-radius:22px;
+	background-position:center;
+	background-repeat:no-repeat;
+	background-size:22px;
+	-webkit-background-size: length_x length_y;
+	text-align:center;
+	vertical-align:middle;
+	font-size:25px;
+	font-weight:bold;
+}
+.fromTo{
+    font-weight: bold;
+}
+#modes{
+    width: 100%;
+    height: 50px;
+	background-color:#EEEEEE;
+    border-top: 1px solid silver;
+    padding: 3px 3px 0;
+}
+#modes div{
+	background-size:28px;
+}
+#modes .activeMode{
+	background-color:#EA2524;
+}
+#driving{
+	background-image:url(../img/car.png);
+} 
+#transit{
+	left:152px;
+	background-image:url(../img/rail.png);
+} 
+#bicycling{
+	left:201px;
+	background-image:url(../img/bike.png);
+}
+#walking{
+	left:250px;
+	background-image:url(../img/walk.png);
+}
+.trip, #toTop{
+	color:#253494;
+	text-decoration:underline;
+	cursor:pointer;
+	font-weight:bold;
+	white-space:nowrap;
+}
+.details{
+	color:#253494;
+	text-decoration:underline;
+	cursor:pointer;
+	margin:0 0 0 3px;
+}
+#toTop{
+	position:fixed;
+	left:500px;
+	bottom:10px;
+}
+.trip:HOVER, .details:HOVER, #toTop:HOVER{
+	color:#EA2524;
+}
+.title{
+	font-weight:bold;
+	padding: 10px 0;
+}
+#sheltersList{
+	width:475px;
+}
+#shelters table{
+	width:100%;
+	border-collapse:collapse;
+}
+#shelters .title{
+	width:400px;
+}
+.evRow{
+	background-color:#D3D3D3;
+}
+#shelters td{
+	padding:8px;
+}
+td.dist{
+	width:55px;
+}
+.accessP, .accessY{
+	width:16px;
+	height:16px;
+	background-position:center;
+	background-repeat:no-repeat;
+	background-size:16px;
+	-webkit-background-size: length_x length_y;
+	float:left;
+}
+.accessY{
+ 	background-image:url(../img/shelter_fa_16.png);
+}
+.accessP{
+ 	background-image:url(../img/shelter_pa_16.png);
+}
+.accessN{
+	display:none;
+}
+.role{
+	font-weight:bold;
+	color:blue;
+}
+

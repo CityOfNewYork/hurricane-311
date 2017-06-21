@@ -42,6 +42,7 @@ task copyFiles(dependsOn: clean) << {
 		include 'css/**'
 		include 'data/**'
 		include 'js/**'
+		include '311/**'
 		into "build/${ver}" 
 	}
 }
