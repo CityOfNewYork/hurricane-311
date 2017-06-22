@@ -1,4 +1,4 @@
-html, body, #map, #splash{
+html, body, #map{
 	font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
 	font-size:14px;
 	margin:0;
@@ -35,13 +35,11 @@ body{
 #banner div {
 	color: #FBEE31;
     font-family: arial;
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bold;
     left: 75px;
     position: absolute;
     top: 3px;
-    width: 200px;
-    font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
 }
 #address{
     border: 1px solid black;
@@ -82,57 +80,15 @@ button{
 	font-size:25px;
 	font-weight:bold;
 }
-.fromTo{
-    font-weight: bold;
-}
-#modes{
-    width: 100%;
-    height: 50px;
-	background-color:#EEEEEE;
-    border-top: 1px solid silver;
-    padding: 3px 3px 0;
-}
-#modes div{
-	background-size:28px;
-}
-#modes .activeMode{
-	background-color:#EA2524;
-}
-#driving{
-	background-image:url(../img/car.png);
-} 
-#transit{
-	left:152px;
-	background-image:url(../img/rail.png);
-} 
-#bicycling{
-	left:201px;
-	background-image:url(../img/bike.png);
-}
-#walking{
-	left:250px;
-	background-image:url(../img/walk.png);
-}
-.trip, #toTop{
+#toTop{
 	color:#253494;
 	text-decoration:underline;
 	cursor:pointer;
 	font-weight:bold;
 	white-space:nowrap;
-}
-.details{
-	color:#253494;
-	text-decoration:underline;
-	cursor:pointer;
-	margin:0 0 0 3px;
-}
-#toTop{
 	position:fixed;
 	left:500px;
 	bottom:10px;
-}
-.trip:HOVER, .details:HOVER, #toTop:HOVER{
-	color:#EA2524;
 }
 .title{
 	font-weight:bold;
@@ -175,8 +131,3 @@ td.dist{
 .accessN{
 	display:none;
 }
-.role{
-	font-weight:bold;
-	color:blue;
-}
-
