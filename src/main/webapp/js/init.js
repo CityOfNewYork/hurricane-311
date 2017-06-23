@@ -1,12 +1,14 @@
 var timeOffset = 1000 * 60 * 5;
 var cacheBust = Math.round(new Date().getTime() / timeOffset) * timeOffset;
 
+nyc.SURFACE_WATER_ZONE = '7';
+nyc.NO_ZONE = 'X';
+
 function csvContentLoaded(csvContent){
 	
 	$(document).ready(function(){
 	
-		var SURFACE_WATER_ZONE = 7,
-			GEOCLIENT_URL = '//maps.nyc.gov/geoclient/v1/search.json?app_key=A159073974562987C&app_id=hurricane-evac',
+		var GEOCLIENT_URL = '//maps.nyc.gov/geoclient/v1/search.json?app_key=A159073974562987C&app_id=hurricane-evac',
 			GOOGLE_URL = 'https://maps.googleapis.com/maps/api/js?sensor=false&libraries=visualization',
 			MESSAGES = {
 				yes_order: '<div class="order active-order">You are required to evacuate</div>',
@@ -112,7 +114,7 @@ function csvContentLoaded(csvContent){
 							return this.get('zone');
 						},
 						isSurfaceWater: function(){
-							return this.getZone() == SURFACE_WATER_ZONE;
+							return this.getZone() == nyc.SURFACE_WATER_ZONE;
 						}
 					},
 					htmlRenderer: {

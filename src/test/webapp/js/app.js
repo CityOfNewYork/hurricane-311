@@ -2,6 +2,9 @@ QUnit.module('nyc.App', {
 	beforeEach: function(assert){
 		setup(assert, this);
 				
+		nyc.SURFACE_WATER_ZONE = '7';
+		nyc.NO_ZONE = 'X';
+
 		var filter_btns_html = '<div id="filter">' +
 			'<input id="filter-all" type="radio" name="filter" data-prop="ACCESSIBLE" data-vals="N,A,P">' +
 			'<input id="filter-access" type="radio" name="filter" data-prop="ACCESSIBLE" data-vals="A,P">' +
@@ -65,9 +68,7 @@ QUnit.module('nyc.App', {
 				this.options = options;
 			};
 		};
-		this.MOCK_POPUP = new MockPopup();
-
-
+		this.MOCK_POPUP = new MockPopup();		
 	},
 	afterEach: function(assert){
 		teardown(assert, this);
@@ -76,7 +77,11 @@ QUnit.module('nyc.App', {
 	}
 });
 
-QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH yes order)', function(assert){
+
+
+
+
+QUnit.test('zone (yes order, is in geocoded data)', function(assert){
 	assert.expect(2);
 	
 	var theTest = this;
@@ -105,7 +110,8 @@ QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH yes order)', function(as
 		app.location = {
 			name: '5 Water Street, Manhattan, NY 10004',
 			coordinates: [-8238980.4561055275, 4968508.079970751],
-			accuracy: nyc.Geocoder.Accuracy.HIGH
+			accuracy: nyc.Geocoder.Accuracy.HIGH,
+			data: {hurricaneEvacuationZone: '1'}
 		};
 		app.showPopup = function(coords, html){
 			popupCoords = coords;
@@ -140,7 +146,7 @@ QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH yes order)', function(as
 	
 });
 
-QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH no order)', function(assert){
+QUnit.test('zone, no order, is in geocoded data)', function(assert){
 	assert.expect(2);
 	
 	var theTest = this;
@@ -169,7 +175,8 @@ QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH no order)', function(ass
 		app.location = {
 			name: '59 Maiden Lane, Manhattan, NY 10038',
 			coordinates: [-8238530.883679672, 4969463.37417323],
-			accuracy: nyc.Geocoder.Accuracy.HIGH
+			accuracy: nyc.Geocoder.Accuracy.HIGH,
+			data: {hurricaneEvacuationZone: '5'}
 		};
 		app.showPopup = function(coords, html){
 			popupCoords = coords;
@@ -203,7 +210,7 @@ QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH no order)', function(ass
 	});
 });
 
-QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH surface water)', function(assert){
+QUnit.test('zone (surface water, is in geocoded data)', function(assert){
 	assert.expect(2);
 	
 	var theTest = this;
@@ -232,7 +239,8 @@ QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH surface water)', functio
 		app.location = {
 			name: 'Brooklyn Bridge, Manhattan, NY 10038',
 			coordinates: [-8237490.54653364, 4969295.73564776],
-			accuracy: nyc.Geocoder.Accuracy.HIGH
+			accuracy: nyc.Geocoder.Accuracy.HIGH,
+			data: {hurricaneEvacuationZone: '7'}
 		};
 		app.showPopup = function(coords, html){
 			popupCoords = coords;
@@ -263,7 +271,7 @@ QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH surface water)', functio
 	});
 });
 
-QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH no zone)', function(assert){
+QUnit.test('zone (no zone, is in geocoded data)', function(assert){
 	assert.expect(2);
 	
 	var theTest = this;
@@ -292,7 +300,8 @@ QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH no zone)', function(asse
 		app.location = {
 			name: '102-25 67 Drive, Queens, NY 11375',
 			coordinates: [-8221025.695549702, 4972117.922980856],
-			accuracy: nyc.Geocoder.Accuracy.HIGH
+			accuracy: nyc.Geocoder.Accuracy.HIGH,
+			data: {hurricaneEvacuationZone: 'X'}
 		};
 		app.showPopup = function(coords, html){
 			popupCoords = coords;
@@ -323,7 +332,260 @@ QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH no zone)', function(asse
 	});
 });
 
-QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH yes order)', function(assert){
+
+
+QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH, yes order, not in geocoded data)', function(assert){
+	assert.expect(2);
+	
+	var theTest = this;
+	var done = assert.async();
+		
+	new nyc.CsvContent('data/pre-storm-content.csv', function(csvMessages){
+		var getOrderUrl = nyc.App.prototype.getOrderUrl;
+		nyc.App.prototype.getOrderUrl = function(){
+			return 'data/yes-order.csv';
+		};
+
+		var app = new nyc.App(
+			theTest.TEST_MAP,
+			theTest.FEATURE_DECORATIONS,
+			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Style(),
+			theTest.MOCK_LOCATION_MGR,
+			theTest.MOCK_DIRECTIONS,
+			theTest.MOCK_POPUP
+		);
+		
+		var popupCoords = null;
+		var popupHtml = null;
+		var tries = 0;
+		
+		app.location = {
+			name: '5 Water Street, Manhattan, NY 10004',
+			coordinates: [-8238980.4561055275, 4968508.079970751],
+			accuracy: nyc.Geocoder.Accuracy.HIGH,
+			data: {}
+		};
+		app.showPopup = function(coords, html){
+			popupCoords = coords;
+			popupHtml = html;
+		};
+		
+		var wait = function(){
+			tries++;
+			if (app.zoneSource.getFeatures().length){ //wait for zones to load
+				app.zone();
+				assert.deepEqual(popupCoords, app.location.coordinates);
+				assert.equal(
+					popupHtml,
+					app.content.message(
+						'location_zone_order',
+						{zone: 1, order: app.content.message('yes_order'), name: '5 Water Street<br> Manhattan, NY 10004'}
+					)
+				);
+				done();
+				nyc.App.prototype.getOrderUrl = getOrderUrl;
+			}else if (tries < 20){
+				setTimeout(wait, 100);
+			}else{
+				assert.ok(false, 'Zone features failed to load');
+				done();
+				nyc.App.prototype.getOrderUrl = getOrderUrl;
+			}
+		};
+		
+		setTimeout(wait, 100);
+	});
+	
+});
+
+QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH, no order, not in geocoded data)', function(assert){
+	assert.expect(2);
+	
+	var theTest = this;
+	var done = assert.async();
+		
+	new nyc.CsvContent('data/pre-storm-content.csv', function(csvMessages){
+		var getOrderUrl = nyc.App.prototype.getOrderUrl;
+		nyc.App.prototype.getOrderUrl = function(){
+			return 'data/yes-order.csv';
+		};
+		
+		var app = new nyc.App(
+			theTest.TEST_MAP,
+			theTest.FEATURE_DECORATIONS,
+			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Style(),
+			theTest.MOCK_LOCATION_MGR,
+			theTest.MOCK_DIRECTIONS,
+			theTest.MOCK_POPUP
+		);
+		
+		var popupCoords = null;
+		var popupHtml = null;
+		var tries = 0;
+		
+		app.location = {
+			name: '59 Maiden Lane, Manhattan, NY 10038',
+			coordinates: [-8238530.883679672, 4969463.37417323],
+			accuracy: nyc.Geocoder.Accuracy.HIGH,
+			data: {}
+		};
+		app.showPopup = function(coords, html){
+			popupCoords = coords;
+			popupHtml = html;
+		};
+		
+		var wait = function(){
+			tries++;
+			if (app.zoneSource.getFeatures().length){ //wait for zones to load
+				app.zone();
+				assert.deepEqual(popupCoords, app.location.coordinates);
+				assert.equal(
+					popupHtml,
+					app.content.message(
+						'location_zone_order',
+						{zone: 5, order: app.content.message('no_order'), name: '59 Maiden Lane<br> Manhattan, NY 10038'}
+					)
+				);
+				done();
+				nyc.App.prototype.getOrderUrl = getOrderUrl;
+			}else if (tries < 20){
+				setTimeout(wait, 100);
+			}else{
+				assert.ok(false, 'Zone features failed to load');
+				done();
+				nyc.App.prototype.getOrderUrl = getOrderUrl;
+			}
+		};
+		
+		setTimeout(wait, 100);
+	});
+});
+
+QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH, surface water, not in geocoded data)', function(assert){
+	assert.expect(2);
+	
+	var theTest = this;
+	var done = assert.async();
+	
+	new nyc.CsvContent('data/pre-storm-content.csv', function(csvMessages){
+		var getOrderUrl = nyc.App.prototype.getOrderUrl;
+		nyc.App.prototype.getOrderUrl = function(){
+			return 'data/yes-order.csv';
+		};
+		
+		var app = new nyc.App(
+			theTest.TEST_MAP,
+			theTest.FEATURE_DECORATIONS,
+			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Style(),
+			theTest.MOCK_LOCATION_MGR,
+			theTest.MOCK_DIRECTIONS,
+			theTest.MOCK_POPUP
+		);
+			
+		var popupCoords = null;
+		var popupHtml = null;
+		var tries = 0;
+		
+		app.location = {
+			name: 'Brooklyn Bridge, Manhattan, NY 10038',
+			coordinates: [-8237490.54653364, 4969295.73564776],
+			accuracy: nyc.Geocoder.Accuracy.HIGH,
+			data: {}
+		};
+		app.showPopup = function(coords, html){
+			popupCoords = coords;
+			popupHtml = html;
+		};
+		
+		var wait = function(){
+			tries++;
+			if (app.zoneSource.getFeatures().length){ //wait for zones to load
+				app.zone();
+				assert.deepEqual(popupCoords, app.location.coordinates);
+				assert.equal(
+					popupHtml,
+					app.content.message('location_zone_unkown', {name: 'Brooklyn Bridge<br> Manhattan, NY 10038'})
+				);
+				done();
+				nyc.App.prototype.getOrderUrl = getOrderUrl;
+			}else if (tries < 20){
+				setTimeout(wait, 100);
+			}else{
+				assert.ok(false, 'Zone features failed to load');
+				done();
+				nyc.App.prototype.getOrderUrl = getOrderUrl;
+			}
+		};
+		
+		setTimeout(wait, 100);
+	});
+});
+
+QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH, no zone, not in geocoded data)', function(assert){
+	assert.expect(2);
+	
+	var theTest = this;
+	var done = assert.async();
+	
+	new nyc.CsvContent('data/pre-storm-content.csv', function(csvMessages){
+		var getOrderUrl = nyc.App.prototype.getOrderUrl;
+		nyc.App.prototype.getOrderUrl = function(){
+			return 'data/yes-order.csv';
+		};
+		
+		var app = new nyc.App(
+			theTest.TEST_MAP,
+			theTest.FEATURE_DECORATIONS,
+			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Style(),
+			theTest.MOCK_LOCATION_MGR,
+			theTest.MOCK_DIRECTIONS,
+			theTest.MOCK_POPUP
+		);
+		
+		var popupCoords = null;
+		var popupHtml = null;
+		var tries = 0;
+		
+		app.location = {
+			name: '102-25 67 Drive, Queens, NY 11375',
+			coordinates: [-8221025.695549702, 4972117.922980856],
+			accuracy: nyc.Geocoder.Accuracy.HIGH,
+			data: {}
+		};
+		app.showPopup = function(coords, html){
+			popupCoords = coords;
+			popupHtml = html;
+		};
+		
+		var wait = function(){
+			tries++;
+			if (app.zoneSource.getFeatures().length){ //wait for zones to load
+				app.zone();
+				assert.deepEqual(popupCoords, app.location.coordinates);
+				assert.equal(
+					popupHtml,
+					app.content.message('location_no_zone', {name: '102-25 67 Drive<br> Queens, NY 11375'})
+				);
+				done();
+				nyc.App.prototype.getOrderUrl = getOrderUrl;
+			}else if (tries < 20){
+				setTimeout(wait, 100);
+			}else{
+				assert.ok(false, 'Zone features failed to load');
+				done();
+				nyc.App.prototype.getOrderUrl = getOrderUrl;
+			}
+		};
+		
+		setTimeout(wait, 100);
+	});
+});
+
+QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH, yes order, not in geocoded data)', function(assert){
 	assert.expect(2);
 	
 	var theTest = this;
@@ -352,7 +614,8 @@ QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH yes order)', function(a
 		app.location = {
 			name: 'Beach 20 Street And Cornaga Avenue, Queens, NY 11691',
 			coordinates: [-8210185.959213057, 4953852.79882015],
-			accuracy: nyc.Geocoder.Accuracy.MEDIUM
+			accuracy: nyc.Geocoder.Accuracy.MEDIUM,
+			data: {}
 		};
 		app.showPopup = function(coords, html){
 			popupCoords = coords;
@@ -386,7 +649,7 @@ QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH yes order)', function(a
 	});
 });
 
-QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH no order)', function(assert){
+QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH, no order, not in geocoded data)', function(assert){
 	assert.expect(2);
 	
 	var theTest = this;
@@ -415,7 +678,8 @@ QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH no order)', function(as
 		app.location = {
 			name: 'Dutch Street And John Street, Manhattan, NY 10038',
 			coordinates: [-8238511.616313086, 4969526.6589722885],
-			accuracy: nyc.Geocoder.Accuracy.MEDIUM
+			accuracy: nyc.Geocoder.Accuracy.MEDIUM,
+			data: {}
 		};
 		app.showPopup = function(coords, html){
 			popupCoords = coords;
@@ -449,7 +713,7 @@ QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH no order)', function(as
 	});
 });
 
-QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH surface water)', function(assert){
+QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH, surface water, not in geocoded data)', function(assert){
 	assert.expect(2);
 	
 	var theTest = this;
@@ -478,7 +742,8 @@ QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH surface water)', functi
 		app.location = {
 			name: 'Brooklyn Bridge, Manhattan, NY 10038',
 			coordinates: [-8237490.54653364, 4969295.73564776],
-			accuracy: nyc.Geocoder.Accuracy.MEDIUM
+			accuracy: nyc.Geocoder.Accuracy.MEDIUM,
+			data: {}
 		};
 		app.showPopup = function(coords, html){
 			popupCoords = coords;
@@ -509,7 +774,7 @@ QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH surface water)', functi
 	});
 });
 
-QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH no zone)', function(assert){
+QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH, no zone, not in geocoded data)', function(assert){
 	assert.expect(2);
 	
 	var theTest = this;
@@ -538,7 +803,8 @@ QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH no zone)', function(ass
 		app.location = {
 			name: '67 Drive And Queens Boulevard, Queens, NY 11375',
 			coordinates: [-8221130.281596985, 4972021.7406895375],
-			accuracy: nyc.Geocoder.Accuracy.MEDIUM
+			accuracy: nyc.Geocoder.Accuracy.MEDIUM,
+			data: {}
 		};
 		app.showPopup = function(coords, html){
 			popupCoords = coords;
@@ -569,7 +835,7 @@ QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH no zone)', function(ass
 	});
 });
 
-QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH multiple zone)', function(assert){
+QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH, multiple zone, not in geocoded data)', function(assert){
 	assert.expect(2);
 	
 	var theTest = this;
@@ -598,7 +864,8 @@ QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH multiple zone)', functi
 		app.location = {
 			name: '10038',
 			coordinates: [-8237976.3885189565, 4969601.664933239],
-			accuracy: nyc.Geocoder.Accuracy.ZIP_CODE
+			accuracy: nyc.Geocoder.Accuracy.ZIP_CODE,
+			data: {}
 		};
 		app.showPopup = function(coords, html){
 			popupCoords = coords;
@@ -1355,7 +1622,7 @@ QUnit.test('gotOrders (Zones 1)', function(assert){
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
-			theTest.MOCK_POPUP
+			theTest.MOCK_POPUP			
 		);
 
 		var test = function(){

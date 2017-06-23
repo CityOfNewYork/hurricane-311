@@ -469,6 +469,30 @@ nyc.App.prototype = {
 	 */
 	zone: function(){
 		var content = this.content,
+			location = this.location,
+			zone = location.data.hurricaneEvacuationZone,
+			name = location.name.replace(/,/, '<br>'), 
+			html;
+		if (zone){
+			if (zone == nyc.NO_ZONE) {
+				html = content.message('location_no_zone', {name: name});
+			}else if (zone == nyc.SURFACE_WATER_ZONE){
+				html = content.message('location_zone_unkown', {name: name}); 
+			}else{
+				var order = content.message(this.zoneOrders[zone] ? 'yes_order' : 'no_order');
+				html = content.message('location_zone_order', {zone: zone, order: order, name: name});			
+			}
+		}else{
+			html = this.queryZone();
+		}
+		this.showPopup(location.coordinates, html);
+	},	
+	/** 
+	 * @private 
+	 * @method
+	 */
+	queryZone: function(){
+		var content = this.content,
 			zones = this.zoneSource, 
 			location = this.location, 
 			name = location.name.replace(/,/, '<br>'), 
@@ -488,7 +512,7 @@ nyc.App.prototype = {
 		if (features.length == 0) {
 			html = content.message('location_no_zone', {name: name});
 		}else{
-			var zone = features[0].getZone();
+			zone = features[0].getZone();
 			if (features.length == 1 && !features[0].isSurfaceWater()) {
 				var order = content.message(this.zoneOrders[zone] ? 'yes_order' : 'no_order');
 				html = content.message('location_zone_order', {zone: zone, order: order, name: name});
@@ -496,7 +520,7 @@ nyc.App.prototype = {
 				html = content.message('location_zone_unkown', {name: name}); 
 			}
 		}
-		this.showPopup(coords, html);
+		return html;
 	},
 	/** 
 	 * @private 
