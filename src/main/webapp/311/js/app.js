@@ -1,9 +1,10 @@
-window.nyc311 = {};
+window.nyc311 = {
+	ORDER_URL: '../data/order.csv?',
+	CENTER_URL: '../data/center.csv?'
+};
 
 nyc311.App = function(geocoder){
 	this.geocoder = geocoder;
-	this.evOrder = {};
-	this.shelters = [];
 	
 	this.getOrders();
 	setInterval($.proxy(this.getOrders, this), 600000);
@@ -20,14 +21,14 @@ nyc311.App.prototype = {
 	shelters: null,
 	getOrders: function(){
 		$.ajax({
-			url: '../data/order.csv?' + new Date().getTime(), 
+			url: nyc311.ORDER_URL + new Date().getTime(), 
 			success: $.proxy(this.gotOrders, this),
 			error: this.loadError
 		});
 	},
 	getShelters: function(){
 		$.ajax({
-			url: '../data/center.csv?' + new Date().getTime(),
+			url: nyc311.CENTER_URL + new Date().getTime(),
 			success: $.proxy(this.gotShelters, this),
 			error: this.loadError
 		});			
@@ -42,10 +43,6 @@ nyc311.App.prototype = {
 		this.evOrder = zones.length ? {text: this.getOrderTxt(zones), zones: zones} : {text: 'There is not an Evacuation Order in effect for any Zone', zones: []};
 		$('#order').html(this.evOrder.text);
 	},
-	gotShelters: function(csv){
-		this.shelters = $.csv.toObjects(csv);
-		this.listShelters();
-	},
 	getOrderTxt: function(zones){
 		var result = 'An Evacuation Order is in effect for Zone';
 		if (zones.length > 1){
@@ -58,13 +55,9 @@ nyc311.App.prototype = {
 			return result + ' ' + zones[0];
 		}
 	},
-	shelterInfo: function(shelter){
-		return '<div class="shelterInfo">' +
-			'<div class="name">' + shelter.NAME + '</div>' +
-			'<div class="addr1">' + shelter.ADDRESS  + '</div>' +
-			'<div class="addr2">' +  shelter.CITY + ', NY ' + shelter.ZIP + '</div>' +
-			'<div class="access' + shelter.ACCESSIBLE + '"></div>' + 
-			'</div>';
+	gotShelters: function(csv){
+		this.shelters = $.csv.toObjects(csv);
+		this.listShelters();
 	},
 	listShelters: function(){
 		var me = this, t = $('#sheltersList table')[0];
@@ -79,6 +72,14 @@ nyc311.App.prototype = {
 			$(c).append(me.shelterInfo(s));
 			c.shelter = s;
 		});
+	},
+	shelterInfo: function(shelter){
+		return '<div class="shelterInfo">' +
+			'<div class="name">' + shelter.NAME + '</div>' +
+			'<div class="addr1">' + shelter.ADDRESS  + '</div>' +
+			'<div class="addr2">' +  shelter.CITY + ', NY ' + shelter.ZIP + '</div>' +
+			'<div class="access' + shelter.ACCESSIBLE + '"></div>' + 
+			'</div>';
 	},
 	sortShelters: function(location){
 		var me = this;
@@ -112,11 +113,20 @@ nyc311.App.prototype = {
 		$('#possible').empty().hide();
 		this.sortShelters(location);
 		$('#userAddr').html(location.name);
-		$('#userZone').html('is located in Evacuation Zone ' + zone);
-		if ($.inArray(zone, this.evOrder.zones) > -1){
-			$('#userEvac').html('AN EVACUATION ORDER IS IN EFFECT FOR ZONE ' + zone);
+		if (zone){
+			if (zone == 'X') {
+				$('#userZone').html('is not located in an Evactuation Zone');
+			}else{
+				$('#userZone').html('is located in Evacuation Zone ' + zone);
+				if ($.inArray(zone, this.evOrder.zones) > -1){
+					$('#userEvac').html('AN EVACUATION ORDER IS IN EFFECT FOR ZONE ' + zone);
+				}else{
+					$('#userEvac').html('No evacuation order in effect for this zone');
+				}
+			}
 		}else{
-			$('#userEvac').html('No evacuation order in effect for this zone');
+			$('#userZone').html('The Evacuation Zone for this location cannot be determined - Please try another location');
+			
 		}
 	},
 	ambiguous: function(response){

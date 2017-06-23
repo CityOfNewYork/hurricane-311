@@ -14,7 +14,7 @@
 			width: 1000px;
 			height: 1000px;
 		}
-		.ui-loader {
+		.ui-loader, #shelters, #order, #address, #possible, #userAddr, #userZone, #userEvac {
 			display: none;
 		}
 	</style>
@@ -22,6 +22,17 @@
 <body>
 	<div id="qunit"></div>
 	<div id="qunit-fixture"></div>
+	<div id="order"></div>
+	<div id="possible"></div>
+	<div id="userAddr"></div>
+	<div id="userZone"></div>
+	<div id="userEvac"></div>
+	<input id="address">
+	<div id="shelters">
+		<div id="sheltersList">
+			<table><tbody></tbody></table>
+		</div>
+	</div>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.4.5/jquery.mobile.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.71/jquery.csv-0.71.min.js"></script>

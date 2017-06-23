@@ -1784,7 +1784,7 @@ QUnit.test('alert', function(assert){
 	setTimeout(function(){
 		assert.equal($('.dia-msg').html(), 'a message');
 		assert.equal($('.dia-container').css('display'), 'block');
-		assert.ok($(':focus').get(0) === $('.dia .btn-ok').get(0));
+		assert.ok($('*:focus').get(0) === $('.dia .btn-ok').get(0));
 		$('.dia-container').remove();
 		done();
 	}, 1000);
