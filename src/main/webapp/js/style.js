@@ -1,6 +1,11 @@
 /** @export */
 window.nyc = window.nyc || {};
 
+nyc.ol.style.LOCATION_ICON = new ol.style.Icon({
+	scale: 48 / 512,
+	src: nyc.util.isIe() || nyc.util.isIos() ? 'img/me.png' : 'img/me.svg'
+});
+
 /** @export */
 nyc.Style = (function(){	
 	/** 
