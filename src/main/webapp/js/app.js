@@ -470,7 +470,7 @@ nyc.App.prototype = {
 	zone: function(){
 		var content = this.content,
 			location = this.location,
-			zone = location.data.hurricaneEvacuationZone,
+			zone = location.data ? location.data.hurricaneEvacuationZone : null,
 			name = location.name.replace(/,/, '<br>'), 
 			html;
 		if (zone){
@@ -512,8 +512,8 @@ nyc.App.prototype = {
 		if (features.length == 0) {
 			html = content.message('location_no_zone', {name: name});
 		}else{
-			zone = features[0].getZone();
-			if (features.length == 1 && !features[0].isSurfaceWater()) {
+			zone = features[0].isSurfaceWater() ? '1' : features[0].getZone();
+			if (features.length == 1) {
 				var order = content.message(this.zoneOrders[zone] ? 'yes_order' : 'no_order');
 				html = content.message('location_zone_order', {zone: zone, order: order, name: name});
 			}else{
