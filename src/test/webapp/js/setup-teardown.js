@@ -88,27 +88,6 @@ function setup(assert, hooks){
 			}
 		}
 	};
-	
-	hooks.MESSAGES = {
-		yes_order: '<div class="order active-order">You are required to evacuate</div>',
-		no_order: '<div class="order">No evacuation order currently in effect</div>',
-		splash_yes_order: '<div class="capitalize inf-name">an evacuation order is in effect for</div>',
-		splash_zone_order: '<div class="zone">${zones}</div>',
-		location_no_zone: '<div class="inf-location"><div class="inf-name">You are not located in an Evacuation Zone</div><div class="inf-name">${name}</div></div>',
-		location_zone_order: '<div class="inf-location"><div class="inf-name">You are located in Zone ${zone}</div>${order}<div class="inf-name">${name}</div></div>',
-		location_zone_unkown: '<div class="inf-location"><div class="inf-name">Zone Finder cannot determine Zone for your address.</div><div>Try alternative address or determine Zone by examining map and clicking on your location.</div><div class="inf-name">${name}</div></div>',
-		zone_info: '<div class="inf-zone"><div class="inf-name">Zone ${zone}</div>${order}</div>',
-		zone_tip: '<div class="capitalize">evacuation zone ${zone}</div><div>${order}</div>',
-		center_info_field: '<div class="${css} notranslate" translate="no">${value}</div>',
-		center_cross_st_field: '<div class="inf-addr inf-cross">Between <span class="notranslate" translate="no">${cross1}</span> and <span class="notranslate" translate="no">${cross2}</span>',
-		center_distance: '<div class="inf-dist">&#8226; ${distance} miles &#8226;</div>',
-		center_info_map: '<div class="capitalize inf-btn inf-map"><a data-role="button" onclick=\'nyc.app.zoomFacility("${id}");\'>map</a></div>',
-		center_info_dir: '<div class="capitalize inf-btn inf-dir"><a data-role="button" onclick=\'nyc.app.direct("${id}");\'>directions</a></div>',
-		center_info_access: '<div class="capitalize inf-btn inf-detail-btn"><a data-role="button" onclick=\'nyc.util.preventDblEventHandler(event, nyc.app.access, nyc.app);\'>details...</a></div><div class="inf-detail">${detail}</div>',
-		center_tip: '<div class="${css}">${name}</div>',
-		bad_input: 'The location you entered was not uderstood',
-		data_load_error: 'There was a problem loading map data. Please refresh the page to try again.'
-	};
 		
 	hooks.TEST_MAP = (function(){
 		var div = $('<div class="test-map"></div>')[0];

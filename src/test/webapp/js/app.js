@@ -96,7 +96,7 @@ QUnit.test('zone (yes order, is in geocoded data)', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -161,7 +161,7 @@ QUnit.test('zone, no order, is in geocoded data)', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -225,7 +225,7 @@ QUnit.test('zone (surface water, is in geocoded data)', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -286,7 +286,7 @@ QUnit.test('zone (no zone, is in geocoded data)', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -349,7 +349,7 @@ QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH, yes order, not in geoco
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -414,7 +414,7 @@ QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH, no order, not in geocod
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -478,7 +478,7 @@ QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH, surface water, not in g
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -539,7 +539,7 @@ QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH, no zone, not in geocode
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -600,7 +600,7 @@ QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH, yes order, not in geoc
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -664,7 +664,7 @@ QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH, no order, not in geoco
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -728,7 +728,7 @@ QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH, surface water, not in 
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -789,7 +789,7 @@ QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH, no zone, not in geocod
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -850,7 +850,7 @@ QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH, multiple zone, not in 
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -911,7 +911,7 @@ QUnit.test('initList', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -954,7 +954,7 @@ QUnit.test('zoomFacility (panel.width == window.width)', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -1017,7 +1017,7 @@ QUnit.test('zoomFacility (panel.width < window.width)', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -1079,7 +1079,7 @@ QUnit.test('located (nyc.Locate.EventType.GEOCODE)', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -1123,7 +1123,7 @@ QUnit.test('located (nyc.Locate.EventType.GEOLOCATION)', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -1169,7 +1169,7 @@ QUnit.test('mapSize', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -1202,7 +1202,7 @@ QUnit.test('listHeight', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -1240,7 +1240,7 @@ QUnit.test('transparency', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -1281,7 +1281,7 @@ QUnit.test('access (popup - slide open)', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -1338,7 +1338,7 @@ QUnit.test('access (popup - slide closed)', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -1396,7 +1396,7 @@ QUnit.test('access (list - slide open)', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -1454,7 +1454,7 @@ QUnit.test('access (list - slide closed)', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -1505,7 +1505,7 @@ QUnit.test('getOrderUrl', function(assert){
 	var app = new nyc.App(
 		this.TEST_MAP,
 		this.FEATURE_DECORATIONS,
-		new nyc.Content([this.MESSAGES]),
+		new nyc.Content([MESSAGES]),
 		new nyc.Style(),
 		this.MOCK_LOCATION_MGR,
 		this.MOCK_DIRECTIONS,
@@ -1521,7 +1521,7 @@ QUnit.test('getOrders (error)', function(assert){
 	var app = new nyc.App(
 		this.TEST_MAP,
 		this.FEATURE_DECORATIONS,
-		new nyc.Content([this.MESSAGES]),
+		new nyc.Content([MESSAGES]),
 		new nyc.Style(),
 		this.MOCK_LOCATION_MGR,
 		this.MOCK_DIRECTIONS,
@@ -1548,7 +1548,7 @@ QUnit.test('getOrders (success)', function(assert){
 	var app = new nyc.App(
 		this.TEST_MAP,
 		this.FEATURE_DECORATIONS,
-		new nyc.Content([this.MESSAGES]),
+		new nyc.Content([MESSAGES]),
 		new nyc.Style(),
 		this.MOCK_LOCATION_MGR,
 		this.MOCK_DIRECTIONS,
@@ -1581,7 +1581,7 @@ QUnit.test('gotOrders (none)', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -1618,7 +1618,7 @@ QUnit.test('gotOrders (Zones 1)', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -1655,7 +1655,7 @@ QUnit.test('gotOrders (Zones 1, 4 and 6)', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -1683,7 +1683,7 @@ QUnit.test('filter', function(assert){
 	var app = new nyc.App(
 		this.TEST_MAP,
 		this.FEATURE_DECORATIONS,
-		new nyc.Content([this.MESSAGES]),
+		new nyc.Content([MESSAGES]),
 		new nyc.Style(),
 		this.MOCK_LOCATION_MGR,
 		this.MOCK_DIRECTIONS,
@@ -1716,7 +1716,7 @@ QUnit.test('zoomCoords', function(assert){
 	var app = new nyc.App(
 		this.TEST_MAP,
 		this.FEATURE_DECORATIONS,
-		new nyc.Content([this.MESSAGES]),
+		new nyc.Content([MESSAGES]),
 		new nyc.Style(),
 		this.MOCK_LOCATION_MGR,
 		this.MOCK_DIRECTIONS,
@@ -1750,7 +1750,7 @@ QUnit.test('mapClick (center)', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -1807,7 +1807,7 @@ QUnit.test('mapClick (zone)', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -1864,7 +1864,7 @@ QUnit.test('mapClick (nothing)', function(assert){
 		var app = new nyc.App(
 			theTest.TEST_MAP,
 			theTest.FEATURE_DECORATIONS,
-			new nyc.Content([theTest.MESSAGES, csvMessages]),
+			new nyc.Content([MESSAGES, csvMessages]),
 			new nyc.Style(),
 			theTest.MOCK_LOCATION_MGR,
 			theTest.MOCK_DIRECTIONS,
@@ -1910,7 +1910,7 @@ QUnit.test('showPopup', function(assert){
 	var app = new nyc.App(
 		this.TEST_MAP,
 		this.FEATURE_DECORATIONS,
-		new nyc.Content([this.MESSAGES]),
+		new nyc.Content([MESSAGES]),
 		new nyc.Style(),
 		this.MOCK_LOCATION_MGR,
 		this.MOCK_DIRECTIONS,
@@ -1939,7 +1939,7 @@ QUnit.test('zoneTip (yes evacuate)', function(assert){
 	feature.getZone = function(){return 1;};	
 	feature.replace = nyc.Content.prototype.replace;
 	feature.message = nyc.Content.prototype.message;
-	feature.messages = this.MESSAGES;
+	feature.messages = MESSAGES;
 	assert.deepEqual(feature.zoneTip(), {
 		cssClass: 'tip-zone',
 		text: feature.message('zone_tip', {zone: 1, order: feature.message('yes_order')})
@@ -1955,7 +1955,7 @@ QUnit.test('zoneTip (no evacuate)', function(assert){
 	feature.getZone = function(){return 2;};
 	feature.replace = nyc.Content.prototype.replace;
 	feature.message = nyc.Content.prototype.message;
-	feature.messages = this.MESSAGES;
+	feature.messages = MESSAGES;
 	assert.deepEqual(feature.zoneTip(), {
 		cssClass: 'tip-zone',
 		text: feature.message('zone_tip', {zone: 2, order: feature.message('no_order')})
@@ -1971,7 +1971,7 @@ QUnit.test('centerTip (accessible)', function(assert){
 	feature.isAccessible = function(){return true;};	
 	feature.replace = nyc.Content.prototype.replace;
 	feature.message = nyc.Content.prototype.message;
-	feature.messages = this.MESSAGES;
+	feature.messages = MESSAGES;
 	assert.deepEqual(feature.centerTip(), {
 		cssClass: 'tip-center',
 		text: feature.message('center_tip', {css: 'access', name: feature.getName()})
@@ -1987,7 +1987,7 @@ QUnit.test('centerTip (not accessible)', function(assert){
 	feature.isAccessible = function(){return false;};	
 	feature.replace = nyc.Content.prototype.replace;
 	feature.message = nyc.Content.prototype.message;
-	feature.messages = this.MESSAGES;
+	feature.messages = MESSAGES;
 	assert.deepEqual(feature.centerTip(), {
 		cssClass: 'tip-center',
 		text: feature.message('center_tip', {css: '', name: feature.getName()})
@@ -2012,7 +2012,7 @@ QUnit.test('error', function(assert){
 	var app = new nyc.App(
 		this.TEST_MAP,
 		this.FEATURE_DECORATIONS,
-		new nyc.Content([this.MESSAGES]),
+		new nyc.Content([MESSAGES]),
 		new nyc.Style(),
 		this.MOCK_LOCATION_MGR,
 		this.MOCK_DIRECTIONS,
@@ -2035,7 +2035,7 @@ QUnit.test('alert', function(assert){
 	var app = new nyc.App(
 		this.TEST_MAP,
 		this.FEATURE_DECORATIONS,
-		new nyc.Content([this.MESSAGES]),
+		new nyc.Content([MESSAGES]),
 		new nyc.Style(),
 		this.MOCK_LOCATION_MGR,
 		this.MOCK_DIRECTIONS,

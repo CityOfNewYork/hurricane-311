@@ -52,7 +52,7 @@ nyc.App = function(map, featureDecorations, content, style, locationMgr, directi
 		{loader: new nyc.ol.source.CsvPointFeatureLoader({
 			url: 'data/center.csv?' + window.cacheBust,
 			projection: 'EPSG:2263',
-			fidCol: 'ID',
+			fidCol: 'BLDG_ID',
 			xCol: 'X',
 			yCol: 'Y'
 		})}, 

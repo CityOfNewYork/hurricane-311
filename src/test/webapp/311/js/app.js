@@ -1,6 +1,8 @@
 QUnit.module('nyc311.App', {
 	beforeEach: function(assert){
 		
+		setup(assert, this);
+
 		nyc311.ORDER_URL = 'data/order.csv?';
 		nyc311.CENTER_URL = 'data/311-center.csv?';
 
@@ -191,44 +193,44 @@ QUnit.module('nyc311.App', {
 		};
 		
 		this.SHELTERS = [{
-			ID:'Q505',
-			X:'1038959.20684',
-			Y:'197885.084923',
-			NAME:'Hillcrest HS',
-			ADDRESS:'160-05 Highland Avenue',
-			BOROCODE:'4',
-			CITY:'Jamaica',
-			CROSS1:'Parsons Blvd',
-			CROSS2:'162 Street',
-			ZIP:'11432',
-			ACCESSIBLE:'N',
-			ACC_FEAT:''
+			ACC_FEAT: '',
+			Accessible: 'N',
+			BLDG_ADD: '160-05 Highland Avenue',
+			BLDG_ID: 'Q505',
+			Borocode: '4',
+			CITY: 'Jamaica',
+			CROSS1: 'Parsons Blvd',
+			CROSS2: '162 Street',
+			OEM_LABEL: 'Hillcrest HS',
+			X: '1038959.207',
+			Y: '197885.0849',
+			ZIP_CODE: '11432'
 		},{
-			ID:'Q515',
-			X:'1033758.24448',
-			Y:'207098.497926',
-			NAME:'Townsend Harris HS',
-			ADDRESS:'149-11 Melbourne Avenue',
-			BOROCODE:'4',
-			CITY:'Flushing',
-			CROSS1:'149 Street',
-			CROSS2:'150 Street',
-			ZIP:'11367',
-			ACCESSIBLE:'Y',
-			ACC_FEAT:'The main/accessible entrance to this location for sheltering purposes is on 149th Street (Close to the intersection with Melbourne Avenue)'
+			ACC_FEAT: 'The main/accessible entrance to this location for sheltering purposes is on 149th Street (Close to the intersection with Melbourne Avenue)',
+			Accessible: 'Y',
+			BLDG_ADD: '149-11 Melbourne Avenue',
+			BLDG_ID: 'Q515',
+			Borocode: '4',
+			CITY: 'Flushing',
+			CROSS1: '149 Street',
+			CROSS2: '150 Street',
+			OEM_LABEL: 'Townsend Harris HS',
+			X: '1033758.244',
+			Y: '207098.4979',
+			ZIP_CODE: '11367'
 		},{
-			ID:'Q268',
-			X:'1043802.51638',
-			Y:'197171.097834',
-			NAME:'PS - IS 268',
-			ADDRESS:'92-07 175 Street',
-			BOROCODE:'4',
-			CITY:'Jamaica',
-			CROSS1:'Jamaica Avenue',
-			CROSS2:'93 Avenue',
-			ZIP:'11433',
-			ACCESSIBLE:'Y',
-			ACC_FEAT:'The main/accessible entrance to this location for sheltering purposes is 92-07 175th Street'
+			ACC_FEAT: 'The main/accessible entrance to this location for sheltering purposes is 92-07 175th Street',
+			Accessible: 'Y',
+			BLDG_ADD: '92-07 175 Street',
+			BLDG_ID: 'Q268',
+			Borocode: '4',
+			CITY: 'Jamaica',
+			CROSS1: 'Jamaica Avenue',
+			CROSS2: '93 Avenue',
+			OEM_LABEL: 'PS - IS 268',
+			X: '1043802.516',
+			Y: '197171.0978',
+			ZIP_CODE: '11433'
 		}];
 	},
 	afterEach: function(assert){
@@ -237,7 +239,7 @@ QUnit.module('nyc311.App', {
 		delete this.GEOCODE;
 		$('#sheltersList tr').remove();
 		$('#address').val('');
-		$('#order, #possible, #userAddr, #userZone, #userEvac').empty().hide();
+		$('#order, #possible, #userAddr').empty().hide();
 	}
 });
 
@@ -273,7 +275,7 @@ QUnit.test('constructor', function(assert){
 		return [fn, scope];
 	};
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER);
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
 	
 	assert.equal(functions.length, 2);
 
@@ -302,7 +304,7 @@ QUnit.test('getOrders', function(assert){
 	$.proxy = function(fn, scope){};
 	$.ajax = function(args){};
 
-	var app = new nyc311.App(this.MOCK_GEOCODER);
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
 	
 	$.ajax = function(args){
 		assert.equal(args.url, nyc311.ORDER_URL + 'now');
@@ -327,37 +329,47 @@ QUnit.test('getOrders', function(assert){
 });
 
 QUnit.test('gotOrders/getOrderTxt (has orders)', function(assert){
-	assert.expect(3);
+	assert.expect(8);
 	
 	var done = assert.async();
 	
 	var test = function(){
-		if (app.evOrder) {
-			assert.equal(app.evOrder.text, 'An Evacuation Order is in effect for Zones 1, 4 and 6');
-			assert.equal($('#order').html(), app.evOrder.text);
-			assert.deepEqual(app.evOrder.zones, ['1', '4', '6']);
+		if (app.zoneOrders) {
+			assert.equal(app.zoneOrders.text, 'An Evacuation Order is in effect for Zones 1, 4 and 6');
+			assert.equal($('#order').html(), app.zoneOrders.text);
+			assert.ok(app.zoneOrders[1]);
+			assert.notOk(app.zoneOrders[2]);
+			assert.notOk(app.zoneOrders[3]);
+			assert.ok(app.zoneOrders[4]);
+			assert.notOk(app.zoneOrders[5]);
+			assert.ok(app.zoneOrders[6]);
 			done();
 		}else{
 			setTimeout(test, 100);
 		}
 		
 	};
-	var app = new nyc311.App(this.MOCK_GEOCODER);
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
 	test();
 });
 
 QUnit.test('gotOrders/getOrderTxt (no orders)', function(assert){
-	assert.expect(3);
+	assert.expect(8);
 	
 	var done = assert.async();
 	
 	nyc311.ORDER_URL = 'data/no-order.csv?';
 
 	var test = function(){
-		if (app.evOrder) {
-			assert.equal(app.evOrder.text, 'There is not an Evacuation Order in effect for any Zone');
-			assert.equal($('#order').html(), app.evOrder.text);
-			assert.notOk(app.evOrder.zones.length);
+		if (app.zoneOrders) {
+			assert.equal(app.zoneOrders.text, 'There is not an Evacuation Order in effect for any Zone');
+			assert.equal($('#order').html(), app.zoneOrders.text);
+			assert.notOk(app.zoneOrders[1]);
+			assert.notOk(app.zoneOrders[2]);
+			assert.notOk(app.zoneOrders[3]);
+			assert.notOk(app.zoneOrders[4]);
+			assert.notOk(app.zoneOrders[5]);
+			assert.notOk(app.zoneOrders[6]);
 			done();
 		}else{
 			setTimeout(test, 100);
@@ -365,7 +377,7 @@ QUnit.test('gotOrders/getOrderTxt (no orders)', function(assert){
 		
 	};
 
-	var app = new nyc311.App(this.MOCK_GEOCODER);
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
 	test();
 });
 
@@ -391,7 +403,7 @@ QUnit.test('gotShelters', function(assert){
 		}
 	};
 
-	var app = new nyc311.App(this.MOCK_GEOCODER);
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
 	test();
 });
 
@@ -401,7 +413,7 @@ QUnit.test('listShelters (w/o distance)', function(assert){
 	var getShelters = nyc311.App.prototype.getShelters;	
 	nyc311.App.prototype.getShelters = function(){};
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER);
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
 
 	app.shelters = this.SHELTERS;
 	app.shelterInfo = function(){
@@ -434,7 +446,7 @@ QUnit.test('listShelters (w distance)', function(assert){
 		s.distance = i;
 	});
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER);
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
 
 	app.shelters = this.SHELTERS;
 	app.shelterInfo = function(){
@@ -460,11 +472,11 @@ QUnit.test('listShelters (w distance)', function(assert){
 QUnit.test('shelterInfo', function(assert){
 	assert.expect(1);
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER);
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
 
 	var info = app.shelterInfo(this.SHELTERS[1]);
 	
-	assert.equal(info, '<div class="shelterInfo"><div class="name">Townsend Harris HS</div><div class="addr1">149-11 Melbourne Avenue</div><div class="addr2">Flushing, NY 11367</div><div class="accessY"></div></div>');
+	assert.equal(info, '<div class="shelterInfo"><div class="name">Townsend Harris HS</div><div class="addr1">149-11 Melbourne Avenue</div><div class="addr1">Between 149 Street and 150 Street</div><div class="addr2">Flushing, NY 11367</div><div class="accessY"></div><a href="#" onclick="$(this).next().slideToggle();">Details</a><ul><li>The main/accessible entrance to this location for sheltering purposes is on 149th Street (Close to the intersection with Melbourne Avenue)</li><li>Access to the main shelter areas will be unobstructed and without steps. </li><li>Accessible restrooms are available.</li><li>Accessible dormitory and eating/cafeteria areas are available.</li><li>Additional amenities will be available such as accessible cots and mobility aids (canes, crutches, manual wheelchairs, storage space for refrigerated medication, etc.).</li></ul></div>');
 });
 
 
@@ -481,7 +493,7 @@ QUnit.test('sortShelters', function(assert){
 	var s1 = this.SHELTERS[1];
 	var s2 = this.SHELTERS[2];
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER);
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
 	app.shelters = this.SHELTERS;
 	
 	app.sortShelters(this.GEOCODE);
@@ -496,7 +508,7 @@ QUnit.test('sortShelters', function(assert){
 QUnit.test('distance', function(assert){
 	assert.expect(3);
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER);
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
 	
 	assert.equal(app.distance(this.GEOCODE.coordinates, [this.SHELTERS[0].X, this.SHELTERS[0].Y]), 10.78);
 	assert.equal(app.distance(this.GEOCODE.coordinates, [this.SHELTERS[1].X, this.SHELTERS[1].Y]), 9.96);
@@ -513,7 +525,7 @@ QUnit.test('find', function(assert){
 	$('#address').val('59 maiden mn');
 	$('#possible, #userAddr, #userZone, #userEvac').html('html');
 
-	var app = new nyc311.App(this.MOCK_GEOCODER);
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
 
 	app.find();
 	
@@ -526,7 +538,7 @@ QUnit.test('find', function(assert){
 QUnit.test('doFind', function(assert){
 	assert.expect(1);
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER);
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
 
 	app.find = function(){
 		assert.ok(true);
@@ -537,7 +549,7 @@ QUnit.test('doFind', function(assert){
 });
 
 QUnit.test('found (no zone, has order)', function(assert){
-	assert.expect(6);
+	assert.expect(4);
 	
 	var geocode = this.GEOCODE;
 	delete geocode.data.hurricaneEvacuationZone;
@@ -545,9 +557,9 @@ QUnit.test('found (no zone, has order)', function(assert){
 	var getOrder = nyc311.App.getOrder;
 	nyc311.App.getOrder = function(){};
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER);
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
 	
-	app.evOrder = {zones: ['1', '2', '5']};
+	app.zoneOrders = {'1': true, '2': true, '5': true};
 	app.sortShelters = function(location){
 		assert.deepEqual(location, geocode);
 	};
@@ -556,9 +568,7 @@ QUnit.test('found (no zone, has order)', function(assert){
 
 	app.found(geocode);
 	
-	assert.equal($('#userAddr').html(), geocode.name);
-	assert.equal($('#userZone').html(), 'The Evacuation Zone for this location cannot be determined - Please try another location');
-	assert.equal($('#userEvac').html(), '');
+	assert.equal($('#userAddr').html(), '<div class="inf-location"><div class="inf-name">Zone Finder cannot determine Zone for your address.</div><div>Try alternative address.</div><div class="inf-name">59 Maiden Lane, Manhattan, NY 10038</div></div>');
 	assert.equal($('#possible').html(), '');
 	assert.equal($('#possible').css('display'), 'none');
 	
@@ -566,7 +576,7 @@ QUnit.test('found (no zone, has order)', function(assert){
 });
 
 QUnit.test('found (no zone, no order)', function(assert){
-	assert.expect(6);
+	assert.expect(4);
 	
 	var geocode = this.GEOCODE;
 	delete geocode.data.hurricaneEvacuationZone;
@@ -574,9 +584,9 @@ QUnit.test('found (no zone, no order)', function(assert){
 	var getOrder = nyc311.App.getOrder;
 	nyc311.App.getOrder = function(){};
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER);
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
 	
-	app.evOrder = {zones: []};
+	app.zoneOrders = {zones: []};
 	app.sortShelters = function(location){
 		assert.deepEqual(location, geocode);
 	};
@@ -585,9 +595,7 @@ QUnit.test('found (no zone, no order)', function(assert){
 
 	app.found(geocode);
 	
-	assert.equal($('#userAddr').html(), geocode.name);
-	assert.equal($('#userZone').html(), 'The Evacuation Zone for this location cannot be determined - Please try another location');
-	assert.equal($('#userEvac').html(), '');
+	assert.equal($('#userAddr').html(), '<div class="inf-location"><div class="inf-name">Zone Finder cannot determine Zone for your address.</div><div>Try alternative address.</div><div class="inf-name">59 Maiden Lane, Manhattan, NY 10038</div></div>');
 	assert.equal($('#possible').html(), '');
 	assert.equal($('#possible').css('display'), 'none');
 	
@@ -595,16 +603,16 @@ QUnit.test('found (no zone, no order)', function(assert){
 });
 
 QUnit.test('found (has zone, has order, requires evac)', function(assert){
-	assert.expect(6);
+	assert.expect(4);
 	
 	var geocode = this.GEOCODE;
 	
 	var getOrder = nyc311.App.getOrder;
 	nyc311.App.getOrder = function(){};
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER);
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
 	
-	app.evOrder = {zones: ['1', '2', '5']};
+	app.zoneOrders = {zones: ['1', '2', '5']};
 	app.sortShelters = function(location){
 		assert.deepEqual(location, geocode);
 	};
@@ -613,9 +621,7 @@ QUnit.test('found (has zone, has order, requires evac)', function(assert){
 
 	app.found(geocode);
 	
-	assert.equal($('#userAddr').html(), geocode.name);
-	assert.equal($('#userZone').html(), 'is located in Evacuation Zone ' + geocode.data.hurricaneEvacuationZone);
-	assert.equal($('#userEvac').html(), 'AN EVACUATION ORDER IS IN EFFECT FOR ZONE ' + geocode.data.hurricaneEvacuationZone);
+	assert.equal($('#userAddr').html(), '<div class="inf-location"><div class="inf-name">You are located in Zone 5</div><div class="order">No evacuation order currently in effect</div><div class="inf-name">59 Maiden Lane, Manhattan, NY 10038</div></div>');
 	assert.equal($('#possible').html(), '');
 	assert.equal($('#possible').css('display'), 'none');
 	
@@ -623,16 +629,16 @@ QUnit.test('found (has zone, has order, requires evac)', function(assert){
 });
 
 QUnit.test('found (has zone, has order, no evac)', function(assert){
-	assert.expect(6);
+	assert.expect(4);
 	
 	var geocode = this.GEOCODE;
 	
 	var getOrder = nyc311.App.getOrder;
 	nyc311.App.getOrder = function(){};
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER);
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
 	
-	app.evOrder = {zones: ['1', '2', '3']};
+	app.zoneOrders = {zones: ['1', '2', '3']};
 	app.sortShelters = function(location){
 		assert.deepEqual(location, geocode);
 	};
@@ -641,9 +647,7 @@ QUnit.test('found (has zone, has order, no evac)', function(assert){
 
 	app.found(geocode);
 	
-	assert.equal($('#userAddr').html(), geocode.name);
-	assert.equal($('#userZone').html(), 'is located in Evacuation Zone ' + geocode.data.hurricaneEvacuationZone);
-	assert.equal($('#userEvac').html(), 'No evacuation order in effect for this zone');
+	assert.equal($('#userAddr').html(), '<div class="inf-location"><div class="inf-name">You are located in Zone 5</div><div class="order">No evacuation order currently in effect</div><div class="inf-name">59 Maiden Lane, Manhattan, NY 10038</div></div>');
 	assert.equal($('#possible').html(), '');
 	assert.equal($('#possible').css('display'), 'none');
 	
@@ -651,16 +655,16 @@ QUnit.test('found (has zone, has order, no evac)', function(assert){
 });
 
 QUnit.test('found (has zone, no order, no evac)', function(assert){
-	assert.expect(6);
+	assert.expect(4);
 	
 	var geocode = this.GEOCODE;
 	
 	var getOrder = nyc311.App.getOrder;
 	nyc311.App.getOrder = function(){};
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER);
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
 	
-	app.evOrder = {zones: []};
+	app.zoneOrders = {zones: []};
 	app.sortShelters = function(location){
 		assert.deepEqual(location, geocode);
 	};
@@ -669,9 +673,7 @@ QUnit.test('found (has zone, no order, no evac)', function(assert){
 
 	app.found(geocode);
 	
-	assert.equal($('#userAddr').html(), geocode.name);
-	assert.equal($('#userZone').html(), 'is located in Evacuation Zone ' + geocode.data.hurricaneEvacuationZone);
-	assert.equal($('#userEvac').html(), 'No evacuation order in effect for this zone');
+	assert.equal($('#userAddr').html(), '<div class="inf-location"><div class="inf-name">You are located in Zone 5</div><div class="order">No evacuation order currently in effect</div><div class="inf-name">59 Maiden Lane, Manhattan, NY 10038</div></div>');
 	assert.equal($('#possible').html(), '');
 	assert.equal($('#possible').css('display'), 'none');
 	
@@ -679,7 +681,7 @@ QUnit.test('found (has zone, no order, no evac)', function(assert){
 });
 
 QUnit.test('found (X zone, has order)', function(assert){
-	assert.expect(6);
+	assert.expect(4);
 	
 	var geocode = this.GEOCODE;
 	geocode.data.hurricaneEvacuationZone = 'X';
@@ -687,9 +689,9 @@ QUnit.test('found (X zone, has order)', function(assert){
 	var getOrder = nyc311.App.getOrder;
 	nyc311.App.getOrder = function(){};
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER);
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
 	
-	app.evOrder = {zones: ['1', '2', '5']};
+	app.zoneOrders = {zones: ['1', '2', '5']};
 	app.sortShelters = function(location){
 		assert.deepEqual(location, geocode);
 	};
@@ -698,9 +700,7 @@ QUnit.test('found (X zone, has order)', function(assert){
 
 	app.found(geocode);
 	
-	assert.equal($('#userAddr').html(), geocode.name);
-	assert.equal($('#userZone').html(), 'is not located in an Evactuation Zone');
-	assert.equal($('#userEvac').html(), '');
+	assert.equal($('#userAddr').html(), '<div class="inf-location"><div class="inf-name">You are not located in an Evacuation Zone</div><div class="inf-name">59 Maiden Lane, Manhattan, NY 10038</div></div>');
 	assert.equal($('#possible').html(), '');
 	assert.equal($('#possible').css('display'), 'none');
 	
@@ -708,7 +708,7 @@ QUnit.test('found (X zone, has order)', function(assert){
 });
 
 QUnit.test('found (X zone, no order)', function(assert){
-	assert.expect(6);
+	assert.expect(4);
 	
 	var geocode = this.GEOCODE;
 	geocode.data.hurricaneEvacuationZone = 'X';
@@ -716,9 +716,9 @@ QUnit.test('found (X zone, no order)', function(assert){
 	var getOrder = nyc311.App.getOrder;
 	nyc311.App.getOrder = function(){};
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER);
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
 	
-	app.evOrder = {zones: []};
+	app.zoneOrders = {zones: []};
 	app.sortShelters = function(location){
 		assert.deepEqual(location, geocode);
 	};
@@ -727,9 +727,7 @@ QUnit.test('found (X zone, no order)', function(assert){
 
 	app.found(geocode);
 	
-	assert.equal($('#userAddr').html(), geocode.name);
-	assert.equal($('#userZone').html(), 'is not located in an Evactuation Zone');
-	assert.equal($('#userEvac').html(), '');
+	assert.equal($('#userAddr').html(), '<div class="inf-location"><div class="inf-name">You are not located in an Evacuation Zone</div><div class="inf-name">59 Maiden Lane, Manhattan, NY 10038</div></div>');
 	assert.equal($('#possible').html(), '');
 	assert.equal($('#possible').css('display'), 'none');
 	
@@ -741,7 +739,7 @@ QUnit.test('ambiguous (has possibles)', function(assert){
 
 	var possibles = [];
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER);
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
 	app.find = function(){
 		possibles.push($('#address').val());
 	};
@@ -768,7 +766,7 @@ QUnit.test('ambiguous (no possibles)', function(assert){
 	
 	var possibles = [];
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER);
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
 	
 	app.find = function(){
 		possibles.push($('#address').val());

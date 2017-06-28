@@ -112,6 +112,7 @@ button{
 }
 td.dist{
 	width:55px;
+	vertical-align: top;
 }
 .accessP, .accessY{
 	width:16px;
@@ -121,6 +122,7 @@ td.dist{
 	background-size:16px;
 	-webkit-background-size: length_x length_y;
 	float:left;
+	margin-right: 5px;
 }
 .accessY{
  	background-image:url(../img/shelter_fa_16.png);
@@ -130,4 +132,8 @@ td.dist{
 }
 .accessN{
 	display:none;
+}
+.shelterInfo ul {
+	display: none;
+	margin-left: -20px;
 }
