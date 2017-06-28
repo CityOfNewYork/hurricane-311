@@ -48,7 +48,7 @@ function csvContentLoaded(csvContent){
 							return this.get('CITY') + ', NY ' + this.get('ZIP_CODE');
 						},
 						isAccessible: function(){
-							return this.get('Accessible') != 'N';
+							return this.get('ACCESSIBLE') != 'N';
 						},
 						getAccessibleFeatures: function(){
 							return this.isAccessible() ? this.message('acc_feat', this.getProperties()) : '';

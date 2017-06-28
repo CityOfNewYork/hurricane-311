@@ -81,12 +81,12 @@ nyc311.App.prototype = {
 			'<div class="addr1">' + shelter.BLDG_ADD  + '</div>' +
 			'<div class="addr1">Between ' + shelter.CROSS1 + ' and ' + shelter.CROSS2  + '</div>' +
 			'<div class="addr2">' +  shelter.CITY + ', NY ' + shelter.ZIP_CODE + '</div>' +
-			'<div class="access' + shelter.Accessible + '"></div>' + 
+			'<div class="access' + shelter.ACCESSIBLE + '"></div>' + 
 			this.getAccessibleDetails(shelter) + 
 			'</div>';
 	},
 	getAccessibleDetails: function(shelter){
-		if (shelter.Accessible == 'Y'){
+		if (shelter.ACCESSIBLE == 'Y'){
 			return '<a href="#" onclick="$(this).next().slideToggle();">Details</a>' + this.content.message('acc_feat', shelter);
 		}
 		return '';

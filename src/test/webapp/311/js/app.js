@@ -194,10 +194,10 @@ QUnit.module('nyc311.App', {
 		
 		this.SHELTERS = [{
 			ACC_FEAT: '',
-			Accessible: 'N',
+			ACCESSIBLE: 'N',
 			BLDG_ADD: '160-05 Highland Avenue',
 			BLDG_ID: 'Q505',
-			Borocode: '4',
+			BOROCODE: '4',
 			CITY: 'Jamaica',
 			CROSS1: 'Parsons Blvd',
 			CROSS2: '162 Street',
@@ -207,10 +207,10 @@ QUnit.module('nyc311.App', {
 			ZIP_CODE: '11432'
 		},{
 			ACC_FEAT: 'The main/accessible entrance to this location for sheltering purposes is on 149th Street (Close to the intersection with Melbourne Avenue)',
-			Accessible: 'Y',
+			ACCESSIBLE: 'Y',
 			BLDG_ADD: '149-11 Melbourne Avenue',
 			BLDG_ID: 'Q515',
-			Borocode: '4',
+			BOROCODE: '4',
 			CITY: 'Flushing',
 			CROSS1: '149 Street',
 			CROSS2: '150 Street',
@@ -220,10 +220,10 @@ QUnit.module('nyc311.App', {
 			ZIP_CODE: '11367'
 		},{
 			ACC_FEAT: 'The main/accessible entrance to this location for sheltering purposes is 92-07 175th Street',
-			Accessible: 'Y',
+			ACCESSIBLE: 'Y',
 			BLDG_ADD: '92-07 175 Street',
 			BLDG_ID: 'Q268',
-			Borocode: '4',
+			BOROCODE: '4',
 			CITY: 'Jamaica',
 			CROSS1: 'Jamaica Avenue',
 			CROSS2: '93 Avenue',
