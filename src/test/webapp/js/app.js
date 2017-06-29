@@ -240,7 +240,7 @@ QUnit.test('zone (surface water, is in geocoded data)', function(assert){
 			name: 'Brooklyn Bridge, Manhattan, NY 10038',
 			coordinates: [-8237490.54653364, 4969295.73564776],
 			accuracy: nyc.Geocoder.Accuracy.HIGH,
-			data: {hurricaneEvacuationZone: '7'}
+			data: {hurricaneEvacuationZone: '1'}
 		};
 		app.showPopup = function(coords, html){
 			popupCoords = coords;
@@ -254,7 +254,7 @@ QUnit.test('zone (surface water, is in geocoded data)', function(assert){
 				assert.deepEqual(popupCoords, app.location.coordinates);
 				assert.equal(
 					popupHtml,
-					app.content.message('location_zone_unkown', {name: 'Brooklyn Bridge<br> Manhattan, NY 10038'})
+					app.content.message('location_zone_order', {zone: 1, order: app.content.message('yes_order'), name: 'Brooklyn Bridge<br> Manhattan, NY 10038'})
 				);
 				done();
 				nyc.App.prototype.getOrderUrl = getOrderUrl;
@@ -507,7 +507,7 @@ QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH, surface water, not in g
 				assert.deepEqual(popupCoords, app.location.coordinates);
 				assert.equal(
 					popupHtml,
-					app.content.message('location_zone_unkown', {name: 'Brooklyn Bridge<br> Manhattan, NY 10038'})
+					app.content.message('location_zone_order', {zone: 1, order: app.content.message('yes_order'), name: 'Brooklyn Bridge<br> Manhattan, NY 10038'})
 				);
 				done();
 				nyc.App.prototype.getOrderUrl = getOrderUrl;
@@ -757,7 +757,7 @@ QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH, surface water, not in 
 				assert.deepEqual(popupCoords, app.location.coordinates);
 				assert.equal(
 					popupHtml,
-					app.content.message('location_zone_unkown', {name: 'Brooklyn Bridge<br> Manhattan, NY 10038'})
+					app.content.message('location_zone_order', {zone: 1, order: app.content.message('yes_order'), name: 'Brooklyn Bridge<br> Manhattan, NY 10038'})
 				);
 				done();
 				nyc.App.prototype.getOrderUrl = getOrderUrl;
