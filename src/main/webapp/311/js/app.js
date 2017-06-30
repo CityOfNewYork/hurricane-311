@@ -8,9 +8,9 @@ nyc311.App = function(geocoder, content){
 	this.content = content;
 	
 	this.getOrders();
-	setInterval($.proxy(this.getOrders, this), 600000);
+	setInterval($.proxy(this.getOrders, this), 60000);
 	this.getShelters();
-	setInterval($.proxy(this.getShelters, this), 600000);
+	setInterval($.proxy(this.getShelters, this), 60000);
 
 	geocoder.on(nyc.Locate.EventType.GEOCODE, $.proxy(this.found, this));
 	geocoder.on(nyc.Locate.EventType.AMBIGUOUS, $.proxy(this.ambiguous, this));
