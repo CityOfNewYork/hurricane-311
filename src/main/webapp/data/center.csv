@@ -1,4 +1,4 @@
-BLDG_ID,X,Y,OEM_LABEL,BLDG_ADD,Borocode,CITY,CROSS1,CROSS2,ZIP_CODE,Accessible,ACC_FEAT
+BLDG_ID,X,Y,OEM_LABEL,BLDG_ADD,BOROCODE,CITY,CROSS1,CROSS2,ZIP_CODE,ACCESSIBLE,ACC_FEAT
 Q515,1033758.244,207098.4979,Townsend Harris HS,149-11 Melbourne Avenue,4,Flushing,149 Street,150 Street,11367,Y,The main/accessible entrance to this location for sheltering purposes is on 149th Street (Close to the intersection with Melbourne Avenue)
 Q505,1038959.207,197885.0849,Hillcrest HS,160-05 Highland Avenue,4,Jamaica,Parsons Blvd,162 Street,11432,N,
 Q268,1043802.516,197171.0978,PS - IS 268,92-07 175 Street,4,Jamaica,Jamaica Avenue,93 Avenue,11433,Y,The main/accessible entrance to this location for sheltering purposes is 92-07 175th Street
