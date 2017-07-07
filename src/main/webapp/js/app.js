@@ -479,11 +479,6 @@ nyc.App.prototype = {
 					name: name, 
 					oem_supplied: content.message('user_in_x_zone')
 				});
-			}else if (zone == nyc.SURFACE_WATER_ZONE){
-				html = content.message('location_zone_unkown', {
-					name: name, 
-					oem_supplied: content.message('user_zone_unkown')
-				}); 
 			}else{
 				html = content.message('location_zone_order', { 
 					order: this.zoneMsg(content, zone), 
@@ -519,14 +514,23 @@ nyc.App.prototype = {
 			});
 		}
 		if (features.length == 0) {
-			html = content.message('location_no_zone', {name: name});
+			html = content.message('location_no_zone', {
+				name: name, 
+				oem_supplied: content.message('user_in_x_zone')
+			});
 		}else{
 			zone = features[0].isSurfaceWater() ? '1' : features[0].getZone();
 			if (features.length == 1) {
-				var order = content.message(this.zoneOrders[zone] ? 'yes_order' : 'no_order');
-				html = content.message('location_zone_order', {zone: zone, order: order, name: name});
+				html = content.message('location_zone_order', { 
+					order: this.zoneMsg(content, zone), 
+					name: name, 
+					oem_supplied: content.message('user_zone', {zone: zone})
+				});	
 			}else{
-				html = content.message('location_zone_unkown', {name: name}); 
+				html = content.message('location_zone_unkown', {
+					name: name, 
+					oem_supplied: content.message('user_zone_unkown')
+				}); 
 			}
 		}
 		return html;

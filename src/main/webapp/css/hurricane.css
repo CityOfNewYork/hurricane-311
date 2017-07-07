@@ -462,7 +462,9 @@ a.popup-closer, a.popup-closer:visited, #fld-srch-container .ui-input-clear:afte
 a.popup-closer:hover, #fld-srch-container .ui-input-clear:hover:after {
 	background-color: rgb(8,80,149);
 }
-
+.popup .addr {
+	margin-top: 5px;
+}
 /* ========================== end popup ========================== */
 
 
