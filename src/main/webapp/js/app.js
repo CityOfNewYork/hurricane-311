@@ -475,12 +475,21 @@ nyc.App.prototype = {
 			html;
 		if (zone){
 			if (zone == nyc.NO_ZONE) {
-				html = content.message('location_no_zone', {name: name});
+				html = content.message('location_no_zone', {
+					name: name, 
+					oem_supplied: content.message('user_in_x_zone')
+				});
 			}else if (zone == nyc.SURFACE_WATER_ZONE){
-				html = content.message('location_zone_unkown', {name: name}); 
+				html = content.message('location_zone_unkown', {
+					name: name, 
+					oem_supplied: content.message('user_zone_unkown')
+				}); 
 			}else{
-				var order = content.message(this.zoneOrders[zone] ? 'yes_order' : 'no_order');
-				html = content.message('location_zone_order', {zone: zone, order: order, name: name});			
+				html = content.message('location_zone_order', { 
+					order: this.zoneMsg(content, zone), 
+					name: name, 
+					oem_supplied: content.message('user_zone', {zone: zone})
+				});			
 			}
 		}else{
 			html = this.queryZone();
@@ -562,10 +571,25 @@ nyc.App.prototype = {
 	 * @private 
 	 * @method
 	 */
+	zoneMsg: function(content, zone){
+		if (this.zoneOrders[zone]){
+			return content.message('yes_order', {
+				oem_supplied: content.message('evac_order')
+			});
+		}else{
+			return content.message('no_order', {
+				oem_supplied: content.message('no_evac_order')
+			});
+		}
+	},
+	/** 
+	 * @private 
+	 * @method
+	 */
 	zoneTip: function(){
 		var zone = this.getZone(), 
 			evacuate = this.orders[zone],
-			order = this.message(evacuate ? 'yes_order' : 'no_order');
+			order = nyc.app.zoneMsg(this, zone);
 		return {
 			cssClass: 'tip-zone',
 			text: this.message('zone_tip', {zone: zone, order: order})
