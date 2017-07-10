@@ -126,7 +126,7 @@ function csvContentLoaded(csvContent){
 		
 		var style = new nyc.Style();
 		
-		nyc.app = new nyc.App(
+		new nyc.App(
 			map,
 			FEATURE_DECORATIONS,
 			new nyc.Content([csvContent, MESSAGES]),

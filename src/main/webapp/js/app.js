@@ -16,6 +16,7 @@ window.nyc = window.nyc || {};
  */
 nyc.App = function(map, featureDecorations, content, style, locationMgr, directions, popup){
 	var me = this;
+	nyc.app = me;
 	me.map = map;
 	me.geocoder = locationMgr.locate.geocoder,
 	me.content = content;
