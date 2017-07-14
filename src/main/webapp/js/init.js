@@ -96,9 +96,16 @@ function csvContentLoaded(csvContent){
 					},
 					htmlRenderer: {
 						html: function(){
-							var zone = this.getZone(), 
-								evacuate = this.orders[zone],
-								order = this.message(evacuate ? 'yes_order' : 'no_order');
+							var zone = this.getZone(), evac = this.orders[zone], order;
+							if (evac){
+								order = this.message('yes_order', {
+									oem_supplied: this.message('evac_order')
+								});
+							}else{
+								order = this.message('no_order', {
+									oem_supplied: this.message('no_evac_order')
+								});
+							}
 							if (!this.isSurfaceWater()){
 								return this.message('zone_info', {zone: zone, order: order});				
 							}
