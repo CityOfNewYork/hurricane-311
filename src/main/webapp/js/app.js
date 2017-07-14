@@ -294,12 +294,26 @@ nyc.App.prototype = {
 	 * @param {Object} event The click event of toggle button
 	 */
 	access: function(event){
-		var me = this, parent = $(event.target).parent();
-		parent.next().slideToggle(function(){
+		var me = this, parent = $(event.target).parent(), detail = parent.next();
+		detail.slideToggle(function(){
 			if (parent.parent().hasClass('inf-pop')) {
-				me.popup.pan();
+				if ($('.popup').height() > $('#map').height()){
+					me.fullScreenDetail();
+					detail.hide();
+				}else{
+					me.popup.pan();
+				}
 			}				
 		});
+	},
+	/** 
+	 * @private 
+	 * @method
+	 * @return {string}
+	 */
+	fullScreenDetail: function(){
+		$('#inf-full-screen div').html($('.popup-content').html());
+		$('#inf-full-screen').fadeIn();
 	},
 	/** 
 	 * @private 
