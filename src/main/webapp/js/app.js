@@ -215,6 +215,18 @@ nyc.App.prototype = {
 	 * @method
 	 */
 	layout: function(){
+		if (nyc.util.isIos()){
+			setTimeout($.proxy(this.doLayout, this), 500);
+		}else{
+			this.doLayout();
+		}
+	},
+	/** 
+	 * @desc Set up page layout
+	 * @public 
+	 * @method
+	 */
+	doLayout: function(){
 		var mobile = $('#panel').width() == $(window).width();
 		$(window).one('resize', $.proxy(this.layout, this));
 		$('#tabs').tabs({
@@ -227,11 +239,9 @@ nyc.App.prototype = {
 		});
 		$('#tabs li a').removeClass('ui-btn-active');
 		if (mobile){
-			$('#map-tab-btn').show();
 			$('#tabs').tabs('refresh').tabs({active: 0});
 			$('#map-tab-btn a').addClass('ui-btn-active');
 		}else{
-			$('#map-tab-btn').hide();
 			$('#tabs').tabs('refresh').tabs({active: 1});
 			$('#centers-tab-btn a').addClass('ui-btn-active');
 		}

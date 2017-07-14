@@ -88,6 +88,9 @@ input.ui-slider-input {
 #tabs .ui-navbar li {
 	width: 50%;
 }
+#map-tab-btn {
+	display: none;
+}
 
 /* =========================== end panel ========================= */
 
@@ -595,6 +598,9 @@ a.popup-closer:hover, #fld-srch-container .ui-input-clear:hover:after {
 	}
 	#panel, #map {
 		width: 100%;
+	}
+	#map-tab-btn {
+		display: block;
 	}
 	#map {
 		top: 87px;
