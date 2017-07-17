@@ -1,8 +1,5 @@
-var timeOffset = 1000 * 60 * 5;
-var cacheBust = Math.round(new Date().getTime() / timeOffset) * timeOffset;
-
-nyc.SURFACE_WATER_ZONE = '7';
-nyc.NO_ZONE = 'X';
+var timeOffset = 1000 * 60 * (document.location.href.indexOf('311') > -1 ? 1 : 5);
+nyc.cacheBust = Math.round(new Date().getTime() / timeOffset) * timeOffset;
 
 function csvContentLoaded(csvContent){
 	
@@ -96,18 +93,9 @@ function csvContentLoaded(csvContent){
 					},
 					htmlRenderer: {
 						html: function(){
-							var zone = this.getZone(), evac = this.orders[zone], order;
-							if (evac){
-								order = this.message('yes_order', {
-									oem_supplied: this.message('evac_order')
-								});
-							}else{
-								order = this.message('no_order', {
-									oem_supplied: this.message('no_evac_order')
-								});
-							}
+							var zone = this.getZone();
 							if (!this.isSurfaceWater()){
-								return this.message('zone_info', {zone: zone, order: order});				
+								return this.message('zone_info', {zone: zone, order: this.zoneMsg(zone)});				
 							}
 						}
 					}
@@ -136,7 +124,7 @@ function csvContentLoaded(csvContent){
 		new nyc.App(
 			map,
 			FEATURE_DECORATIONS,
-			new nyc.Content([csvContent, MESSAGES]),
+			new nyc.HurricaneContent([csvContent, MESSAGES]),
 			style,
 			new nyc.LocationMgr({
 				controls: new nyc.ol.control.ZoomSearch(map),
@@ -150,4 +138,4 @@ function csvContentLoaded(csvContent){
 	});
 };
 
-new nyc.CsvContent('data/content.csv?' + cacheBust, csvContentLoaded);
+new nyc.CsvContent('data/content.csv?' + nyc.cacheBust, csvContentLoaded);
