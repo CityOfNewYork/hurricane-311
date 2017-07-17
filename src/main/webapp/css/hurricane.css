@@ -125,27 +125,30 @@ input.ui-slider-input {
 	padding: 0;
 	height: 100%;
 }
-#tabs .ui-navbar a {
-	height: 20px;
-	padding: 13px 0 9px;
+#tabs .ui-navbar li {
 	background-color: #085095;
+	border-left: 1px solid #fefcd5;
+	display: table;
+}
+#tabs .ui-navbar li.ui-tabs-active {
+	background-color: #fefcd5;
+}
+#tabs .ui-navbar a {
+	display: table-cell;
+	vertical-align: middle;
+	height: 45px;
+	padding: 0;
 	color: #fefcd5;
 	text-shadow: none;
+	background-color: transparent;
 	border: none;
+	white-space: normal;
+
 }
 #tabs .ui-navbar a.ui-btn-active {
 	color: #085095;
 	background-color: rgba(251, 237, 48, 0);
 
-}
-#centers-tab-btn a.pre-storm {
-    padding: 3px 0 19px !important;
-}
-#tabs .ui-navbar li {
-	width: 50%;
-}
-#map-tab-btn {
-	display: none;
 }
 
 /* =========================== end panel ========================= */
@@ -636,6 +639,7 @@ a.popup-closer:hover, #fld-srch-container .ui-input-clear:hover:after {
 /* ======================= end active-order ====================== */
 
 
+
 /* ===================== begin media queries ===================== */
 
 @media only screen and (max-width : 605px) {
@@ -647,6 +651,14 @@ a.popup-closer:hover, #fld-srch-container .ui-input-clear:hover:after {
 		right: 3px;
 	}
 }
+@media only screen and (min-width : 496px) {
+	#tabs .ui-navbar li {
+		width: 50%;
+	}
+	#tabs .ui-navbar li:first-of-type {
+		display: none;
+	}
+}
 @media only screen and (max-width : 495px), screen and (max-height: 350px) {
 	#map-page .ui-content {
 		z-index: 1000;
@@ -655,14 +667,8 @@ a.popup-closer:hover, #fld-srch-container .ui-input-clear:hover:after {
 	#panel, #map {
 		width: 100%;
 	}
-	#map-tab-btn {
-		display: block;
-	}
 	#map {
 		top: 87px;
-	}
-	#tabs .ui-navbar li {
-		width: 33%;
 	}
 	#splash-cont {
 		margin-top: 10px;
