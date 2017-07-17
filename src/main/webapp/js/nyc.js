@@ -7,7 +7,7 @@ if (typeof String.prototype.trim != "function") {
 /**
  * @public
  */
-window.nyc = nyc || {};
+window.nyc = window.nyc || {};
 
 /**
  * @desc The zone designation of surface waters

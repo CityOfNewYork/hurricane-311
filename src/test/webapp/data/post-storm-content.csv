@@ -1,10 +1,1 @@
-key,value
-post_storm,YES
-banner_text,Something different
-splash_msg,A different splash message
-btn_text,Lookie a map
-centers_tab,shelters
-filter_centers,shelters
-centers_msg,A different centers message
-legend_msg,A different legend message
-legend_center,shelter
+key,valuepost_storm,YESbanner_text,Hurricane Josh Shelter Locatorsplash_msg,"If you need emergency shelter as a result of Hurricane Josh, use the map to find the nearest facility or call 311 for info"btn_text,Shelter Mapcenters_tab,Sheltersfilter_centers,Shelterscenters_msg,"If your home is unsafe, you may go to one of the shelters listed below. If you cannot get there on your own please call 311. CHECK BACK DAILY AS THE LIST OF SHELTERS MAY CHANGE"legend_msg,"Areas impacted by Hurricane Josh may still be unsafe. If you cannot remain in your home, use this application or call 311 to located a city-operated shelter."legend_center,shelteruser_in_x_zone,You are not located in an area impaced by Hurricane Josh storm surgeuser_zone_unkown,Zone Finder cannot determine your address.<br>Try alternative address or examine map and click on your location.user_zone_unkown_311,Zone Finder cannot determine your address.<br>Try alternative address.user_zone,Hurricane Josh Shelter Locatorevac_order,You are in an area that may have been impacted by Hurricane Joshno_evac_order,

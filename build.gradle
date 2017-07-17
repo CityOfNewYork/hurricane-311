@@ -60,11 +60,13 @@ task replaceTokens(dependsOn: [setEnv, copyFiles]) << {
 		ant.replace(file: "build/${ver}/down.html", token: '/* google analytics */', value: project.ext['hurricane.analytics'])
 	}
 
-	ant.replace(file: "build/${ver}/index.html", token: 'hurricane.css', value: "${appName}.css")
+	ant.replace(file: "build/${ver}/index.html", token: 'hurricane.css', value: "${appName}.css?${ver}")
 	ant.replace(file: "build/${ver}/index.html", token: '<script src="js/style.js"></script>', value: '')
 	ant.replace(file: "build/${ver}/index.html", token: '<script src="js/app.js"></script>', value: '')
-	ant.replace(file: "build/${ver}/index.html", token: 'js/init.js', value: "js/${appName}.js")
+	ant.replace(file: "build/${ver}/index.html", token: 'js/init.js', value: "js/${appName}.js?${ver}")
 	ant.replace(file: "build/${ver}/index.html", token: local_nyclib, value: project.ext["${env}_nyclib"])
+
+	ant.replace(file: "build/${ver}/311/index.html", token: 'hurricane-version', value: ver)
 
 }
 

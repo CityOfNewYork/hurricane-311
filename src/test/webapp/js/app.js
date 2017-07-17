@@ -139,7 +139,6 @@ QUnit.test('zone (yes order, is in geocoded data)', function(assert){
 	
 });
 
-/*
 QUnit.test('zone, no order, is in geocoded data)', function(assert){
 	assert.expect(2);
 	
@@ -184,10 +183,7 @@ QUnit.test('zone, no order, is in geocoded data)', function(assert){
 				assert.deepEqual(popupCoords, app.location.coordinates);
 				assert.equal(
 					popupHtml,
-					app.content.message(
-						'location_zone_order',
-						{zone: 5, order: app.content.message('no_order'), name: '59 Maiden Lane<br> Manhattan, NY 10038'}
-					)
+					'<div class="inf-location"><div class="inf-name">You are located in Zone 5</div><div class="order">No evacuation order currently in effect</div><div class="inf-name addr">59 Maiden Lane<br> Manhattan, NY 10038</div></div>'
 				);
 				done();
 				nyc.App.prototype.getOrderUrl = getOrderUrl;
@@ -248,7 +244,7 @@ QUnit.test('zone (surface water, is in geocoded data)', function(assert){
 				assert.deepEqual(popupCoords, app.location.coordinates);
 				assert.equal(
 					popupHtml,
-					app.content.message('location_zone_order', {zone: 1, order: app.content.message('yes_order'), name: 'Brooklyn Bridge<br> Manhattan, NY 10038'})
+					'<div class="inf-location"><div class="inf-name">You are located in Zone 1</div><div class="order active-order">You are required to evacuate</div><div class="inf-name addr">Brooklyn Bridge<br> Manhattan, NY 10038</div></div>'
 				);
 				done();
 				nyc.App.prototype.getOrderUrl = getOrderUrl;
@@ -309,7 +305,7 @@ QUnit.test('zone (no zone, is in geocoded data)', function(assert){
 				assert.deepEqual(popupCoords, app.location.coordinates);
 				assert.equal(
 					popupHtml,
-					app.content.message('location_no_zone', {name: '102-25 67 Drive<br> Queens, NY 11375'})
+					'<div class="inf-location"><div class="inf-name">You are not located in an Evacuation Zone</div><div class="inf-name addr">102-25 67 Drive<br> Queens, NY 11375</div></div>'
 				);
 				done();
 				nyc.App.prototype.getOrderUrl = getOrderUrl;
@@ -325,8 +321,6 @@ QUnit.test('zone (no zone, is in geocoded data)', function(assert){
 		setTimeout(wait, 100);
 	});
 });
-
-
 
 QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH, yes order, not in geocoded data)', function(assert){
 	assert.expect(2);
@@ -372,10 +366,7 @@ QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH, yes order, not in geoco
 				assert.deepEqual(popupCoords, app.location.coordinates);
 				assert.equal(
 					popupHtml,
-					app.content.message(
-						'location_zone_order',
-						{zone: 1, order: app.content.message('yes_order'), name: '5 Water Street<br> Manhattan, NY 10004'}
-					)
+					'<div class="inf-location"><div class="inf-name">You are located in Zone 1</div><div class="order active-order">You are required to evacuate</div><div class="inf-name addr">5 Water Street<br> Manhattan, NY 10004</div></div>'
 				);
 				done();
 				nyc.App.prototype.getOrderUrl = getOrderUrl;
@@ -437,10 +428,7 @@ QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH, no order, not in geocod
 				assert.deepEqual(popupCoords, app.location.coordinates);
 				assert.equal(
 					popupHtml,
-					app.content.message(
-						'location_zone_order',
-						{zone: 5, order: app.content.message('no_order'), name: '59 Maiden Lane<br> Manhattan, NY 10038'}
-					)
+					'<div class="inf-location"><div class="inf-name">You are located in Zone 5</div><div class="order">No evacuation order currently in effect</div><div class="inf-name addr">59 Maiden Lane<br> Manhattan, NY 10038</div></div>'
 				);
 				done();
 				nyc.App.prototype.getOrderUrl = getOrderUrl;
@@ -501,7 +489,7 @@ QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH, surface water, not in g
 				assert.deepEqual(popupCoords, app.location.coordinates);
 				assert.equal(
 					popupHtml,
-					app.content.message('location_zone_order', {zone: 1, order: app.content.message('yes_order'), name: 'Brooklyn Bridge<br> Manhattan, NY 10038'})
+					'<div class="inf-location"><div class="inf-name">You are located in Zone 1</div><div class="order active-order">You are required to evacuate</div><div class="inf-name addr">Brooklyn Bridge<br> Manhattan, NY 10038</div></div>'
 				);
 				done();
 				nyc.App.prototype.getOrderUrl = getOrderUrl;
@@ -562,7 +550,7 @@ QUnit.test('zone (accuracy = nyc.Geocoder.Accuracy.HIGH, no zone, not in geocode
 				assert.deepEqual(popupCoords, app.location.coordinates);
 				assert.equal(
 					popupHtml,
-					app.content.message('location_no_zone', {name: '102-25 67 Drive<br> Queens, NY 11375'})
+					'<div class="inf-location"><div class="inf-name">You are not located in an Evacuation Zone</div><div class="inf-name addr">102-25 67 Drive<br> Queens, NY 11375</div></div>'
 				);
 				done();
 				nyc.App.prototype.getOrderUrl = getOrderUrl;
@@ -623,10 +611,7 @@ QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH, yes order, not in geoc
 				assert.deepEqual(popupCoords, app.location.coordinates);
 				assert.equal(
 					popupHtml,
-					app.content.message(
-						'location_zone_order',
-						{zone: 1, order: app.content.message('yes_order'), name: 'Beach 20 Street And Cornaga Avenue<br> Queens, NY 11691'}
-					)
+					'<div class="inf-location"><div class="inf-name">You are located in Zone 1</div><div class="order active-order">You are required to evacuate</div><div class="inf-name addr">Beach 20 Street And Cornaga Avenue<br> Queens, NY 11691</div></div>'
 				);
 				done();
 				nyc.App.prototype.getOrderUrl = getOrderUrl;
@@ -687,10 +672,7 @@ QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH, no order, not in geoco
 				assert.deepEqual(popupCoords, app.location.coordinates);
 				assert.equal(
 					popupHtml,
-					app.content.message(
-						'location_zone_order',
-						{zone: 5, order: app.content.message('no_order'), name: 'Dutch Street And John Street<br> Manhattan, NY 10038'}
-					)
+					'<div class="inf-location"><div class="inf-name">You are located in Zone 5</div><div class="order">No evacuation order currently in effect</div><div class="inf-name addr">Dutch Street And John Street<br> Manhattan, NY 10038</div></div>'
 				);
 				done();
 				nyc.App.prototype.getOrderUrl = getOrderUrl;
@@ -751,7 +733,7 @@ QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH, surface water, not in 
 				assert.deepEqual(popupCoords, app.location.coordinates);
 				assert.equal(
 					popupHtml,
-					app.content.message('location_zone_order', {zone: 1, order: app.content.message('yes_order'), name: 'Brooklyn Bridge<br> Manhattan, NY 10038'})
+					'<div class="inf-location"><div class="inf-name">You are located in Zone 1</div><div class="order active-order">You are required to evacuate</div><div class="inf-name addr">Brooklyn Bridge<br> Manhattan, NY 10038</div></div>'
 				);
 				done();
 				nyc.App.prototype.getOrderUrl = getOrderUrl;
@@ -812,7 +794,7 @@ QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH, no zone, not in geocod
 				assert.deepEqual(popupCoords, app.location.coordinates);
 				assert.equal(
 					popupHtml,
-					app.content.message('location_no_zone', {name: '67 Drive And Queens Boulevard<br> Queens, NY 11375'})
+					'<div class="inf-location"><div class="inf-name">You are not located in an Evacuation Zone</div><div class="inf-name addr">67 Drive And Queens Boulevard<br> Queens, NY 11375</div></div>'
 				);
 				done();
 				nyc.App.prototype.getOrderUrl = getOrderUrl;
@@ -873,7 +855,7 @@ QUnit.test('zone (accuracy != nyc.Geocoder.Accuracy.HIGH, multiple zone, not in 
 				assert.deepEqual(popupCoords, app.location.coordinates);
 				assert.equal(
 					popupHtml,
-					app.content.message('location_zone_unkown', {name: '10038'})
+					'<div class="inf-location"><div class="inf-name">Zone Finder cannot determine Zone for your address.<br>Try alternative address or determine Zone by examining map and clicking on your location.</div><div class="inf-name addr">10038</div></div>'
 				);
 				done();
 				nyc.App.prototype.getOrderUrl = getOrderUrl;
@@ -1924,36 +1906,88 @@ QUnit.test('showPopup', function(assert){
 	assert.deepEqual(app.popup.options, {coordinates: [1, 2], html: 'some html'});
 });
 
+QUnit.test('zoneTip (isSurfaceWater)', function(assert){
+	assert.expect(1);
+
+	var done = assert.async();
+	
+	var test = function(csvContent){
+		var feature = new ol.Feature();
+		feature.zoneTip = nyc.App.prototype.zoneTip;
+		feature.zoneOrders = {'1': true};
+		feature.getZone = function(){return 7;};	
+		feature.replace = nyc.HurricaneContent.prototype.replace;
+		feature.message = nyc.HurricaneContent.prototype.message;
+		feature.locationMsg = nyc.HurricaneContent.prototype.locationMsg;
+		feature.zoneMsg = nyc.HurricaneContent.prototype.zoneMsg;
+		feature.isSurfaceWater = function(){return true;};
+		feature.messages = csvContent;
+		for (var msg in MESSAGES){
+			feature.messages[msg] = MESSAGES[msg];
+		}
+		assert.notOk(feature.zoneTip());
+		done();
+	};
+
+	new nyc.CsvContent('data/pre-storm-content.csv', test);
+});
+
 QUnit.test('zoneTip (yes evacuate)', function(assert){
 	assert.expect(1);
 
-	var feature = new ol.Feature();
-	feature.zoneTip = nyc.App.prototype.zoneTip;
-	feature.orders = {'1': true};
-	feature.getZone = function(){return 1;};	
-	feature.replace = nyc.HurricaneContent.prototype.replace;
-	feature.message = nyc.HurricaneContent.prototype.message;
-	feature.messages = MESSAGES;
-	assert.deepEqual(feature.zoneTip(), {
-		cssClass: 'tip-zone',
-		text: feature.message('zone_tip', {zone: 1, order: feature.message('yes_order')})
-	});
+	var done = assert.async();
+	
+	var test = function(csvContent){
+		var feature = new ol.Feature();
+		feature.zoneTip = nyc.App.prototype.zoneTip;
+		feature.zoneOrders = {'1': true};
+		feature.getZone = function(){return 1;};	
+		feature.replace = nyc.HurricaneContent.prototype.replace;
+		feature.message = nyc.HurricaneContent.prototype.message;
+		feature.locationMsg = nyc.HurricaneContent.prototype.locationMsg;
+		feature.zoneMsg = nyc.HurricaneContent.prototype.zoneMsg;
+		feature.isSurfaceWater = function(){};
+		feature.messages = csvContent;
+		for (var msg in MESSAGES){
+			feature.messages[msg] = MESSAGES[msg];
+		}
+		assert.deepEqual(feature.zoneTip(), {
+			cssClass: 'tip-zone',
+			text: '<div class="capitalize">evacuation zone 1</div><div><div class="order active-order">You are required to evacuate</div></div>'
+		});
+		done();
+	};
+
+	new nyc.CsvContent('data/pre-storm-content.csv', test);
 });
 
 QUnit.test('zoneTip (no evacuate)', function(assert){
 	assert.expect(1);
 
-	var feature = new ol.Feature();
-	feature.zoneTip = nyc.App.prototype.zoneTip;
-	feature.orders = {'1': true};
-	feature.getZone = function(){return 2;};
-	feature.replace = nyc.HurricaneContent.prototype.replace;
-	feature.message = nyc.HurricaneContent.prototype.message;
-	feature.messages = MESSAGES;
-	assert.deepEqual(feature.zoneTip(), {
-		cssClass: 'tip-zone',
-		text: feature.message('zone_tip', {zone: 2, order: feature.message('no_order')})
-	});
+	var done = assert.async();
+	
+	var test = function(csvContent){
+		var feature = new ol.Feature();
+		feature.zoneTip = nyc.App.prototype.zoneTip;
+		feature.zoneOrders = {'1': true};
+		feature.getZone = function(){return 2;};	
+		feature.replace = nyc.HurricaneContent.prototype.replace;
+		feature.message = nyc.HurricaneContent.prototype.message;
+		feature.locationMsg = nyc.HurricaneContent.prototype.locationMsg;
+		feature.zoneMsg = nyc.HurricaneContent.prototype.zoneMsg;
+		feature.isSurfaceWater = function(){};
+		feature.messages = csvContent;
+		for (var msg in MESSAGES){
+			feature.messages[msg] = MESSAGES[msg];
+		}
+		assert.deepEqual(feature.zoneTip(), {
+			cssClass: 'tip-zone',
+			text: '<div class="capitalize">evacuation zone 2</div><div><div class="order">No evacuation order currently in effect</div></div>'
+		});
+		done();
+	};
+
+	new nyc.CsvContent('data/pre-storm-content.csv', test);
 });
 
 QUnit.test('centerTip (accessible)', function(assert){
@@ -2050,5 +2084,3 @@ QUnit.test('alert', function(assert){
 		done();
 	}, 1000);
 });
-
-*/
