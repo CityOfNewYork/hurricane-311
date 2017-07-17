@@ -7,8 +7,8 @@ window.nyc = window.nyc || {};
  * @class
  * @constructor
  * @param {ol.Map} map The OpenLayers map for the hurricane map
- * @param {Object} featureDecorations Decorations for the evacuation zone and evacuation center features
- * @param {nyc.Content} content Manages content messages
+ * @param {Object<string, Object>} featureDecorations Decorations for the evacuation zone and evacuation center features
+ * @param {nyc.HurricaneContent} content Manages content messages
  * @param {nyc.Style} style Styles layers
  * @param {nyc.LocationMgr} locationMgr Locates using geolocation and geocoding
  * @param {nyc.Directions} directions Generates directions using Google Maps
@@ -32,7 +32,7 @@ nyc.App = function(map, featureDecorations, content, style, locationMgr, directi
 		me.layout();
 	});
 	
-	me.getState();
+	me.setState();
 	
 	me.zoneSource = new nyc.ol.source.Decorating(
 		{url: 'data/zone.json' , format: new ol.format.TopoJSON},
@@ -51,7 +51,7 @@ nyc.App = function(map, featureDecorations, content, style, locationMgr, directi
 
 	me.centerSource = new nyc.ol.source.FilteringAndSorting(
 		{loader: new nyc.ol.source.CsvPointFeatureLoader({
-			url: 'data/center.csv?' + window.cacheBust,
+			url: 'data/center.csv?' + nyc.cacheBust,
 			projection: 'EPSG:2263',
 			fidCol: 'BLDG_ID',
 			xCol: 'X',
@@ -161,11 +161,14 @@ nyc.App.prototype = {
 	 * @member {nyc.ol.source.Decorating}
 	 */
 	locationSource: null,
-	/** @private */
+	/** 
+	 * @private  
+	 * @member {nyc.HurricaneContent}
+	 */
 	content: null,
 	/** 
 	 * @private
-	 * @member {nyc.Content}
+	 * @member {nyc.content}
 	 */
 	controls: null,
 	/** 
@@ -190,7 +193,7 @@ nyc.App.prototype = {
 	location: null,
 	/** 
 	 * @private
-	 * @member {Object<number, boolean>}
+	 * @member {Object<string, boolean>}
 	 */
 	zoneOrders: null,
 	/** 
@@ -222,8 +225,7 @@ nyc.App.prototype = {
 		}
 	},
 	/** 
-	 * @desc Set up page layout
-	 * @public 
+	 * @private
 	 * @method
 	 */
 	doLayout: function(){
@@ -291,7 +293,7 @@ nyc.App.prototype = {
 	 * @desc Toggle the display of accessibility info
 	 * @public 
 	 * @method
-	 * @param {Object} event The click event of toggle button
+	 * @param {JQueryEvent} event The click event of toggle button
 	 */
 	access: function(event){
 		var me = this, parent = $(event.target).parent(), detail = parent.next();
@@ -404,7 +406,7 @@ nyc.App.prototype = {
 	 * @private 
 	 * @method
 	 */
-	getState: function(){
+	setState: function(){
 		var content = this.content;
 		$('#splash-cont .orders').html('<div class="order">' + content.message('splash_msg') + '</div>');
 		if (content.message('post_storm') == 'NO'){
@@ -427,7 +429,7 @@ nyc.App.prototype = {
 	 * @method
 	 */
 	getOrderUrl: function(){
-		return 'data/order.csv?' + window.cacheBust;
+		return 'data/order.csv?' + nyc.cacheBust;
 	},
 	/** 
 	 * @private 
@@ -455,6 +457,7 @@ nyc.App.prototype = {
 				evacReq.push(zone.ZONE);
 			}				
 		});
+		content.zoneOrders = orders;
 		if (evacReq.length){
 			$('#splash').addClass('active-order');
 			$('.orders').html(content.message('splash_yes_order'));
@@ -471,7 +474,7 @@ nyc.App.prototype = {
 	/** 
 	 * @private 
 	 * @method
-	 * @param {Object} event
+	 * @param {JQueryEvent} event
 	 */
 	filter: function(event){
 		this.centerSource.filter([{
@@ -493,28 +496,8 @@ nyc.App.prototype = {
 	 * @method
 	 */
 	zone: function(){
-		var content = this.content,
-			location = this.location,
-			zone = location.data ? location.data.hurricaneEvacuationZone : null,
-			name = location.name.replace(/,/, '<br>'), 
-			html;
-		if (zone){
-			if (zone == nyc.NO_ZONE) {
-				html = content.message('location_no_zone', {
-					name: name, 
-					oem_supplied: content.message('user_in_x_zone')
-				});
-			}else{
-				html = content.message('location_zone_order', { 
-					order: this.zoneMsg(content, zone), 
-					name: name, 
-					oem_supplied: content.message('user_zone', {zone: zone})
-				});			
-			}
-		}else{
-			html = this.queryZone();
-		}
-		this.showPopup(location.coordinates, html);
+		var html = this.content.locationMsg(this.location) || this.queryZone();
+		this.showPopup(this.location.coordinates, html);
 	},	
 	/** 
 	 * @private 
@@ -547,7 +530,7 @@ nyc.App.prototype = {
 			zone = features[0].isSurfaceWater() ? '1' : features[0].getZone();
 			if (features.length == 1) {
 				html = content.message('location_zone_order', { 
-					order: this.zoneMsg(content, zone), 
+					order: content.zoneMsg(zone), 
 					name: name, 
 					oem_supplied: content.message('user_zone', {zone: zone})
 				});	
@@ -563,7 +546,7 @@ nyc.App.prototype = {
 	/** 
 	 * @private 
 	 * @method
-	 * @param {Object} event
+	 * @param {ol.MapBrowserEvent} event
 	 */
 	mapClick: function(event){
 		var me = this, map = me.map, px = event.pixel;
@@ -600,29 +583,14 @@ nyc.App.prototype = {
 	 * @private 
 	 * @method
 	 */
-	zoneMsg: function(content, zone){
-		if (this.zoneOrders[zone]){
-			return content.message('yes_order', {
-				oem_supplied: content.message('evac_order')
-			});
-		}else{
-			return content.message('no_order', {
-				oem_supplied: content.message('no_evac_order')
-			});
-		}
-	},
-	/** 
-	 * @private 
-	 * @method
-	 */
 	zoneTip: function(){
-		var zone = this.getZone(), 
-			evacuate = this.orders[zone],
-			order = nyc.app.zoneMsg(this, zone);
-		return {
-			cssClass: 'tip-zone',
-			text: this.message('zone_tip', {zone: zone, order: order})
-		};
+		if (!this.isSurfaceWater()){
+			var zone = this.getZone();
+			return {
+				cssClass: 'tip-zone',
+				text: this.message('zone_tip', {zone: zone, order: this.zoneMsg(zone)})
+			};
+		}
 	},
 	/** 
 	 * @private 

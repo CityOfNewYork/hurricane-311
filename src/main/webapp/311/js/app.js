@@ -1,12 +1,42 @@
+/** 
+ * @public 
+ * @namespace
+ */
 window.nyc311 = {
+	/**
+	 * @desc The URL to the order.csv data
+	 * @public
+	 * @const {string}
+	 */
 	ORDER_URL: '../data/order.csv?',
-	CENTER_URL: '../data/center.csv?'
+	/**
+	 * @desc The URL to the center.csv data
+	 * @public
+	 * @const {string}
+	 */
+	CENTER_URL: '../data/center.csv?',
+	/**
+	 * @desc The URL to the content.csv data
+	 * @public
+	 * @const {string}
+	 */
+	CONTENT_URL: '../data/content.csv?'
 };
 
+/**
+ * @desc A class to manage 311 call taker interaction with the hurricane evacuation data
+ * @public
+ * @class
+ * @constructor
+ * @param {nyc.Geoclient} geocoder Address geocoder that provides hurricane zone data
+ * @param {nyc.HurricaneContent} content Manages content messages
+ */
 nyc311.App = function(geocoder, content){
 	this.geocoder = geocoder;
 	this.content = content;
 	
+	this.getContent();
+	setInterval($.proxy(this.getContent, this), 60000);
 	this.getOrders();
 	setInterval($.proxy(this.getOrders, this), 60000);
 	this.getShelters();
@@ -18,8 +48,37 @@ nyc311.App = function(geocoder, content){
 };
 
 nyc311.App.prototype = {
+	/**
+	 * @private
+	 * @member {nyc.Geoclient}
+	 */
+	geocoder: null,
+	/**
+	 * @private
+	 * @member {nyc.HurricaneContent}
+	 */
+	content: null,
+	/**
+	 * @private
+	 * @member {Object<string, boolean>}
+	 */
 	zoneOrders: null,
+	/**
+	 * @private
+	 * @member {Array<Object<string, Object>>}
+	 */	
 	shelters: null,
+	/**
+	 * @private
+	 * @method
+	 */
+	getContent: function(){
+		new nyc.CsvContent(nyc311.CONTENT_URL + new Date().getTime(), $.proxy(this.gotContent, this));
+	},
+	/**
+	 * @private
+	 * @method
+	 */
 	getOrders: function(){
 		$.ajax({
 			url: nyc311.ORDER_URL + new Date().getTime(), 
@@ -27,6 +86,10 @@ nyc311.App.prototype = {
 			error: this.loadError
 		});
 	},
+	/**
+	 * @private
+	 * @method
+	 */
 	getShelters: function(){
 		$.ajax({
 			url: nyc311.CENTER_URL + new Date().getTime(),
@@ -34,6 +97,22 @@ nyc311.App.prototype = {
 			error: this.loadError
 		});			
 	},
+	/**
+	 * @private
+	 * @method
+	 * @param {Object<string, string>} content
+	 */
+	gotContent: function(content){
+		for (var msg in content){
+			this.content.messages[msg] = content[msg];
+		}
+		this.setHeadline();
+	},
+	/**
+	 * @private
+	 * @method
+	 * @param {string} csv
+	 */
 	gotOrders: function(csv){
 		var data = $.csv.toObjects(csv), zoneOrders = this.zoneOrders = {}, zones = [];
 		$.each(data, function(_, zone){
@@ -42,10 +121,44 @@ nyc311.App.prototype = {
 				zoneOrders[zone.ZONE] = true;
 			}
 		});
-		zoneOrders.text = zones.length ? this.getOrderTxt(zones) : 'There is not an Evacuation Order in effect for any Zone';
-		$('#order').html(zoneOrders.text);
+		this.content.zoneOrders = zoneOrders; 
+		this.setHeadline();
 	},
-	getOrderTxt: function(zones){
+	/**
+	 * @private
+	 * @method
+	 * @param {string} csv
+	 */
+	gotShelters: function(csv){
+		this.shelters = $.csv.toObjects(csv);
+		this.listShelters();
+	},
+	/**
+	 * @private
+	 * @method
+	 */
+	setHeadline: function(){
+		var content = this.content;
+		if (content.messages.post_storm == 'NO'){
+			$('#order').html(this.getOrderTxt());
+		}else{
+			$('#order').html(content.message('splash_msg'));
+		}
+	},
+	/**
+	 * @private
+	 * @method
+	 */
+	getOrderTxt: function(){
+		var zones = [];
+		for (var z in this.zoneOrders){
+			if (this.zoneOrders[z]){
+				zones.push(z);
+			}
+		};
+		if (!zones.length){
+			return 'There is not an Evacuation Order in effect for any Zone';
+		}
 		var result = 'An Evacuation Order is in effect for Zone';
 		if (zones.length > 1){
 			result += 's';
@@ -57,10 +170,10 @@ nyc311.App.prototype = {
 			return result + ' ' + zones[0];
 		}
 	},
-	gotShelters: function(csv){
-		this.shelters = $.csv.toObjects(csv);
-		this.listShelters();
-	},
+	/**
+	 * @private
+	 * @method
+	 */
 	listShelters: function(){
 		var me = this, t = $('#sheltersList table')[0];
 		$('#sheltersList tr').remove();
@@ -75,6 +188,12 @@ nyc311.App.prototype = {
 			c.shelter = s;
 		});
 	},
+	/**
+	 * @private
+	 * @method
+	 * @param {Object<string, Object>} shelter
+	 * @return {string}
+	 */
 	shelterInfo: function(shelter){
 		return '<div class="shelterInfo">' +
 			'<div class="name">' + shelter.OEM_LABEL + '</div>' +
@@ -85,12 +204,23 @@ nyc311.App.prototype = {
 			this.getAccessibleDetails(shelter) + 
 			'</div>';
 	},
+	/**
+	 * @private
+	 * @method
+	 * @param {Object<string, Object>} shelter
+	 * @return {string}
+	 */
 	getAccessibleDetails: function(shelter){
 		if (shelter.ACCESSIBLE == 'Y'){
 			return '<a href="#" onclick="$(this).next().slideToggle();">Details</a>' + this.content.message('acc_feat', shelter);
 		}
 		return '';
 	},
+	/**
+	 * @private
+	 * @method
+	 * @param {nyc.Locate.Result} location
+	 */
 	sortShelters: function(location){
 		var me = this;
 		$.each(me.shelters, function(_, s){
@@ -103,6 +233,13 @@ nyc311.App.prototype = {
 		});
 		me.listShelters();
 	},
+	/**
+	 * @private
+	 * @method
+	 * @param {Object<string, Object>} a
+	 * @param {Object<string, Object>} b
+	 * @return {number}
+	 */
 	distance: function(a, b){
 		var dx = a[0] - b[0], 
 			dy = a[1] - b[1], 
@@ -110,30 +247,40 @@ nyc311.App.prototype = {
 			r = d.substr(0, d.indexOf('.') + 3);
 		return r * 1;
 	},
+	/**
+	 * @private
+	 * @method
+	 */
 	find: function(){
 		$('#possible').empty().hide();
 		$('#userAddr, #userZone, #userEvac').empty();
 		this.geocoder.search($('#address').val());
 	},
+	/**
+	 * @private
+	 * @method
+	 * @param {JQueryEvent}
+	 */
 	doFind: function(event){
 		if (event.keyCode == 13) this.find();
 	},
 	found: function(location){
-		var content = this.content, zone = location.data.hurricaneEvacuationZone, html;
+		var content = this.content, html = content.locationMsg(location);
 		$('#possible').empty().hide();
 		this.sortShelters(location);
-		if (zone){
-			if (zone == 'X') {
-				html = content.message('location_no_zone', location);
-			}else{
-				var order = content.message(this.zoneOrders[zone] ? 'yes_order' : 'no_order');
-				html = content.message('location_zone_order', {zone: zone, order: order, name: location.name});			
-			}
-		}else{
-			html = content.message('location_zone_unkown_311', location);
+		if (!html){
+			html = content.message('location_zone_unkown', {
+				name: location.name, 
+				oem_supplied: content.message('user_zone_unkown_311')
+			}); 
 		}
 		$('#userAddr').html(html);
 	},
+	/** 
+	 * @private 
+	 * @method
+	 * @param {nyc.Locate.Ambiguous} response
+	 */
 	ambiguous: function(response){
 		if (response.possible.length){
 			var me = this, div = $('<div class="name"></div>');
@@ -151,15 +298,27 @@ nyc311.App.prototype = {
 			this.geocodeError();
 		}
 	},
+	/**
+	 * @private
+	 * @method
+	 */
 	toTop: function(){
 		$('#address').focus();
 		$('#address').select();
 		window.scrollTo(0,0);
 	},
+	/**
+	 * @private
+	 * @method
+	 */
 	geocodeError: function(){
 		$('#possible').empty().hide();
 		alert('Unable to locate\n' + $('#address').val());
 	},
+	/**
+	 * @private
+	 * @method
+	 */
 	loadError: function(){
 		alert('There was an error loading data');
 	}	

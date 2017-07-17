@@ -12,20 +12,16 @@
 	<script src="https://maps.nyc.gov/nyc-lib//v0.3.0-SNAPSHOT/src/js/nyc/geocoder.js"></script>
 	<script src="https://maps.nyc.gov/nyc-lib//v0.3.0-SNAPSHOT/src/js/nyc/content.js"></script>
 	<script src="../data/messages.js" type="text/javascript"></script>
+	<script src="../js/content.js" type="text/javascript"></script>
+	<script src="../js/nyc.js" type="text/javascript"></script>
 	<script src="js/app.js" type="text/javascript"></script>
 	<script>
-		if (typeof String.prototype.trim != "function") {
-			String.prototype.trim = function(){
-				return this.replace(/^\s+|\s+$/g, "");
-			};
-		};
-	
 		$(document).ready(function(){
 			window.app = new nyc311.App(
 				new nyc.Geoclient('https://maps.nyc.gov/geoclient/v1/search.json?app_key=A159073974562987C&app_id=hurricane-evac', 'EPSG:2263'),
-				new nyc.Content(MESSAGES)
-			)
-		});	
+				new nyc.HurricaneContent(MESSAGES)
+			);
+		});
 	</script>
 </head>
 <body>
