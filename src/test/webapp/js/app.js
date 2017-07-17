@@ -77,10 +77,6 @@ QUnit.module('nyc.App', {
 	}
 });
 
-
-
-
-
 QUnit.test('zone (yes order, is in geocoded data)', function(assert){
 	assert.expect(2);
 	
@@ -124,11 +120,8 @@ QUnit.test('zone (yes order, is in geocoded data)', function(assert){
 				app.zone();
 				assert.deepEqual(popupCoords, app.location.coordinates);
 				assert.equal(
-					popupHtml,
-					app.content.message(
-						'location_zone_order',
-						{zone: 1, order: app.content.message('yes_order'), name: '5 Water Street<br> Manhattan, NY 10004'}
-					)
+					popupHtml, 
+					'<div class="inf-location"><div class="inf-name">You are located in Zone 1</div><div class="order active-order">You are required to evacuate</div><div class="inf-name addr">5 Water Street<br> Manhattan, NY 10004</div></div>'
 				);
 				done();
 				nyc.App.prototype.getOrderUrl = getOrderUrl;
@@ -146,6 +139,7 @@ QUnit.test('zone (yes order, is in geocoded data)', function(assert){
 	
 });
 
+/*
 QUnit.test('zone, no order, is in geocoded data)', function(assert){
 	assert.expect(2);
 	
@@ -2057,3 +2051,4 @@ QUnit.test('alert', function(assert){
 	}, 1000);
 });
 
+*/
