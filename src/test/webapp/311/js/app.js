@@ -275,7 +275,7 @@ QUnit.test('constructor', function(assert){
 		return [fn, scope];
 	};
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 	
 	assert.equal(functions.length, 2);
 
@@ -304,7 +304,7 @@ QUnit.test('getOrders', function(assert){
 	$.proxy = function(fn, scope){};
 	$.ajax = function(args){};
 
-	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 	
 	$.ajax = function(args){
 		assert.equal(args.url, nyc311.ORDER_URL + 'now');
@@ -349,7 +349,7 @@ QUnit.test('gotOrders/getOrderTxt (has orders)', function(assert){
 		}
 		
 	};
-	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 	test();
 });
 
@@ -377,7 +377,7 @@ QUnit.test('gotOrders/getOrderTxt (no orders)', function(assert){
 		
 	};
 
-	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 	test();
 });
 
@@ -403,7 +403,7 @@ QUnit.test('gotShelters', function(assert){
 		}
 	};
 
-	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 	test();
 });
 
@@ -413,7 +413,7 @@ QUnit.test('listShelters (w/o distance)', function(assert){
 	var getShelters = nyc311.App.prototype.getShelters;	
 	nyc311.App.prototype.getShelters = function(){};
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 
 	app.shelters = this.SHELTERS;
 	app.shelterInfo = function(){
@@ -446,7 +446,7 @@ QUnit.test('listShelters (w distance)', function(assert){
 		s.distance = i;
 	});
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 
 	app.shelters = this.SHELTERS;
 	app.shelterInfo = function(){
@@ -472,7 +472,7 @@ QUnit.test('listShelters (w distance)', function(assert){
 QUnit.test('shelterInfo', function(assert){
 	assert.expect(1);
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 
 	var info = app.shelterInfo(this.SHELTERS[1]);
 	
@@ -493,7 +493,7 @@ QUnit.test('sortShelters', function(assert){
 	var s1 = this.SHELTERS[1];
 	var s2 = this.SHELTERS[2];
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 	app.shelters = this.SHELTERS;
 	
 	app.sortShelters(this.GEOCODE);
@@ -508,7 +508,7 @@ QUnit.test('sortShelters', function(assert){
 QUnit.test('distance', function(assert){
 	assert.expect(3);
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 	
 	assert.equal(app.distance(this.GEOCODE.coordinates, [this.SHELTERS[0].X, this.SHELTERS[0].Y]), 10.78);
 	assert.equal(app.distance(this.GEOCODE.coordinates, [this.SHELTERS[1].X, this.SHELTERS[1].Y]), 9.96);
@@ -525,7 +525,7 @@ QUnit.test('find', function(assert){
 	$('#address').val('59 maiden mn');
 	$('#possible, #userAddr, #userZone, #userEvac').html('html');
 
-	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 
 	app.find();
 	
@@ -538,7 +538,7 @@ QUnit.test('find', function(assert){
 QUnit.test('doFind', function(assert){
 	assert.expect(1);
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 
 	app.find = function(){
 		assert.ok(true);
@@ -557,7 +557,7 @@ QUnit.test('found (no zone, has order)', function(assert){
 	var getOrder = nyc311.App.getOrder;
 	nyc311.App.getOrder = function(){};
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 	
 	app.zoneOrders = {'1': true, '2': true, '5': true};
 	app.sortShelters = function(location){
@@ -584,7 +584,7 @@ QUnit.test('found (no zone, no order)', function(assert){
 	var getOrder = nyc311.App.getOrder;
 	nyc311.App.getOrder = function(){};
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 	
 	app.zoneOrders = {zones: []};
 	app.sortShelters = function(location){
@@ -610,7 +610,7 @@ QUnit.test('found (has zone, has order, requires evac)', function(assert){
 	var getOrder = nyc311.App.getOrder;
 	nyc311.App.getOrder = function(){};
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 	
 	app.zoneOrders = {zones: ['1', '2', '5']};
 	app.sortShelters = function(location){
@@ -636,7 +636,7 @@ QUnit.test('found (has zone, has order, no evac)', function(assert){
 	var getOrder = nyc311.App.getOrder;
 	nyc311.App.getOrder = function(){};
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 	
 	app.zoneOrders = {zones: ['1', '2', '3']};
 	app.sortShelters = function(location){
@@ -662,7 +662,7 @@ QUnit.test('found (has zone, no order, no evac)', function(assert){
 	var getOrder = nyc311.App.getOrder;
 	nyc311.App.getOrder = function(){};
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 	
 	app.zoneOrders = {zones: []};
 	app.sortShelters = function(location){
@@ -689,7 +689,7 @@ QUnit.test('found (X zone, has order)', function(assert){
 	var getOrder = nyc311.App.getOrder;
 	nyc311.App.getOrder = function(){};
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 	
 	app.zoneOrders = {zones: ['1', '2', '5']};
 	app.sortShelters = function(location){
@@ -716,7 +716,7 @@ QUnit.test('found (X zone, no order)', function(assert){
 	var getOrder = nyc311.App.getOrder;
 	nyc311.App.getOrder = function(){};
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 	
 	app.zoneOrders = {zones: []};
 	app.sortShelters = function(location){
@@ -739,7 +739,7 @@ QUnit.test('ambiguous (has possibles)', function(assert){
 
 	var possibles = [];
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 	app.find = function(){
 		possibles.push($('#address').val());
 	};
@@ -766,7 +766,7 @@ QUnit.test('ambiguous (no possibles)', function(assert){
 	
 	var possibles = [];
 	
-	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.Content(MESSAGES));
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 	
 	app.find = function(){
 		possibles.push($('#address').val());
