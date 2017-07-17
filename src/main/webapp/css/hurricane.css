@@ -659,7 +659,7 @@ a.popup-closer:hover, #fld-srch-container .ui-input-clear:hover:after {
 		display: none;
 	}
 }
-@media only screen and (max-width : 495px), screen and (max-height: 350px) {
+@media only screen and (max-width : 495px) {
 	#map-page .ui-content {
 		z-index: 1000;
 		top: 87px;
