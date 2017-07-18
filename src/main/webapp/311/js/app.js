@@ -144,10 +144,10 @@ nyc311.App.prototype = {
 		}else{
 			$('#order').html(content.message('splash_msg'));
 		}
-		$('#evac-ctr').html(content.message('centers_tab'));
 		document.title = title;
-		$('.banner div').html(banner).attr('title', title);		
-		$('.banner img').attr('alt', title);		
+		$('#evac-ctr').html(content.message('centers_tab'));
+		$('#banner div').html(banner).attr('title', title);		
+		$('#banner img').attr('alt', title);		
 	},
 	/**
 	 * @private
@@ -257,7 +257,7 @@ nyc311.App.prototype = {
 	 */
 	find: function(){
 		$('#possible').empty().hide();
-		$('#userAddr, #userZone, #userEvac').empty();
+		$('#evac-msg, #userZone, #userEvac').empty();
 		this.geocoder.search($('#address').val());
 	},
 	/**
@@ -273,12 +273,12 @@ nyc311.App.prototype = {
 		$('#possible').empty().hide();
 		this.sortShelters(location);
 		if (!html){
-			html = content.message('location_zone_unkown', {
+			html = content.message('location_zone_unkown_311', {
 				name: location.name, 
 				oem_supplied: content.message('user_zone_unkown_311')
 			}); 
 		}
-		$('#userAddr').html(html);
+		$('#evac-msg').html(html);
 	},
 	/** 
 	 * @private 

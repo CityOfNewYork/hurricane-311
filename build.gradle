@@ -2,7 +2,6 @@ import gov.nyc.doitt.nyc.gis.gradle.*
 
 plugins {
     id 'base'
-    id 'jetty'
     id 'org.hidetake.ssh' version '1.1.2'
 }
 
@@ -13,7 +12,7 @@ ext{
 	jsSrcDir = "build/${ver}/js"
 	cssSrcDir = "build/${ver}/css"
 
-	orderedJsFiles = ['style.js', 'app.js', 'init.js']
+	orderedJsFiles = ['nyc.js', 'style.js', 'content.js', 'app.js', 'init.js']
 	orderedCssFiles = ['hurricane.css']
 
 	local_nyclib = 'https://maps.nyc.gov/nyc-lib/'
@@ -62,6 +61,15 @@ task replaceTokens(dependsOn: [setEnv, copyFiles]) << {
 
 	ant.replace(file: "build/${ver}/index.html", token: 'hurricane.css', value: "${appName}.css?${ver}")
 	ant.replace(file: "build/${ver}/index.html", token: '<script src="js/style.js"></script>', value: '')
+	ant.replace(file: "build/${ver}/index.html", token: '<script src="js/nyc.js"></script>', value: '')
+	ant.replace(file: "build/${ver}/index.html", token: '<script src="js/content.js"></script>', value: '')
+	ant.replace(file: "build/${ver}/index.html", token: '<script src="js/app.js"></script>', value: '')
+	ant.replace(file: "build/${ver}/index.html", token: 'js/init.js', value: "js/${appName}.js?${ver}")
+	ant.replace(file: "build/${ver}/index.html", token: local_nyclib, value: project.ext["${env}_nyclib"])
+
+	ant.replace(file: "build/${ver}/index.html", token: '<script src="js/style.js"></script>', value: '')
+	ant.replace(file: "build/${ver}/index.html", token: '<script src="js/nyc.js"></script>', value: '')
+	ant.replace(file: "build/${ver}/index.html", token: '<script src="js/content.js"></script>', value: '')
 	ant.replace(file: "build/${ver}/index.html", token: '<script src="js/app.js"></script>', value: '')
 	ant.replace(file: "build/${ver}/index.html", token: 'js/init.js', value: "js/${appName}.js?${ver}")
 	ant.replace(file: "build/${ver}/index.html", token: local_nyclib, value: project.ext["${env}_nyclib"])
@@ -77,9 +85,9 @@ task minifyScript(type: MiniJsTask, dependsOn: [replaceTokens]) {
 	sourceDir = jsSrcDir
 	destinationDir = "build/${ver}/js" 
 }
-minifyScript.doLast {
-	delete fileTree(dir: "build/${ver}/js", include: '*.js', exclude: "${appName}.*")
-}
+//minifyScript.doLast {
+//	delete fileTree(dir: "build/${ver}/js", include: '*.js', exclude: "${appName}.*")
+//}
 
 task minifyCss(type: MiniCssTask, dependsOn: [replaceTokens]) {
 	libName = appName

@@ -409,9 +409,9 @@ nyc.App.prototype = {
 	setState: function(){
 		var content = this.content;
 		$('#splash-cont .orders').html('<div class="order">' + content.message('splash_msg') + '</div>');
+		this.getOrders();
 		if (content.message('post_storm') == 'NO'){
 			$('#centers-tab-btn a').addClass('pre-storm');
-			this.getOrders();
 		}
 		var banner = content.message('banner_text'), title = 'NYC ' + banner;
 		document.title = title;
@@ -459,7 +459,7 @@ nyc.App.prototype = {
 			}				
 		});
 		content.zoneOrders = orders;
-		if (evacReq.length){
+		if (evacReq.length && content.messages.post_storm == 'NO'){
 			$('#splash').addClass('active-order');
 			$('.orders').html(content.message('splash_yes_order'));
 			if (evacReq.length > 1){

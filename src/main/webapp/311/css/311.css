@@ -57,7 +57,7 @@ button{
 	padding:10px 5px 0;
 	font-weight:bold;
 }
-#userAddr, #userZone, #userEvac{
+#evac-msg {
 	color:#EA2524;
 	font-weight:bold;
 	width:400px;
