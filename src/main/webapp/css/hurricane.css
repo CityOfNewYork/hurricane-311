@@ -314,20 +314,29 @@ a.ui-btn.hdr-btn {
 	top: -4px;
 	padding: 8px 8px 8px 35px;
 }
-.ui-btn:after {
-	background-color: rgba(8,80,149,0.5);
-}
 #map-page {
 	position: fixed;
 }
+
+.fld-srch-container .ui-listview>.ui-li-static {
+	color: #085095;
+}
+.fld-srch-container .ui-listview>.ui-li-static:hover {
+	background-color: rgba(8,80,149,0.5);
+	color: #fff;
+}
+
 
 /* ====================== end header buttons ===================== */
 
 
 /* ===================== begin other buttons ===================== */
 
+.ui-btn:after, .fld-srch-container .ui-input-clear:after {
+	background-color: rgba(8,80,149,0.5);
+}
 .ui-page-theme-a .ctl-tbn:hover, .ui-page-theme-a #list-more:hover,
-.ui-page-theme-a #back:hover, div.dia button.ui-btn:hover {
+.ui-page-theme-a #back:hover, div.dia button.ui-btn:hover, .fld-srch-container .ui-input-clear:hover:after {
 	background-color: #085095;
 	color: white;
 }
