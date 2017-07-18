@@ -138,12 +138,16 @@ nyc311.App.prototype = {
 	 * @method
 	 */
 	setHeadline: function(){
-		var content = this.content;
+		var content = this.content, banner = content.message('banner_text'), title = 'NYC ' + banner;
 		if (content.messages.post_storm == 'NO'){
 			$('#order').html(this.getOrderTxt());
 		}else{
 			$('#order').html(content.message('splash_msg'));
 		}
+		$('#evac-ctr').html(content.message('centers_tab'));
+		document.title = title;
+		$('.banner div').html(banner).attr('title', title);		
+		$('.banner img').attr('alt', title);		
 	},
 	/**
 	 * @private

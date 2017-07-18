@@ -413,9 +413,10 @@ nyc.App.prototype = {
 			$('#centers-tab-btn a').addClass('pre-storm');
 			this.getOrders();
 		}
-		var banner = content.message('banner_text');
-		$('.banner h1').html(banner).attr('title', 'NYC ' + content.message('banner_text'));		
-		$('.banner img').attr('alt', 'NYC ' + content.message('banner_text'));		
+		var banner = content.message('banner_text'), title = 'NYC ' + banner;
+		document.title = title;
+		$('.banner h1').html(banner).attr('title', title);		
+		$('.banner img').attr('alt', title);		
 		$('#btn-view-map').html(content.message('btn_text'));		
 		$('#centers-tab-btn a').html(content.message('centers_tab'));		
 		$('.filter-center').html(content.message('filter_centers'));		
