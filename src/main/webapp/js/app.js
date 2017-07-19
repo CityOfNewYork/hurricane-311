@@ -241,9 +241,11 @@ nyc.App.prototype = {
 		});
 		$('#tabs li a').removeClass('ui-btn-active');
 		if (mobile){
+			$('#tabs').removeClass('only-two');
 			$('#tabs').tabs('refresh').tabs({active: 0});
 			$('#map-tab-btn a').addClass('ui-btn-active');
 		}else{
+			$('#tabs').addClass('only-two');
 			$('#tabs').tabs('refresh').tabs({active: 1});
 			$('#centers-tab-btn a').addClass('ui-btn-active');
 		}

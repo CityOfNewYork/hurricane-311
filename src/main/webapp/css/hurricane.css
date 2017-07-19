@@ -150,6 +150,12 @@ input.ui-slider-input {
 	background-color: rgba(251, 237, 48, 0);
 
 }
+#tabs.only-two .ui-navbar li {
+	width: 50%;
+}
+#tabs.only-two .ui-navbar li:first-of-type {
+	display: none;
+}
 
 /* =========================== end panel ========================= */
 
@@ -268,11 +274,6 @@ input.ui-slider-input {
 	left: 3px;
 	top: 10px;
 }
-.banner h1 {
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	overflow: hidden;
-}
 .ui-page-theme-a .banner h1 {
 	color: rgb(251, 237, 48);
 	margin: -4px 0 0 0;
@@ -283,7 +284,10 @@ input.ui-slider-input {
 	position: absolute;
 	left: 80px;
 	top: 11px;
-	right: 250px;
+	right: 275px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 #dir-page .banner h1 {
 	right: 150px;
@@ -660,15 +664,7 @@ a.popup-closer:hover, #fld-srch-container .ui-input-clear:hover:after {
 		right: 3px;
 	}
 }
-@media only screen and (min-width : 496px) {
-	#tabs .ui-navbar li {
-		width: 50%;
-	}
-	#tabs .ui-navbar li:first-of-type {
-		display: none;
-	}
-}
-@media only screen and (max-width : 495px) {
+@media only screen and (max-width : 495px), screen and (max-height: 340px) {
 	#map-page .ui-content {
 		z-index: 1000;
 		top: 87px;
