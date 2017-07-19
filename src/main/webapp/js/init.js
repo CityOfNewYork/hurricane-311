@@ -4,8 +4,7 @@ nyc.cacheBust = Math.round(new Date().getTime() / timeOffset) * timeOffset;
 function csvContentLoaded(csvContent){
 	
 	$(document).ready(function(){
-	
-		var GEOCLIENT_URL = '//maps.nyc.gov/geoclient/v1/search.json?app_key=A159073974562987C&app_id=hurricane-evac',
+		var GEOCLIENT_URL = '//maps.nyc.gov/geoclient/v1/search.json?app_key=YOUR_APP_KEY&app_id=YOUR_APP_ID',
 			GOOGLE_URL = 'https://maps.googleapis.com/maps/api/js?sensor=false&libraries=visualization',
 			LANGUAGES = {
 			    en: {val: 'English', desc: 'English', hint: 'Translate'},
