@@ -1,0 +1,16 @@
+key,value
+post_storm,NO
+banner_text,banner_text
+splash_msg,splash_msg
+btn_text,btn_text
+centers_tab,centers_tab
+filter_centers,filter_centers
+centers_msg,centers_msg
+legend_msg,legend_msg
+legend_center,legend_center
+user_in_x_zone,user_in_x_zone
+user_zone_unkown,user_zone_unkown
+user_zone_unkown_311,user_zone_unkown_311
+user_zone,user_zone
+evac_order,evac_order
+no_evac_order,no_evac_order
