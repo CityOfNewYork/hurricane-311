@@ -2,10 +2,10 @@
 
 This app is a stand-alone HTML5 app that can be dropped into the doc root of any web server.
 
-* The ```center.json``` file included is a snapshot of the evacuation center data for development use only.
+* The ```center.csv``` file included is a snapshot of the evacuation center data for development use only.
 * The ```zone.json``` file included is a snapshot of the evacuation zone data for development use only.
-* The ```order.json``` file included is sample evacuation order data for development use only.
-* In production ```center.json```, ```zone.json``` and ```order.json``` may change without notice and are regularly cached at a CDN.
+* The ```order.csv``` file included is sample evacuation order data for development use only.
+* In production ```center.csv```, ```zone.json``` and ```order.csv``` may change without notice and are regularly cached at a CDN.
 
 ## Geocoding:
 * To use ```nyc.Geoclient``` as the implementation of ```nyc.Geocoder``` you must first get your Geoclient App ID and App Key from the NYC Developer Portal [https://developer.cityofnewyork.us/api/geoclient-api](https://developer.cityofnewyork.us/api/geoclient-api)

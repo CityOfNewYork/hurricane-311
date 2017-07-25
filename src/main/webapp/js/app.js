@@ -462,6 +462,7 @@ nyc.App.prototype = {
 		});
 		content.zoneOrders = orders;
 		if (evacReq.length && content.messages.post_storm == 'NO'){
+			$('body').addClass('pre-storm').addClass('has-order');
 			$('#splash').addClass('active-order');
 			$('.orders').html(content.message('splash_yes_order'));
 			if (evacReq.length > 1){
@@ -472,7 +473,10 @@ nyc.App.prototype = {
 				zones += (i == evacReq.length - 2) ? ' and ' : ', ';								
 			});
 			$('.orders').append(content.message('splash_zone_order', {zones: zones.substr(0, zones.length - 2)}));
+		}else if (content.messages.post_storm == 'YES'){
+			$('body').addClass('post-storm');
 		}
+
 	},
 	/** 
 	 * @private 
