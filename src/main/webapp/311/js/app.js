@@ -36,15 +36,14 @@ nyc311.App = function(geocoder, content){
 	this.content = content;
 	
 	this.getContent();
-	setInterval($.proxy(this.getContent, this), 60000);
 	this.getOrders();
-	setInterval($.proxy(this.getOrders, this), 60000);
 	this.getShelters();
-	setInterval($.proxy(this.getShelters, this), 60000);
 
 	geocoder.on(nyc.Locate.EventType.GEOCODE, $.proxy(this.found, this));
 	geocoder.on(nyc.Locate.EventType.AMBIGUOUS, $.proxy(this.ambiguous, this));
 	geocoder.on(nyc.Locate.EventType.ERROR, $.proxy(this.geocodeError, this));
+	
+	$('#filter-all, #filter-access').click($.proxy(this.filter, this));
 };
 
 nyc311.App.prototype = {
@@ -72,6 +71,13 @@ nyc311.App.prototype = {
 	 * @private
 	 * @method
 	 */
+	/**
+	 * @public
+	 * @method
+	 */
+	filter: function(){
+		this.listShelters($('#filter-access').is(':checked'));
+	},
 	getContent: function(){
 		new nyc.CsvContent(nyc311.CONTENT_URL + new Date().getTime(), $.proxy(this.gotContent, this));
 	},
@@ -131,7 +137,7 @@ nyc311.App.prototype = {
 	 */
 	gotShelters: function(csv){
 		this.shelters = $.csv.toObjects(csv);
-		this.listShelters();
+		this.listShelters($('#filter-access').is(':checked'));
 	},
 	/**
 	 * @private
@@ -146,6 +152,7 @@ nyc311.App.prototype = {
 		}
 		document.title = title;
 		$('#evac-ctr').html(content.message('centers_tab'));
+		$('.filter-center').html(content.message('filter_centers'));
 		$('#banner div').html(banner).attr('title', title);		
 		$('#banner img').attr('alt', title);		
 	},
@@ -161,7 +168,7 @@ nyc311.App.prototype = {
 			}
 		};
 		if (!zones.length){
-			return 'There is not an Evacuation Order in effect for any Zone';
+			return this.content.message('splash_msg');
 		}
 		var result = 'An Evacuation Order is in effect for Zone';
 		if (zones.length > 1){
@@ -177,19 +184,24 @@ nyc311.App.prototype = {
 	/**
 	 * @private
 	 * @method
+	 * @param {boolean} access
 	 */
-	listShelters: function(){
-		var me = this, t = $('#sheltersList table')[0];
+	listShelters: function(access){
+		var me = this, t = $('#sheltersList table')[0], i = 0;;
 		$('#sheltersList tr').remove();
-		$.each(me.shelters, function(i, s){
-			var r = t.insertRow(i);
-			if (i % 2 == 0) $(r).addClass('evRow');
-			var c = r.insertCell(0);
-			$(c).addClass('dist');
-			if (!isNaN(s.distance)) $(c).append('<span>' + s.distance + ' mi</span><br>');
-			c = r.insertCell(1);
-			$(c).append(me.shelterInfo(s));
-			c.shelter = s;
+		
+		$.each(me.shelters, function(){
+			if (!access || (access && this.ACCESSIBLE == 'Y')) {
+				var r = t.insertRow(i);
+				if (i % 2 == 0) $(r).addClass('evRow');
+				var c = r.insertCell(0);
+				$(c).addClass('dist');
+				if (!isNaN(this.distance)) $(c).append('<span>' + this.distance + ' mi</span><br>');
+				c = r.insertCell(1);
+				$(c).append(me.shelterInfo(this));
+				c.shelter = this;
+				i++;
+			}			
 		});
 	},
 	/**
@@ -227,15 +239,15 @@ nyc311.App.prototype = {
 	 */
 	sortShelters: function(location){
 		var me = this;
-		$.each(me.shelters, function(_, s){
-			s.distance = me.distance(location.coordinates, [s.X, s.Y]);
+		$.each(me.shelters, function(){
+			this.distance = me.distance(location.coordinates, [this.X, this.Y]);
 		});
 		me.shelters.sort(function(a, b){
 			if (a.distance < b.distance) return -1;
 			if (a.distance > b.distance) return 1;
 			return 0;
 		});
-		me.listShelters();
+		me.listShelters($('#filter-access').is(':checked'));
 	},
 	/**
 	 * @private

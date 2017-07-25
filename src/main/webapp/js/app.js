@@ -62,14 +62,16 @@ nyc.App = function(map, featureDecorations, content, style, locationMgr, directi
 	);
 	
 	me.centerSource.on(nyc.ol.source.Decorating.LoaderEventType.FEATURELOADERROR, $.proxy(me.error, me));
-	me.centerLayer = new ol.layer.Vector({
-		source: me.centerSource,
-		style: $.proxy(style.centerStyle, style)
+	me.centerSource.on(nyc.ol.source.Decorating.LoaderEventType.FEATURESLOADED, function(){
+		me.centerLayer = new ol.layer.Vector({
+			source: me.centerSource,
+			style: $.proxy(style.centerStyle, style)
+		});
+		map.addLayer(me.centerLayer);
+		me.tips.push(
+			new nyc.ol.FeatureTip(map, [{layer: me.centerLayer, labelFunction: me.centerTip}])
+		);
 	});
-	map.addLayer(me.centerLayer);
-	me.tips.push(
-		new nyc.ol.FeatureTip(map, [{layer: me.centerLayer, labelFunction: me.centerTip}])
-	);
 	
 	$('#panel, .banner, .ctl').hover($.proxy(me.hideTips, me));
 

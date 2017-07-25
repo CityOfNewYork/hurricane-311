@@ -38,8 +38,13 @@
 		<div id="evac-msg">&nbsp;</div>
 	</div>
 	<div class="section">
-		<div id="evac-ctr" class="title"></div>
-		<div><img src="img/shelter_fa_16.png" alt="Full Wheelchair Accessibility" title="Full Wheelchair Accessibility" /> = Full Wheelchair Accessibility</div>
+		<div id="evac-ctr" class="title capitalize"></div>
+		<div id="filter">
+			<input id="filter-all" type="radio" checked name="filter">
+			<label for="filter-all" class="capitalize">all <span class="filter-center"></span></label>
+			<input id="filter-access" type="radio" name="filter">
+			<label for="filter-access" class="capitalize"><img src="img/shelter_fa_16.png"> only accessible <span class="filter-center"></span></label>
+		</div>
 		<div id="shelters">
 			<div id="sheltersList">
 				<table><tbody></tbody></table>

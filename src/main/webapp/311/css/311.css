@@ -21,6 +21,13 @@ body{
 .name{
 	font-weight:bold;
 }
+#filter {
+	margin-bottom: 5px;
+}
+.capitalize{
+	text-transform: capitalize;
+}
+
 #banner{
 	z-index:3000;
 	width:100%;
@@ -114,21 +121,15 @@ td.dist{
 	width:55px;
 	vertical-align: top;
 }
-.accessP, .accessY{
+.accessY{
 	width:16px;
 	height:16px;
 	background-position:center;
 	background-repeat:no-repeat;
 	background-size:16px;
-	-webkit-background-size: length_x length_y;
-	float:left;
 	margin-right: 5px;
-}
-.accessY{
+	float:left;
  	background-image:url(../img/shelter_fa_16.png);
-}
-.accessP{
- 	background-image:url(../img/shelter_pa_16.png);
 }
 .accessN{
 	display:none;
