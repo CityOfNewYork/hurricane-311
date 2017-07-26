@@ -6,9 +6,16 @@ QUnit.module('nyc311.App', {
 		nyc311.ORDER_URL = 'data/order.csv?';
 		nyc311.CENTER_URL = 'data/311-center.csv?';
 
-		var MockGeocoder = function(){};
-		nyc.inherits(MockGeocoder, nyc.EventHandling);
-		
+		var MockGeocoder = function(){
+			this.eventTypes = [];
+			this.functions = [];
+			this.scopes = [];
+			this.on = function(eventType, fn, scope){
+				this.eventTypes.push(eventType);
+				this.functions.push(fn);
+				this.scopes.push(scope);
+			}
+		};
 		this.MOCK_GEOCODER = new MockGeocoder();
 		
 		this.AMBIGUOUS_RESPONSE = {
@@ -244,15 +251,15 @@ QUnit.module('nyc311.App', {
 });
 
 QUnit.test('constructor', function(assert){
-	assert.expect(12);
+	assert.expect(9);
 	
 	var getContent = nyc311.App.prototype.getContent;
 	var getOrders = nyc311.App.prototype.getOrders;
 	var getShelters = nyc311.App.prototype.getShelters;
-	var found = nyc311.App.prototype.found;
-	var ambiguous = nyc311.App.prototype.ambiguous;
-	var geocodeError = nyc311.App.prototype.geocodeError;
 	
+	nyc311.App.prototype.getContent = function(){
+		assert.ok(true);
+	};
 	nyc311.App.prototype.getOrders = function(){
 		assert.ok(true);
 	};
@@ -260,43 +267,85 @@ QUnit.test('constructor', function(assert){
 		assert.ok(true);
 	};
 
-	var setInterval = window.setInterval;
 	var functions = [];
 	var scopes = [];
-	
-	window.setInterval = function(fn, ms){
-		functions.push(fn[0]);
-		scopes.push(fn[1]);
-		assert.equal(ms, 60000);
-	};
 	
 	var proxy = $.proxy;
 	
 	$.proxy = function(fn, scope){
-		return [fn, scope];
+		functions.push(fn);
+		scopes.push(scope);
 	};
 	
 	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
 	
-	assert.equal(functions.length, 3);
+	assert.deepEqual(this.MOCK_GEOCODER.eventTypes, [nyc.Locate.EventType.GEOCODE, nyc.Locate.EventType.AMBIGUOUS, nyc.Locate.EventType.ERROR]);
+	assert.deepEqual(this.MOCK_GEOCODER.functions, [app.found, app.ambiguous, app.geocodeError]);
+	assert.deepEqual(this.MOCK_GEOCODER.scopes, [app, app, app]);
 
-	assert.deepEqual(functions[0], app.getContent);
-	assert.deepEqual(functions[1], app.getOrders);
-	assert.deepEqual(functions[2], app.getShelters);
+	assert.equal(functions.length, 1);
+	assert.deepEqual(functions[0], app.filter);
 	assert.deepEqual(scopes[0], app);
-	assert.deepEqual(scopes[1], app);
-	assert.deepEqual(scopes[2], app);
 	
 	nyc311.App.prototype.getContent = getContent;
 	nyc311.App.prototype.getOrders = getOrders;
 	nyc311.App.prototype.getShelters = getShelters;
-	nyc311.App.prototype.found = found;
-	nyc311.App.prototype.ambiguous = ambiguous;
-	nyc311.App.prototype.geocodeError = geocodeError;
-	
-	
-	window.setInterval = setInterval;
+		
 	$.proxy = proxy;
+});
+
+QUnit.test('getContent', function(assert){
+	assert.expect(3);
+	
+	var csv = nyc.CsvContent;
+	var proxy = $.proxy;
+	
+	$.proxy = function(fn, scope){};
+
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
+	
+	$.proxy = function(fn, scope){
+		return [fn, scope];
+	};
+
+	nyc.CsvContent = function(url, callback){
+		assert.equal(url, nyc311.CONTENT_URL + 'now');
+		assert.deepEqual(callback[0], app.gotContent);
+		assert.deepEqual(callback[1], app);
+	};
+	
+	var getTime = Date.prototype.getTime;
+	Date.prototype.getTime = function(){
+		return 'now';
+	};
+	app.getContent();
+	
+	$.proxy = proxy;
+	nyc.CsvContent = csv;
+	Date.prototype.getTime = getTime;
+	
+});
+
+QUnit.test('gotContent', function(assert){
+	assert.expect(5);
+	
+	var getContent = nyc311.App.prototype.getContent;
+
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
+	
+	app.setHeadline = function(){
+		assert.ok(true);
+	};
+
+	assert.notOk(app.content.messages.m1);
+	assert.notOk(app.content.messages.m2);
+
+	app.gotContent({m1: 'hello', m2: 'world'});
+	
+	assert.equal(app.content.messages.m1, 'hello');
+	assert.equal(app.content.messages.m2, 'world');
+	
+	nyc311.App.prototype.getContent = getContent;	
 });
 
 QUnit.test('getOrders', function(assert){
@@ -390,6 +439,39 @@ QUnit.test('gotOrders (no orders)', function(assert){
 	test();
 });
 
+QUnit.test('getShelters', function(assert){
+	assert.expect(4);
+	
+	var ajax = $.ajax;
+	var proxy = $.proxy;
+	
+	$.proxy = function(fn, scope){};
+	$.ajax = function(args){};
+
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
+	
+	$.ajax = function(args){
+		assert.equal(args.url, nyc311.CENTER_URL + 'now');
+		assert.deepEqual(args.error, app.loadError);
+	};
+	
+	$.proxy = function(fn, scope){
+		assert.deepEqual(fn, app.gotShelters);
+		assert.deepEqual(scope, app);
+	};
+
+	var getTime = Date.prototype.getTime;
+	Date.prototype.getTime = function(){
+		return 'now';
+	};
+	app.getShelters();
+	
+	$.ajax = ajax;
+	$.proxy = proxy;
+	Date.prototype.getTime = getTime;
+	
+});
+
 QUnit.test('setHeadline (pre-storm, has order)', function(assert){
 	assert.expect(5);
 	
@@ -442,7 +524,7 @@ QUnit.test('setHeadline (pre-storm, no order)', function(assert){
 		if (app.content.messages.post_storm){
 			
 			assert.equal(document.title, 'NYC Hurricane Evacuation Zone Finder');
-			assert.equal($('#order').html(), 'There is not an Evacuation Order in effect for any Zone');
+			assert.equal($('#order').html(), 'No evacuation order currently in effect');
 			assert.equal($('#evac-ctr').html(), 'evacuation centers');
 			assert.equal($('#banner div').html(), 'Hurricane Evacuation Zone Finder');
 			assert.equal($('#banner img').attr('alt'), 'NYC Hurricane Evacuation Zone Finder');
@@ -525,22 +607,26 @@ QUnit.test('setHeadline (post-storm, no order)', function(assert){
 
 });
 
-QUnit.test('gotShelters', function(assert){
+QUnit.test('gotShelters (list all)', function(assert){
 	assert.expect(2);
 	
 	var done = assert.async();
 	
+	var radio = $('<input id="filter-access" type="radio">');
+	$('body').append(radio);
+	
 	var expected = this.SHELTERS;
 	var listShelters = nyc311.App.prototype.listShelters;
 	
-	nyc311.App.prototype.listShelters = function(){
-		assert.ok(true);
+	nyc311.App.prototype.listShelters = function(access){
+		assert.notOk(access);
 	};
 	
 	var test = function(){
 		if (app.shelters) {
 			assert.deepEqual(app.shelters, expected);
 			done();
+			radio.remove();
 			nyc311.App.prototype.listShelters = listShelters;
 		}else{
 			setTimeout(test, 100);
@@ -551,7 +637,37 @@ QUnit.test('gotShelters', function(assert){
 	test();
 });
 
-QUnit.test('listShelters (w/o distance)', function(assert){
+QUnit.test('gotShelters (list only accessible)', function(assert){
+	assert.expect(2);
+	
+	var done = assert.async();
+	
+	var radio = $('<input id="filter-access" type="radio" checked>');
+	$('body').append(radio);
+	
+	var expected = this.SHELTERS;
+	var listShelters = nyc311.App.prototype.listShelters;
+	
+	nyc311.App.prototype.listShelters = function(access){
+		assert.ok(access);
+	};
+	
+	var test = function(){
+		if (app.shelters) {
+			assert.deepEqual(app.shelters, expected);
+			done();
+			radio.remove();
+			nyc311.App.prototype.listShelters = listShelters;
+		}else{
+			setTimeout(test, 100);
+		}
+	};
+
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
+	test();
+});
+
+QUnit.test('listShelters (all w/o distance)', function(assert){
 	assert.expect(8);
 
 	var getShelters = nyc311.App.prototype.getShelters;	
@@ -580,7 +696,35 @@ QUnit.test('listShelters (w/o distance)', function(assert){
 	nyc311.App.prototype.getShelters = getShelters;	
 });
 
-QUnit.test('listShelters (w distance)', function(assert){
+QUnit.test('listShelters (only accessible w/o distance)', function(assert){
+	assert.expect(6);
+
+	var getShelters = nyc311.App.prototype.getShelters;	
+	nyc311.App.prototype.getShelters = function(){};
+	
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
+
+	app.shelters = this.SHELTERS;
+	app.shelterInfo = function(){
+		return 'info';
+	};
+	
+	assert.equal($('#sheltersList tr').length, 0);
+	
+	app.listShelters(true);
+	
+	assert.equal($('#sheltersList tr').length, 2);
+	assert.equal($($('#sheltersList tr').get(0)).html(), '<td class="dist"></td><td>info</td>');
+	assert.equal($($('#sheltersList tr').get(1)).html(), '<td class="dist"></td><td>info</td>');
+
+	assert.equal($('#sheltersList tr').get(0).className, 'evRow');
+	assert.equal($('#sheltersList tr').get(1).className, '');
+	
+	nyc311.App.prototype.getShelters = getShelters;	
+
+});
+
+QUnit.test('listShelters (all w distance)', function(assert){
 	assert.expect(8);
 
 	var getShelters = nyc311.App.prototype.getShelters;	
@@ -609,6 +753,37 @@ QUnit.test('listShelters (w distance)', function(assert){
 	assert.equal($('#sheltersList tr').get(0).className, 'evRow');
 	assert.equal($('#sheltersList tr').get(1).className, '');
 	assert.equal($('#sheltersList tr').get(2).className, 'evRow');
+	
+	nyc311.App.prototype.getShelters = getShelters;	
+});
+
+QUnit.test('listShelters (only accessible w distance)', function(assert){
+	assert.expect(6);
+
+	var getShelters = nyc311.App.prototype.getShelters;	
+	nyc311.App.prototype.getShelters = function(){};
+	
+	$.each(this.SHELTERS, function(i, s){
+		s.distance = i;
+	});
+	
+	var app = new nyc311.App(this.MOCK_GEOCODER, new nyc.HurricaneContent(MESSAGES));
+
+	app.shelters = this.SHELTERS;
+	app.shelterInfo = function(){
+		return 'info';
+	};
+	
+	assert.equal($('#sheltersList tr').length, 0);
+	
+	app.listShelters(true);
+	
+	assert.equal($('#sheltersList tr').length, 2);
+	assert.equal($($('#sheltersList tr').get(0)).html(), '<td class="dist"><span>1 mi</span><br></td><td>info</td>');
+	assert.equal($($('#sheltersList tr').get(1)).html(), '<td class="dist"><span>2 mi</span><br></td><td>info</td>');
+
+	assert.equal($('#sheltersList tr').get(0).className, 'evRow');
+	assert.equal($('#sheltersList tr').get(1).className, '');
 	
 	nyc311.App.prototype.getShelters = getShelters;	
 });

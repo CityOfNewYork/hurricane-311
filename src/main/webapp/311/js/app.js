@@ -39,9 +39,9 @@ nyc311.App = function(geocoder, content){
 	this.getOrders();
 	this.getShelters();
 
-	geocoder.on(nyc.Locate.EventType.GEOCODE, $.proxy(this.found, this));
-	geocoder.on(nyc.Locate.EventType.AMBIGUOUS, $.proxy(this.ambiguous, this));
-	geocoder.on(nyc.Locate.EventType.ERROR, $.proxy(this.geocodeError, this));
+	geocoder.on(nyc.Locate.EventType.GEOCODE, this.found, this);
+	geocoder.on(nyc.Locate.EventType.AMBIGUOUS, this.ambiguous, this);
+	geocoder.on(nyc.Locate.EventType.ERROR, this.geocodeError, this);
 	
 	$('#filter-all, #filter-access').click($.proxy(this.filter, this));
 };
@@ -68,16 +68,26 @@ nyc311.App.prototype = {
 	 */	
 	shelters: null,
 	/**
-	 * @private
+	 * @desc Scroll page to top
+	 * @public
 	 * @method
 	 */
+	toTop: function(){
+		$('#address').focus();
+		$('#address').select();
+		window.scrollTo(0,0);
+	},
 	/**
-	 * @public
+	 * @private
 	 * @method
 	 */
 	filter: function(){
 		this.listShelters($('#filter-access').is(':checked'));
 	},
+	/**
+	 * @private
+	 * @method
+	 */
 	getContent: function(){
 		new nyc.CsvContent(nyc311.CONTENT_URL + new Date().getTime(), $.proxy(this.gotContent, this));
 	},
@@ -313,15 +323,6 @@ nyc311.App.prototype = {
 		}else{
 			this.geocodeError();
 		}
-	},
-	/**
-	 * @private
-	 * @method
-	 */
-	toTop: function(){
-		$('#address').focus();
-		$('#address').select();
-		window.scrollTo(0,0);
 	},
 	/**
 	 * @private
