@@ -18,7 +18,7 @@ var MESSAGES = {
 	center_tip: '<div class="${css}">${name}</div>',
 	bad_input: 'The location you entered was not understood',
 	data_load_error: 'There was a problem loading map data. Please refresh the page to try again.',
-	trip_planner: 'For directions with information regarding wheelchair accessible subway stations use the <a href="http://tripplanner.mta.info/MyTrip/ui_phone/cp/idefault.aspx" target="_blank">MTA Trip Planner</a>.',
+	trip_planner: 'For directions with information regarding wheelchair accessible subway stations use the <a href="http://tripplanner.mta.info/MyTrip/ui_phone/cp/idefault.aspx" target="_blank" rel="noopener noreferer">MTA Trip Planner</a>.',
 	no_directions: '<span class="capitalize">${travelMode}</span> directions from <b><span class="notranslate" translate="no">${origin}</span></b> to <b><span class="notranslate" translate="no">${destination}</span></b> are not available.  Please try a different mode of transportation.',
 	acc_feat: '<ul><li>${ACC_FEAT}</li><li>Access to the main shelter areas will be unobstructed and without steps. </li><li>Accessible restrooms are available.</li><li>Accessible dormitory and eating/cafeteria areas are available.</li><li>Additional amenities will be available such as accessible cots and mobility aids (canes, crutches, manual wheelchairs, storage space for refrigerated medication, etc.).</li></ul>'
 };

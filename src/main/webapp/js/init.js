@@ -1,6 +1,9 @@
 var timeOffset = 1000 * 60 *  5;
 nyc.cacheBust = Math.round(new Date().getTime() / timeOffset) * timeOffset;
 
+nyc.ol.style.LOCATION_ICON_SVG  = 'img/me.svg';
+nyc.ol.style.LOCATION_ICON_PNG  = 'img/me.png';
+
 function csvContentLoaded(csvContent){
 	
 	$(document).ready(function(){
