@@ -111,8 +111,8 @@ function csvContentLoaded(csvContent){
 				setTimeout(loadingComplete, 100);
 			}
 		};
-		var lang = new nyc.Lang({target: '#splash-cont', languages: LANGUAGES});
-		lang.on(nyc.Lang.EventType.READY, loadingComplete);
+		var lang = new nyc.lang.Goog({target: '#splash-cont', languages: LANGUAGES});
+		lang.on(nyc.lang.Translate.EventType.READY, loadingComplete);
 		
 		new nyc.Share('#map');
 		
