@@ -657,7 +657,7 @@ a.popup-closer:hover, #fld-srch-container .ui-input-clear:hover:after {
 
 /* ===================== begin media queries ===================== */
 
-@media only screen and (max-width : 605px) {
+@media only screen and (max-width : 700px) {
 	.ui-page-theme-a .banner h1 {
 		font-size: 14px;
 		white-space: normal;
@@ -682,13 +682,33 @@ a.popup-closer:hover, #fld-srch-container .ui-input-clear:hover:after {
 	}
 }
 @media only screen and (max-width : 465px) {
-	.banner .orders {
-		display: none;
+	.ui-page-theme-a .banner .orders * {
+		margin-top: 3px;
+		font-size: 12px;
 	}
-	.banner h1 {
-		right: 0;
-		top: 18px;
-		max-width: 300px;
+	.ui-page-theme-a .banner h1 {
+		max-height: 35px;
+		right: 0;		
+	}
+	.pre-storm.has-order .ui-page-theme-a h1 {
+		right: 200px !important;
+	}
+}
+@media only screen and (max-width : 350px) {
+	.ui-page-theme-a .banner .orders * {
+		margin-top: 3px;
+		font-size: 12px;
+	}
+	.banner-logo {
+		top: 3px;
+		height: 12px;
+	}
+	.pre-storm.has-order .ui-page-theme-a h1 {
+		top: 20px;
+		line-height: 13px;
+		left: 3px;
+		right: 190px !important;
+		max-height: 25px;
 	}
 }
 
