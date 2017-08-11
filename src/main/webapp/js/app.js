@@ -292,6 +292,10 @@ nyc.App.prototype = {
 			me.lastDir = from + '|' + to;
 			me.directions.directions(args);
 		}
+		
+		if ($('#inf-full-screen').is(':visible')){
+			$('#inf-full-screen').hide();
+		}
 	},
 	/** 
 	 * @desc Toggle the display of accessibility info

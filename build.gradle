@@ -7,7 +7,7 @@ plugins {
 
 ext{
 	appName = 'nyc-hurricane'
-	ver = 'v0.2.2-SNAPSHOT'
+	ver = 'v0.2.2'
 	
 	jsSrcDir = "build/${ver}/js"
 	cssSrcDir = "build/${ver}/css"
@@ -81,7 +81,6 @@ task minifyScript(type: MiniJsTask, dependsOn: [replaceTokens]) {
 minifyScript.doLast {
 	delete "build/${ver}/js/app.js"
 	delete "build/${ver}/js/init.js"
-	delete "build/${ver}/js/nyc.js"
 	delete "build/${ver}/js/style.js"
 }
 

@@ -80,7 +80,9 @@ div.popup-content {
 #inf-full-screen div.inf-container, #inf-full-screen div.inf-detail, div.inf-full-screen div.inf-btn.apply, div.inf-full-screen div.inf-btn.pdf {
 	width: auto;
 }
-
+#inf-full-screen .inf-map {
+	display: none;
+}
 /* =================== end full screen detail ==================== */
 
 
@@ -292,7 +294,7 @@ input.ui-slider-input {
 	right: 275px;
 }
 #dir-page .banner h1 {
-	right: 150px;
+	right: 155px;
 }
 #map-page .ui-content, #dir-page .ui-content {
 	overflow: hidden;
@@ -317,7 +319,7 @@ input.ui-slider-input {
 /* ===================== begin header buttons ==================== */
 
 a.ui-btn.hdr-btn {
-	top: -4px;
+	top: -5px;
 	padding: 8px 8px 8px 35px;
 }
 #map-page {
