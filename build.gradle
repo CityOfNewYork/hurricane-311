@@ -7,7 +7,7 @@ plugins {
 
 ext{
 	appName = 'nyc-hurricane'
-	ver = 'v0.2.2'
+	ver = 'v0.2.3-SNAPSHOT'
 	
 	jsSrcDir = "build/${ver}/js"
 	cssSrcDir = "build/${ver}/css"
