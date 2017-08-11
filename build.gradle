@@ -79,7 +79,10 @@ task minifyScript(type: MiniJsTask, dependsOn: [replaceTokens]) {
 	destinationDir = "build/${ver}/js" 
 }
 minifyScript.doLast {
-	delete fileTree(dir: "build/${ver}/js", include: '*.js', exclude: "${appName}.*")
+	delete "build/${ver}/js/app.js"
+	delete "build/${ver}/js/init.js"
+	delete "build/${ver}/js/nyc.js"
+	delete "build/${ver}/js/style.js"
 }
 
 task minifyCss(type: MiniCssTask, dependsOn: [replaceTokens]) {
