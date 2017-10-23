@@ -5,7 +5,7 @@ nyc.ol.style.LOCATION_ICON_SVG  = 'img/me.svg';
 nyc.ol.style.LOCATION_ICON_PNG  = 'img/me.png';
 
 function csvContentLoaded(csvContent){
-	
+
 	$(document).ready(function(){
 		var GEOCLIENT_URL = '//maps.nyc.gov/geoclient/v1/search.json?app_key=YOUR_APP_KEY&app_id=YOUR_APP_ID',
 			GOOGLE_URL = 'https://maps.googleapis.com/maps/api/js?sensor=false&libraries=visualization',
@@ -97,32 +97,29 @@ function csvContentLoaded(csvContent){
 						html: function(){
 							var zone = this.getZone();
 							if (!this.isSurfaceWater()){
-								return this.message('zone_info', {zone: zone, order: this.zoneMsg(zone)});				
+								return this.message('zone_info', {zone: zone, order: this.zoneMsg(zone)});
 							}
 						}
 					}
 				}
 			};
-		
+
 		var loadingComplete = function(){
 			if ($('#splash .orders').html()){
-				$('#first-load').fadeOut();			
+				$('#first-load').fadeOut();
 			}else{
 				setTimeout(loadingComplete, 100);
 			}
 		};
 		var lang = new nyc.lang.Goog({target: '#splash-cont', languages: LANGUAGES});
 		lang.on(nyc.lang.Translate.EventType.READY, loadingComplete);
-		
+
 		new nyc.Share('#map');
-		
-		var base = new nyc.ol.layer.BaseLayer();
-		base.on('postcompose', nyc.ol.layer.grayscale);
-		
+
 		var map = new nyc.ol.Basemap({target: $('#map').get(0)});
-		
+
 		var style = new nyc.Style();
-		
+
 		new nyc.App(
 			map,
 			FEATURE_DECORATIONS,
@@ -136,7 +133,7 @@ function csvContentLoaded(csvContent){
 			new nyc.Directions('#dir-map', '#directions', GOOGLE_URL),
 			new nyc.ol.Popup(map)
 		);
-	
+
 	});
 };
 
