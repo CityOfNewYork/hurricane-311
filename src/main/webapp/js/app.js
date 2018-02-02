@@ -23,17 +23,17 @@ nyc.App = function(map, featureDecorations, content, style, locationMgr, directi
 	me.view = map.getView();
 	me.directions = directions;
 	me.popup = popup;
-	me.location = {};
+	me.location = {data: {}};
 	me.zoneOrders = {};
 	me.tips = [];
-	
+
 	$('#btn-view-map, #btn-view-map *').click(function(){
 		$('#splash').fadeOut();
 		me.layout();
 	});
-	
+
 	me.setState();
-	
+
 	me.zoneSource = new nyc.ol.source.Decorating(
 		{url: 'data/zone.json' , format: new ol.format.TopoJSON},
 		[content, {orders: me.zoneOrders}, featureDecorations.zone.fieldAccessors, featureDecorations.zone.htmlRenderer]
@@ -56,11 +56,11 @@ nyc.App = function(map, featureDecorations, content, style, locationMgr, directi
 			fidCol: 'BLDG_ID',
 			xCol: 'X',
 			yCol: 'Y'
-		})}, 
+		})},
 		[content, featureDecorations.center.fieldAccessors, featureDecorations.center.htmlRenderer],
 		{nativeProjection: 'EPSG:2263', projection: 'EPSG:3857'}
 	);
-	
+
 	me.centerSource.on(nyc.ol.source.Decorating.LoaderEventType.FEATURELOADERROR, $.proxy(me.error, me));
 	me.centerSource.on(nyc.ol.source.Decorating.LoaderEventType.FEATURESLOADED, function(){
 		me.centerLayer = new ol.layer.Vector({
@@ -72,35 +72,35 @@ nyc.App = function(map, featureDecorations, content, style, locationMgr, directi
 			new nyc.ol.FeatureTip(map, [{layer: me.centerLayer, labelFunction: me.centerTip}])
 		);
 	});
-	
+
 	$('#panel, .banner, .ctl').hover($.proxy(me.hideTips, me));
 
 	$('#filter input').click($.proxy(me.filter, me));
-		
+
 	locationMgr.on(nyc.Locate.EventType.GEOCODE, $.proxy(me.located, me));
 	locationMgr.on(nyc.Locate.EventType.GEOLOCATION, $.proxy(me.located, me));
-		
+
 	directions.on(nyc.Directions.EventType.CHANGED, function(){
 		var msg = content.message('trip_planner'), node = $('#directions div.adp div.adp-agencies');
 		if (node.length && node.html().indexOf(msg) == -1){
-			node.prepend(msg);			
+			node.prepend(msg);
 		}
 	});
 
 	directions.on(nyc.Directions.EventType.NO_DIRECTIONS, function(event){
 		var req = event.response.request;
-		req.travelMode = req.travelMode.toLowerCase(); 
+		req.travelMode = req.travelMode.toLowerCase();
 		me.alert(content.message('no_directions', req));
-		$('#directions div.adp div.adp-agencies').prepend(content.message('trip_planner'))			
+		$('#directions div.adp div.adp-agencies').prepend(content.message('trip_planner'))
 	});
 
 	map.on('click', $.proxy(me.mapClick, me));
-	
+
 	$('#transparency').attr('type', ''); //removes up/down arrows from input in ff
 	$('#transparency').change($.proxy(me.transparency, me));
-	
+
 	$('#map-tab-btn a').click($.proxy(me.mapSize, me));
-	
+
 	$('a, button').each(function(_, n){
 		if ($(n).attr('onclick')){
 			$(n).bind('tap', function(){
@@ -108,7 +108,7 @@ nyc.App = function(map, featureDecorations, content, style, locationMgr, directi
 			});
 		}
 	});
-	
+
 	$(window).on('resize orientationchange', function(){
 		if ($('#dir-page').css('display') == 'block'){
 			if ($('#dir-map').width() < $(window).width()){
@@ -119,93 +119,102 @@ nyc.App = function(map, featureDecorations, content, style, locationMgr, directi
 	$('body').pagecontainer({change: $.proxy(me.layout, me)});
 
 	/* make available to screen reader in links list */
-	$('a, button').attr('role', 'link'); 
+	$('a, button').attr('role', 'link');
+
+	this.mtaHack = new nyc.MtaTripPlannerHack();
+  $('#mta-btn').click($.proxy(this.hackMta, this));
+
 };
-	
+
 nyc.App.prototype = {
-	/** 
+	/**
 	 * @private
 	 * @member {ol.Map}
 	 */
 	map: null,
-	/** 
+	/**
 	 * @private
 	 * @member {nyc.Geocoder}
 	 */
 	geocoder: null,
-	/** 
+	/**
 	 * @private
 	 * @member {ol.View}
 	 */
 	view: null,
-	/** 
+	/**
 	 * @private
 	 * @member {nyc.ol.source.Decorating}
 	 */
 	zoneSource: null,
-	/** 
+	/**
 	 * @private
 	 * @member {ol.layer.Vector}
 	 */
 	zoneLayer: null,
-	/** 
+	/**
 	 * @private
 	 * @member {nyc.ol.source.FilteringAndSorting}
 	 */
 	centerSource: null,
-	/** 
+	/**
 	 * @private
 	 * @member {ol.layer.Vector}
 	 */
 	centerLayer: null,
-	/** 
+	/**
 	 * @private
 	 * @member {nyc.ol.source.Decorating}
 	 */
 	locationSource: null,
-	/** 
-	 * @private  
+	/**
+	 * @private
 	 * @member {nyc.HurricaneContent}
 	 */
 	content: null,
-	/** 
+	/**
 	 * @private
 	 * @member {nyc.content}
 	 */
 	controls: null,
-	/** 
+	/**
 	 * @private
 	 * @member {nyc.Directions}
 	 */
 	directions: null,
-	/** 
+	/**
 	 * @private
 	 * @member {nyc.ol.Popup}
 	 */
 	popup: null,
-	/** 
+	/**
 	 * @private
 	 * @member {Array<nyc.ol.FeatureTip>}
 	 */
 	tips: null,
-	/** 
+	/**
 	 * @private
 	 * @member {nyc.Locate.Result}
 	 */
 	location: null,
-	/** 
+	/**
 	 * @private
 	 * @member {Object<string, boolean>}
 	 */
 	zoneOrders: null,
-	/** 
+	/**
 	 * @private
 	 * @member {nyc.Dialog}
 	 */
 	dialog: null,
-	/** 
+	/**
+	 * @private
+	 * @member {nyc.MtaTripPlannerHack}
+	 */
+	mtaHack: null,
+	/**
 	 * @desc Initializes the list of evacuation centers
-	 * @public 
+	 * @public
 	 * @method
 	 */
 	initList: function(){
@@ -214,9 +223,9 @@ nyc.App.prototype = {
 			setTimeout(this.listHeight, 10);
 		}
 	},
-	/** 
+	/**
 	 * @desc Set up page layout
-	 * @public 
+	 * @public
 	 * @method
 	 */
 	layout: function(){
@@ -226,7 +235,7 @@ nyc.App.prototype = {
 			this.doLayout();
 		}
 	},
-	/** 
+	/**
 	 * @private
 	 * @method
 	 */
@@ -236,7 +245,7 @@ nyc.App.prototype = {
 		$('#tabs').tabs({
 			activate: function(event, ui){
 				$('#map-page .ui-content').css(
-					'z-index', 
+					'z-index',
 					mobile && ui.newPanel.attr('id') == 'map-tab' ? '1000' : 'auto'
 				);
 			}
@@ -285,21 +294,26 @@ nyc.App.prototype = {
 			to = feature.getAddress(),
 			name = feature.getName(),
 			from = me.origin();
-		
+
+		me.destination = {
+		  name: name + ' - ' + to,
+		  coordinates: feature.getGeometry().getCoordinates(),
+		  data: {}
+		};
 		$('body').pagecontainer('change', $('#dir-page'), {transition: 'slideup'});
 		if (me.lastDir != from + '|' + to){
 			var args = {from: unescape(from), to: unescape(to), facility: unescape(name)};
 			me.lastDir = from + '|' + to;
 			me.directions.directions(args);
 		}
-		
+
 		if ($('#inf-full-screen').is(':visible')){
 			$('#inf-full-screen').hide();
 		}
 	},
-	/** 
+	/**
 	 * @desc Toggle the display of accessibility info
-	 * @public 
+	 * @public
 	 * @method
 	 * @param {JQueryEvent} event The click event of toggle button
 	 */
@@ -313,11 +327,11 @@ nyc.App.prototype = {
 				}else{
 					me.popup.pan();
 				}
-			}				
+			}
 		});
 	},
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 * @method
 	 * @return {string}
 	 */
@@ -325,13 +339,13 @@ nyc.App.prototype = {
 		$('#inf-full-screen div').html($('.popup-content').html());
 		$('#inf-full-screen').fadeIn();
 	},
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 * @method
 	 * @return {string}
 	 */
 	origin: function(){
-		var location = this.location || {};
+		var location = this.location || {data: {}};
 		if (location.type == 'geolocation'){
 			var coordinates = proj4('EPSG:3857', 'EPSG:4326', location.coordinates);
 			return [coordinates[1], coordinates[0]];
@@ -343,34 +357,35 @@ nyc.App.prototype = {
 	 * @method
 	 * @param {nyc.Locate.Result} data
 	 */
-	located: function(data){
-		this.list(data.coordinates);
-		this.location = data;
+	located: function(location){
+		this.list(location.coordinates);
+		location.data = location.data || {};
+		this.location = location;
 		this.zone();
 	},
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 * @method
 	 */
 	mapSize: function(){
 		var map = this.map;
 		setTimeout(function(){map.updateSize();}, 10);
 	},
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 * @method
 	 * @return {boolean}
 	 */
 	isMobile: function(){
 		return navigator.userAgent.match(/(iPad|iPhone|iPod|iOS|Android)/g);
 	},
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 * @method
 	 * @param {ol.Coordinate} coordinates
 	 */
 	list: function(coordinates){
-		var container = $('#centers-list'); 
+		var container = $('#centers-list');
 		container.empty();
 		$.each(this.centerSource.sort(coordinates), function(i, facility){
 			var info = $(facility.html('inf-list'));
@@ -385,14 +400,14 @@ nyc.App.prototype = {
 						$(n).trigger('click');
 					});
 				}
-			});				
-		}			
+			});
+		}
 		/* make available to screen reader in links list */
-		$('#centers-list a').attr('role', 'link'); 
+		$('#centers-list a').attr('role', 'link');
 		this.listHeight();
 	},
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 * @method
 	 */
 	listHeight: function(){
@@ -400,8 +415,8 @@ nyc.App.prototype = {
 			$('#centers-tab').height() - $('#centers-tab .centers-top').height() - 5
 		);
 	},
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 * @method
 	 */
 	transparency: function(){
@@ -410,8 +425,8 @@ nyc.App.prototype = {
 		$('.leg-sw.zone').css('opacity', opacity);
 		this.map.render();
 	},
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 * @method
 	 */
 	setState: function(){
@@ -423,25 +438,25 @@ nyc.App.prototype = {
 		}
 		var banner = content.message('banner_text'), title = 'NYC ' + banner;
 		document.title = title;
-		$('.banner h1').html(banner).attr('title', title);		
-		$('.banner img').attr('alt', title);		
-		$('#btn-view-map').html(content.message('btn_text'));		
-		$('#centers-tab-btn a').html(content.message('centers_tab'));		
-		$('.filter-center').html(content.message('filter_centers'));		
-		$('.leg-center').html(content.message('legend_center'));		
-		$('#centers-tab .panel-note').html(content.message('centers_msg'));		
-		$('#legend-tab .panel-note.top').html(content.message('legend_msg'));			
+		$('.banner h1').html(banner).attr('title', title);
+		$('.banner img').attr('alt', title);
+		$('#btn-view-map').html(content.message('btn_text'));
+		$('#centers-tab-btn a').html(content.message('centers_tab'));
+		$('.filter-center').html(content.message('filter_centers'));
+		$('.leg-center').html(content.message('legend_center'));
+		$('#centers-tab .panel-note').html(content.message('centers_msg'));
+		$('#legend-tab .panel-note.top').html(content.message('legend_msg'));
 		$('#first-load').fadeOut();
 	},
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 * @method
 	 */
 	getOrderUrl: function(){
 		return 'data/order.csv?' + nyc.cacheBust;
 	},
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 * @method
 	 */
 	getOrders: function(){
@@ -452,8 +467,8 @@ nyc.App.prototype = {
 			error: $.proxy(this.error, this)
 		});
 	},
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 * @method
 	 * @param {string} csv
 	 */
@@ -464,7 +479,7 @@ nyc.App.prototype = {
 			if (zone.EVACUATE == 'YES'){
 				orders[zone.ZONE] = true;
 				evacReq.push(zone.ZONE);
-			}				
+			}
 		});
 		content.zoneOrders = orders;
 		if (evacReq.length && content.messages.post_storm == 'NO'){
@@ -476,7 +491,7 @@ nyc.App.prototype = {
 			}
 			$.each(evacReq, function(i, zone){
 				zones += zone;
-				zones += (i == evacReq.length - 2) ? ' and ' : ', ';								
+				zones += (i == evacReq.length - 2) ? ' and ' : ', ';
 			});
 			$('.orders').append(content.message('splash_zone_order', {zones: zones.substr(0, zones.length - 2)}));
 		}else if (content.messages.post_storm == 'YES'){
@@ -484,8 +499,8 @@ nyc.App.prototype = {
 		}
 
 	},
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 * @method
 	 * @param {JQueryEvent} event
 	 */
@@ -496,32 +511,32 @@ nyc.App.prototype = {
 		}]);
 		this.list(this.location.coordinates);
 	},
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 * @method
 	 * @param {ol.Coordinate} coordinates
 	 */
 	zoomCoords: function(coords){
 		this.view.animate({zoom: 17, center: coords});
 	},
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 * @method
 	 */
 	zone: function(){
 		var html = this.content.locationMsg(this.location) || this.queryZone();
 		this.showPopup(this.location.coordinates, html);
-	},	
-	/** 
-	 * @private 
+	},
+	/**
+	 * @private
 	 * @method
 	 */
 	queryZone: function(){
 		var content = this.content,
-			zones = this.zoneSource, 
-			location = this.location, 
-			name = location.name.replace(/,/, '<br>'), 
-			coords = location.coordinates, 
+			zones = this.zoneSource,
+			location = this.location,
+			name = location.name.replace(/,/, '<br>'),
+			coords = location.coordinates,
 			accuracy = location.accuracy,
 			buffer = this.geocoder.accuracyDistance(accuracy),
 			features = [],
@@ -536,28 +551,28 @@ nyc.App.prototype = {
 		}
 		if (features.length == 0) {
 			html = content.message('location_no_zone', {
-				name: name, 
+				name: name,
 				oem_supplied: content.message('user_in_x_zone')
 			});
 		}else{
 			zone = features[0].isSurfaceWater() ? '1' : features[0].getZone();
 			if (features.length == 1) {
-				html = content.message('location_zone_order', { 
-					order: content.zoneMsg(zone), 
-					name: name, 
+				html = content.message('location_zone_order', {
+					order: content.zoneMsg(zone),
+					name: name,
 					oem_supplied: content.message('user_zone', {zone: zone})
-				});	
+				});
 			}else{
 				html = content.message('location_zone_unkown', {
-					name: name, 
+					name: name,
 					oem_supplied: content.message('user_zone_unkown')
-				}); 
+				});
 			}
 		}
 		return html;
 	},
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 * @method
 	 * @param {ol.MapBrowserEvent} event
 	 */
@@ -578,8 +593,8 @@ nyc.App.prototype = {
 			}
 		});
 	},
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 * @method
 	 * @param {ol.Coordinate} coordinates
 	 * @param {string} html
@@ -592,8 +607,8 @@ nyc.App.prototype = {
 			html: html
 		});
 	},
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 * @method
 	 */
 	zoneTip: function(){
@@ -605,8 +620,8 @@ nyc.App.prototype = {
 			};
 		}
 	},
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 * @method
 	 */
 	centerTip: function(){
@@ -615,18 +630,18 @@ nyc.App.prototype = {
 			text:  this.message('center_tip', {css: this.isAccessible() ? 'access' : '', name: this.getName()})
 		};
 	},
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 * @method
 	 */
 	locationTip: function(){
 		return {
 			cssClass: 'tip-location',
 			text: this.getName().replace(/,/, '<br>')
-		};			
+		};
 	},
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 * @method
 	 */
 	hideTips: function(){
@@ -634,8 +649,8 @@ nyc.App.prototype = {
 			tip.hide();
 		});
 	},
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 * @method
 	 * @method
 	 */
@@ -643,11 +658,24 @@ nyc.App.prototype = {
 		this.alert(this.content.message('data_load_error'));
 	},
 	/**
-	 * @private 
+	 * @private
 	 * @param {string} msg
 	 */
 	alert: function(msg){
 		this.dialog = this.dialog || new nyc.Dialog();
 		this.dialog.ok({message: msg});
-	}
+	},
+	/**
+   * @desc Show MTA TripPlanner
+   * @private
+   * @method
+   * @param {JQuery.Event} event
+   */
+  hackMta: function(event){
+    this.mtaHack.directions({
+      accessible: true,
+      origin: this.location,
+      destination: this.destination
+    });
+  }
 };
