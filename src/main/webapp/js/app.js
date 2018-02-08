@@ -359,6 +359,7 @@ nyc.App.prototype = {
 	 */
 	located: function(location){
 		this.list(location.coordinates);
+		$('#centers-list').scrollTop(0);
 		location.data = location.data || {};
 		this.location = location;
 		this.zone();
