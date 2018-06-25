@@ -47,6 +47,7 @@ body{
     left: 75px;
     position: absolute;
     top: 3px;
+    text-transform: capitalize;
 }
 #address{
     border: 1px solid black;

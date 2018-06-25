@@ -8,19 +8,19 @@ window.nyc311 = {
 	 * @public
 	 * @const {string}
 	 */
-	ORDER_URL: '../data/order.csv?',
+	ORDER_URL: '/hurricane/data/order.csv?',
 	/**
 	 * @desc The URL to the center.csv data
 	 * @public
 	 * @const {string}
 	 */
-	CENTER_URL: '../data/center.csv?',
+	CENTER_URL: '/hurricane/data/center.csv?',
 	/**
 	 * @desc The URL to the content.csv data
 	 * @public
 	 * @const {string}
 	 */
-	CONTENT_URL: '../data/content.csv?'
+	CONTENT_URL: '/hurricane/data/content.csv?'
 };
 
 /**
