@@ -9,12 +9,6 @@ ext{
 	appName = 'nyc-hurricane-311'
 	ver = 'v0.2.6'
 
-	jsSrcDir = "build/${ver}/js"
-	cssSrcDir = "build/${ver}/css"
-
-	orderedJsFiles = ['nyc.js', 'style.js', 'content.js', 'app.js', 'init.js']
-	orderedCssFiles = ['hurricane.css']
-
 	local_nyclib = 'https://maps.nyc.gov/nyc-lib/'
 
 	default_env = 'local'
@@ -31,14 +25,6 @@ task copyFiles(dependsOn: clean) << {
 	build.mkdirs()
 	copy {
 		from 'src/main/webapp'
-		include '*.html'
-		include '*.json'
-		include 'img/**'
-		include 'manifest.webmanifest'
-		exclude 'img/Thumbs.db'
-		include 'css/**'
-		include 'data/**'
-		include 'js/**'
 		include '311/**'
 		into "build/${ver}"
 	}
@@ -46,55 +32,12 @@ task copyFiles(dependsOn: clean) << {
 
 task replaceTokens(dependsOn: [setEnv, copyFiles]) << {
 	ant.taskdef(name: 'replace', classname: 'org.apache.tools.ant.taskdefs.Replace')
-	if (project.hasProperty("hurricane.${env}.geoclient.url")){
-		ant.replace(file: "build/${ver}/js/init.js", token: project.ext['hurricane.git.geoclient.url'], value: project.ext["hurricane.${env}.geoclient.url"])
-	}
-	if (project.hasProperty("hurricane.${env}.google.url")){
-		ant.replace(file: "build/${ver}/js/init.js", token: project.ext['hurricane.local.google.url'], value: project.ext["hurricane.${env}.google.url"])
-	}
-	if (project.hasProperty('hurricane.analytics')){
-		ant.replace(file: "build/${ver}/index.html", token: '/* google analytics */', value: project.ext['hurricane.analytics'])
-		ant.replace(file: "build/${ver}/down.html", token: '/* google analytics */', value: project.ext['hurricane.analytics'])
-	}
-
-	ant.replace(file: "build/${ver}/index.html", token: 'hurricane.css', value: "${appName}.css?${ver}")
-	ant.replace(file: "build/${ver}/index.html", token: '<script src="js/style.js"></script>', value: '')
-	ant.replace(file: "build/${ver}/index.html", token: '<script src="js/nyc.js"></script>', value: '')
-	ant.replace(file: "build/${ver}/index.html", token: '<script src="js/content.js"></script>', value: '')
-	ant.replace(file: "build/${ver}/index.html", token: '<script src="js/app.js"></script>', value: '')
-	ant.replace(file: "build/${ver}/index.html", token: 'js/init.js', value: "js/${appName}.js?${ver}")
-	ant.replace(file: "build/${ver}/index.html", token: local_nyclib, value: project.ext["hurricane.${env}.nyc-lib"])
-
 	ant.replace(file: "build/${ver}/311/index.html", token: 'hurricane-version', value: ver)
 	ant.replace(file: "build/${ver}/311/index.html", token: '../js/', value: '../src/js/')
-
-
+	ant.replace(file: "build/${ver}/311/index.html", token: '/* google analytics */', value: project.ext['hurricane.analytics'])
 }
 
-task minifyScript(type: MiniJsTask, dependsOn: [replaceTokens]) {
-	libName = appName
-	version = ver
-	fileNames = orderedJsFiles
-	sourceDir = jsSrcDir
-	destinationDir = "build/${ver}/js"
-}
-minifyScript.doLast {
-	delete "build/${ver}/js/app.js"
-	delete "build/${ver}/js/init.js"
-	delete "build/${ver}/js/style.js"
-}
-
-task minifyCss(type: MiniCssTask, dependsOn: [replaceTokens]) {
-	libName = appName
-	fileNames = orderedCssFiles
-	sourceDir = cssSrcDir
-	destinationDir = "build/${ver}/css"
-}
-minifyCss.doLast {
-	delete fileTree(dir: "build/${ver}/css", include: 'hurricane.css', exclude: "${appName}.*")
-}
-
-task buildApp(dependsOn: [minifyScript, minifyCss]) << {}
+task buildApp(dependsOn: [replaceTokens]) << {}
 
 task archive(type: Zip, dependsOn: [buildApp]) {}
 
