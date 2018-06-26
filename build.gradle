@@ -7,7 +7,7 @@ plugins {
 
 ext{
 	appName = 'nyc-hurricane-311'
-	ver = 'v0.2.6'
+	ver = 'v0.2.7'
 
 	local_nyclib = 'https://maps.nyc.gov/nyc-lib/'
 
